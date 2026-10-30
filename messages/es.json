@@ -36,6 +36,85 @@
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión…"
   },
+  "tour": {
+    "help": "Ayuda",
+    "helpTooltip": "Volver a ver la guía de esta página",
+    "step": "Paso {current} de {total}",
+    "announce": "Paso {current} de {total}: {title}",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Listo",
+    "skip": "Omitir la guía",
+    "cases": {
+      "welcome": {
+        "title": "Bienvenido a Kinstamp",
+        "body": "USCIS es un tablero público: cualquiera con un número de recibo puede leer ahí el estado de un caso, y nunca muestra datos personales. Kinstamp es tu cuaderno privado encima de ese tablero: qué casos sigues, cómo los llamas, las fechas que anotas, con quién los compartes. Solo tú ves tu cuaderno."
+      },
+      "addCase": {
+        "title": "Agregar un caso",
+        "body": "Ingresa el número de recibo impreso en una notificación de USCIS. Kinstamp lo consulta y lo sigue por ti."
+      },
+      "caseCard": {
+        "title": "Tus casos de un vistazo",
+        "body": "Cada tarjeta muestra el estado actual y el último cambio. Toca un caso para abrirlo."
+      },
+      "insights": {
+        "title": "Tendencias",
+        "body": "Cuánto tardan los casos como el tuyo, calculado con datos anónimos y solo de personas que dieron su consentimiento."
+      },
+      "account": {
+        "title": "Tu cuenta",
+        "body": "El idioma, los avisos por correo, el consentimiento y descargar o eliminar tus datos están en Configuración."
+      }
+    },
+    "attorney": {
+      "welcome": {
+        "title": "Bienvenido a Kinstamp",
+        "body": "Tus clientes comparten casos con tu dirección de correo. Ves solo lo que comparten contigo, mientras lo compartan."
+      },
+      "table": {
+        "title": "Los casos de tus clientes",
+        "body": "Los casos más urgentes van primero. La columna de último cambio muestra qué se movió esta semana."
+      },
+      "filters": {
+        "title": "Buscar y filtrar",
+        "body": "Busca un cliente o un número de recibo, filtra por estado o muestra solo los casos que cambiaron en los últimos 7 días."
+      },
+      "row": {
+        "title": "Abrir un caso",
+        "body": "Abre un caso para ver su línea de tiempo, actualizarlo, agregar fechas clave y preguntarle al asistente."
+      }
+    },
+    "case_detail": {
+      "status": {
+        "title": "El estado, en lenguaje sencillo",
+        "body": "El estado oficial de USCIS con lo que suele significar. Actualizar consulta USCIS en este momento."
+      },
+      "timeline": {
+        "title": "Línea de tiempo",
+        "body": "Cada estado que ha tenido este caso, con su origen: informado por USCIS u observado por Kinstamp."
+      },
+      "keyDates": {
+        "title": "Fechas clave",
+        "body": "Plazos y citas de las cartas de USCIS, que la API no nos da. Cuenta regresiva, exportar al calendario y visibles para el abogado."
+      },
+      "share": {
+        "title": "Compartir con tu abogado",
+        "body": "Dale acceso a tu abogado por correo. Ve solo este caso y puedes revocarlo cuando quieras."
+      },
+      "assistant": {
+        "title": "Preguntar sobre este caso",
+        "body": "Un asistente que responde solo con los datos de este caso. No es asesoría legal."
+      }
+    }
+  },
+  "idle": {
+    "title": "¿Sigues ahí?",
+    "description": "Para proteger tu información cerraremos tu sesión en {seconds, plural, one {# segundo} other {# segundos}}, salvo que te quedes.",
+    "signingOut": "Cerrando tu sesión…",
+    "stay": "Seguir conectado",
+    "signOut": "Cerrar sesión ahora"
+  },
   "status": {
     "tone": {
       "progress": "En proceso",
@@ -93,6 +172,10 @@
       "emailNotConfirmed": "Primero confirma tu correo. Busca en tu bandeja el enlace que te enviamos.",
       "invalidCredentials": "El correo y la contraseña no coinciden.",
       "confirmation": "Ese enlace de confirmación no es válido o ya venció. Inicia sesión para pedir uno nuevo."
+    },
+    "notices": {
+      "idle": "Cerramos tu sesión tras 30 minutos sin actividad.",
+      "expired": "Tu sesión terminó. Inicia sesión para continuar donde estabas."
     },
     "fields": {
       "fullName": "Nombre completo",
@@ -342,7 +425,7 @@
     },
     "keyDates": {
       "title": "Fechas clave",
-      "empty": "Todavía no hay fechas clave. Agrega el plazo o la cita de un aviso de USCIS y haremos la cuenta regresiva.",
+      "empty": "USCIS manda los plazos y las citas por carta, y su API nunca los reporta. Anótalos aquí: contamos los días que faltan, los pasamos a tu calendario y los ve tu abogado.",
       "add": "Agregar fecha clave",
       "kind": {
         "due_date": "Plazo",
@@ -613,14 +696,45 @@
       "subtitle": "Kinstamp guarda el historial completo de cada caso de USCIS que sigue tu familia, explica cada estado en lenguaje sencillo, en inglés o español, y deja que tu abogado lo siga contigo.",
       "cta": "Crear una cuenta gratis",
       "secondary": "Iniciar sesión",
-      "note": "Gratis para familias. Funciona con cualquier número de recibo de USCIS."
+      "note": "Gratis para familias. Funciona con cualquier número de recibo de USCIS.",
+      "eyebrow": "Seguimiento de casos de USCIS para familias y sus abogados"
     },
     "preview": {
-      "ariaLabel": "Ejemplo del detalle de un caso con su línea de tiempo",
+      "ariaLabel": "Ejemplo del detalle de un caso: estado actual, fechas clave, línea de tiempo y con quién está compartido",
+      "nav": "Casos",
       "nickname": "Green card de mamá",
       "form": "Formulario {form}",
+      "statusLabel": "Estado actual",
+      "meaning": "USCIS programó una entrevista. El aviso con la fecha, hora y oficina va en camino o ya lo tienes.",
+      "checked": "Consultado hoy · Último cambio {date}",
+      "keyDates": "Fechas clave",
       "timeline": "Línea de tiempo",
+      "sharedWith": "Compartido con",
+      "shareActive": "Activo desde {date}",
       "caption": "Ejemplo con un recibo de prueba de USCIS."
+    },
+    "audience": {
+      "title": "Hecho para la familia, y para el abogado en quien confía.",
+      "families": {
+        "label": "Para familias",
+        "title": "Cada caso que tu familia espera, en un solo lugar.",
+        "items": {
+          "one": "Una sola lista para cada número de recibo, cada uno con su propio nombre.",
+          "plain": "Qué significa cada estado, en español o inglés sencillo.",
+          "dates": "Fechas límite y citas con cuenta regresiva, exportables a tu calendario.",
+          "email": "Un correo cuando algo cambia, para que dejes de entrar a USCIS."
+        }
+      },
+      "attorneys": {
+        "label": "Para abogados",
+        "title": "Solo lo que comparten los clientes, ordenado por lo que te necesita primero.",
+        "items": {
+          "shared": "Ves únicamente los casos que un cliente compartió con tu correo.",
+          "urgency": "Un tablero ordenado por urgencia: la fecha clave más cercana y el último cambio arriba.",
+          "same": "La misma línea de tiempo y fechas clave que ve la familia, más actualizar.",
+          "revoke": "Un acceso que el cliente puede revocar al instante, sin preguntas."
+        }
+      }
     },
     "benefits": {
       "title": "Todo sobre un caso, en un solo lugar tranquilo.",
@@ -646,20 +760,53 @@
       "subtitle": "Tres pasos, sin papeleo.",
       "add": {
         "title": "Agrega un caso",
-        "body": "Ingresa el número de recibo de tu aviso y ponle un nombre al caso."
+        "body": "Ingresa el número de recibo de tu aviso y ponle un nombre al caso.",
+        "mockLabel": "Número de recibo",
+        "mockNickname": "Nombre",
+        "mockValue": "Green card de mamá"
       },
       "check": {
         "title": "Consultamos a USCIS",
-        "body": "Actualiza cuando quieras. Kinstamp también consulta entre semana y te avisa por correo si algo cambia."
+        "body": "Actualiza cuando quieras. Kinstamp también consulta entre semana y te avisa por correo si algo cambia.",
+        "mockBefore": "El caso fue recibido",
+        "mockAfter": "Se programó la cita de datos biométricos",
+        "mockChanged": "Cambió"
       },
       "share": {
         "title": "Comparte si quieres",
-        "body": "Tu abogado ve solo lo que compartes, por el tiempo que tú decidas."
+        "body": "Tu abogado ve solo lo que compartes, por el tiempo que tú decidas.",
+        "mockActive": "Activo",
+        "mockRevoke": "Revocar"
       }
     },
     "privacy": {
       "title": "Tus datos siguen siendo tuyos.",
-      "body": "Kinstamp solo consulta los casos que tú agregas. Las tendencias de tiempos usan datos anónimos de quienes dan su consentimiento, y solo para grupos lo bastante grandes como para que ningún caso pueda identificarse."
+      "public": "La página de estado de casos de USCIS es pública y no muestra datos personales: cualquiera con un número de recibo lee el mismo estado.",
+      "private": "Kinstamp es el cuaderno privado de tu familia encima de eso: qué casos sigues, sus nombres, fechas clave y con quién los compartes, protegidos con seguridad a nivel de fila en la base de datos. Las tendencias anónimas salen solo de quienes dan su consentimiento, y solo para grupos de 5 casos o más.",
+      "ledger": {
+        "uscis": {
+          "title": "Lo que muestra USCIS",
+          "items": {
+            "1": "El título del estado y su fecha",
+            "2": "La descripción oficial del estado",
+            "3": "El mismo texto para cualquiera con el número de recibo"
+          }
+        },
+        "kinstamp": {
+          "title": "Lo que Kinstamp mantiene privado",
+          "items": {
+            "1": "Qué casos sigues y sus nombres",
+            "2": "Las fechas clave que agregas de tus avisos",
+            "3": "Con quién compartes, y desde cuándo"
+          }
+        }
+      }
+    },
+    "closing": {
+      "title": "Empieza con el número de recibo de tu aviso.",
+      "body": "Kinstamp es una demo construida sobre el API de prueba de USCIS: los casos que agregas usan datos de prueba de USCIS, no solicitudes reales.",
+      "cta": "Crear una cuenta gratis",
+      "secondary": "Iniciar sesión"
     }
   },
   "assistant": {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { safeNextPath, signInSchema, signUpSchema } from "./schemas";
+import { safeNextPath, signInReason, signInSchema, signUpSchema } from "./schemas";
 
 describe("signUpSchema", () => {
   const valid = {
@@ -42,5 +42,15 @@ describe("safeNextPath", () => {
 
   it.each(["https://evil.com", "//evil.com", "/\\evil.com", "cases", undefined])("rejects %s", (path) => {
     expect(safeNextPath(path)).toBeNull();
+  });
+});
+
+describe("signInReason", () => {
+  it.each(["idle", "expired"] as const)("accepts %s", (reason) => {
+    expect(signInReason(reason)).toBe(reason);
+  });
+
+  it.each(["other", ["idle"], undefined, 42])("ignores %s", (value) => {
+    expect(signInReason(value)).toBeNull();
   });
 });

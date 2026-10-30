@@ -6,7 +6,7 @@ import { SignInForm } from "@/components/auth/sign-in-form";
 import { AuthBackdrop } from "@/components/layout/auth-backdrop";
 import { Container } from "@/components/layout/container";
 import { Skeleton } from "@/components/ui/skeleton";
-import { safeNextPath } from "@/lib/auth/schemas";
+import { safeNextPath, signInReason } from "@/lib/auth/schemas";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("auth.signIn");
@@ -28,7 +28,7 @@ export default async function SignInPage({ searchParams }: PageProps<"/sign-in">
             </p>
           }
         >
-          {/* The URL (next, error) is request data: read it inside Suspense so the card itself stays static. */}
+          {/* The URL (next, error, reason) is request data: read it inside Suspense so the card itself stays static. */}
           <Suspense fallback={<Skeleton className="h-72 w-full rounded-lg" />}>
             <SignInFromParams searchParams={searchParams} />
           </Suspense>
@@ -42,5 +42,6 @@ async function SignInFromParams({ searchParams }: Pick<PageProps<"/sign-in">, "s
   const params = await searchParams;
   const next = safeNextPath(Array.isArray(params.next) ? params.next[0] : params.next);
   const error = params.error === "confirmation" ? "confirmation" : null;
-  return <SignInForm next={next} urlError={error} />;
+  const reason = signInReason(Array.isArray(params.reason) ? params.reason[0] : params.reason);
+  return <SignInForm next={next} urlError={error} reason={reason} />;
 }

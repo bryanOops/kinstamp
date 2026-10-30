@@ -36,6 +36,85 @@
     "signOut": "Sign out",
     "signingOut": "Signing out…"
   },
+  "tour": {
+    "help": "Help",
+    "helpTooltip": "Replay the guide for this page",
+    "step": "Step {current} of {total}",
+    "announce": "Step {current} of {total}: {title}",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "skip": "Skip tour",
+    "cases": {
+      "welcome": {
+        "title": "Welcome to Kinstamp",
+        "body": "USCIS is a public board: anyone with a receipt number can read a case's status there, and it never shows personal data. Kinstamp is your private notebook on top of it: which cases you follow, what you call them, the dates you note, who you share with. Only you see your notebook."
+      },
+      "addCase": {
+        "title": "Add a case",
+        "body": "Enter the receipt number printed on a USCIS notice. Kinstamp checks it and keeps following it for you."
+      },
+      "caseCard": {
+        "title": "Your cases at a glance",
+        "body": "Each card shows the current status and the last change. Tap a case to open it."
+      },
+      "insights": {
+        "title": "Insights",
+        "body": "How long cases like yours take, computed from anonymous data and only from people who gave consent."
+      },
+      "account": {
+        "title": "Your account",
+        "body": "Language, email alerts, consent, and downloading or deleting your data all live in Settings."
+      }
+    },
+    "attorney": {
+      "welcome": {
+        "title": "Welcome to Kinstamp",
+        "body": "Clients share cases with your email address. You see only what is shared with you, for as long as it is shared."
+      },
+      "table": {
+        "title": "Your clients' cases",
+        "body": "The most urgent cases come first. The last-change column shows what moved this week."
+      },
+      "filters": {
+        "title": "Search and filter",
+        "body": "Find a client or receipt number, filter by status, or show only the cases that changed in the last 7 days."
+      },
+      "row": {
+        "title": "Open a case",
+        "body": "Open a case to see its timeline, refresh it, add key dates and ask the assistant about it."
+      }
+    },
+    "case_detail": {
+      "status": {
+        "title": "The status, in plain language",
+        "body": "The official USCIS status with what it usually means. Refresh checks USCIS right now."
+      },
+      "timeline": {
+        "title": "Timeline",
+        "body": "Every status this case has had, with where it came from: reported by USCIS or observed by Kinstamp."
+      },
+      "keyDates": {
+        "title": "Key dates",
+        "body": "Deadlines and appointments from USCIS letters, which the API does not give us. Countdown, calendar export, and visible to the attorney."
+      },
+      "share": {
+        "title": "Share with your attorney",
+        "body": "Give your attorney access by email. They see this case only, and you can revoke it at any time."
+      },
+      "assistant": {
+        "title": "Ask about this case",
+        "body": "An assistant that answers only from this case's data. It is not legal advice."
+      }
+    }
+  },
+  "idle": {
+    "title": "Still there?",
+    "description": "To protect your information we'll sign you out in {seconds, plural, one {# second} other {# seconds}} unless you stay.",
+    "signingOut": "Signing you out…",
+    "stay": "Stay signed in",
+    "signOut": "Sign out now"
+  },
   "status": {
     "tone": {
       "progress": "In progress",
@@ -93,6 +172,10 @@
       "emailNotConfirmed": "Confirm your email first. Check your inbox for the link we sent you.",
       "invalidCredentials": "That email and password don't match.",
       "confirmation": "That confirmation link is invalid or has expired. Sign in to request a new one."
+    },
+    "notices": {
+      "idle": "We signed you out after 30 minutes without activity.",
+      "expired": "Your session ended. Sign in to continue where you left off."
     },
     "fields": {
       "fullName": "Full name",
@@ -342,7 +425,7 @@
     },
     "keyDates": {
       "title": "Key dates",
-      "empty": "No key dates yet. Add the due date or appointment from a USCIS notice and we'll count down to it.",
+      "empty": "USCIS sends deadlines and appointment dates by letter, and its API never reports them. Add them here: we count down to each one, export it to your calendar and show it to your attorney.",
       "add": "Add a key date",
       "kind": {
         "due_date": "Due date",
@@ -613,14 +696,45 @@
       "subtitle": "Kinstamp keeps the full history of every USCIS case your family tracks, explains each status in plain English or Spanish, and lets your attorney follow along.",
       "cta": "Create a free account",
       "secondary": "Sign in",
-      "note": "Free for families. Works with any USCIS receipt number."
+      "note": "Free for families. Works with any USCIS receipt number.",
+      "eyebrow": "USCIS case tracking for families and their attorneys"
     },
     "preview": {
-      "ariaLabel": "Example of a case detail with its timeline",
+      "ariaLabel": "Example of a case detail: current status, key dates, timeline and who it is shared with",
+      "nav": "Cases",
       "nickname": "Mom's green card",
       "form": "Form {form}",
+      "statusLabel": "Current status",
+      "meaning": "USCIS scheduled an interview. The notice with the date, time and office is on its way or already with you.",
+      "checked": "Checked today · Last change {date}",
+      "keyDates": "Key dates",
       "timeline": "Timeline",
+      "sharedWith": "Shared with",
+      "shareActive": "Active since {date}",
       "caption": "Example with a USCIS sandbox receipt."
+    },
+    "audience": {
+      "title": "Built for the family, and for the attorney they trust.",
+      "families": {
+        "label": "For families",
+        "title": "Every case your family is waiting on, in one place.",
+        "items": {
+          "one": "One list for every receipt number, each with its own nickname.",
+          "plain": "What each status means, in plain English or Spanish.",
+          "dates": "Due dates and appointments with a countdown, exportable to your calendar.",
+          "email": "An email when something changes, so you stop refreshing USCIS."
+        }
+      },
+      "attorneys": {
+        "label": "For attorneys",
+        "title": "Only what clients share, sorted by what needs you first.",
+        "items": {
+          "shared": "You see only the cases a client has shared with your email.",
+          "urgency": "A dashboard sorted by urgency: nearest key date and latest change on top.",
+          "same": "The same timeline and key dates the family sees, plus refresh.",
+          "revoke": "Access the client can revoke instantly, no questions asked."
+        }
+      }
     },
     "benefits": {
       "title": "Everything about a case, in one calm place.",
@@ -646,20 +760,53 @@
       "subtitle": "Three steps, no paperwork.",
       "add": {
         "title": "Add a case",
-        "body": "Enter the receipt number from your notice and give the case a nickname."
+        "body": "Enter the receipt number from your notice and give the case a nickname.",
+        "mockLabel": "Receipt number",
+        "mockNickname": "Nickname",
+        "mockValue": "Mom's green card"
       },
       "check": {
         "title": "We check USCIS",
-        "body": "Refresh whenever you want. Kinstamp also checks on weekdays and emails you when something changes."
+        "body": "Refresh whenever you want. Kinstamp also checks on weekdays and emails you when something changes.",
+        "mockBefore": "Case Was Received",
+        "mockAfter": "Biometrics Appointment Was Scheduled",
+        "mockChanged": "Changed"
       },
       "share": {
         "title": "Share if you want",
-        "body": "Your attorney sees only what you share, for as long as you want."
+        "body": "Your attorney sees only what you share, for as long as you want.",
+        "mockActive": "Active",
+        "mockRevoke": "Revoke"
       }
     },
     "privacy": {
       "title": "Your data stays yours.",
-      "body": "Kinstamp only checks cases you add. Processing-time insights use anonymized data from people who opt in, and only for groups large enough that no case can be singled out."
+      "public": "USCIS's case status page is public and shows no personal data: anyone with a receipt number reads the same status.",
+      "private": "Kinstamp is your family's private notebook on top of it: which cases you track, their nicknames, key dates and who you share with, protected by row-level security in the database. Anonymous insights come only from people who opt in, and only for groups of 5 or more cases.",
+      "ledger": {
+        "uscis": {
+          "title": "What USCIS shows",
+          "items": {
+            "1": "The status title and its date",
+            "2": "The official status description",
+            "3": "The same text for anyone with the receipt number"
+          }
+        },
+        "kinstamp": {
+          "title": "What Kinstamp keeps private",
+          "items": {
+            "1": "Which cases you track and their nicknames",
+            "2": "Key dates you add from your notices",
+            "3": "Who you share with, and since when"
+          }
+        }
+      }
+    },
+    "closing": {
+      "title": "Start with the receipt number on your notice.",
+      "body": "Kinstamp is a demo built on the USCIS sandbox API: the cases you add use USCIS test data, not real filings.",
+      "cta": "Create a free account",
+      "secondary": "Sign in"
     }
   },
   "assistant": {

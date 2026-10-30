@@ -8,7 +8,12 @@ import { supabaseEnv } from "@/lib/env";
 // the person itself (see src/server/auth.ts).
 const privatePrefixes = ["/cases", "/attorney", "/insights", "/settings"];
 
+// Kept in sync with PATHNAME_HEADER in src/server/auth.ts (that module is server-only).
+const pathnameHeader = "x-kinstamp-pathname";
+
 export async function proxy(request: NextRequest) {
+  // Server Components cannot read the URL; `requireProfile` uses this to build its `next`.
+  request.headers.set(pathnameHeader, request.nextUrl.pathname);
   let response = NextResponse.next({ request });
 
   const { serverUrl, anonKey } = supabaseEnv();
@@ -32,7 +37,13 @@ export async function proxy(request: NextRequest) {
   if (!signedIn && privatePrefixes.some((prefix) => pathname.startsWith(prefix))) {
     const url = request.nextUrl.clone();
     url.pathname = "/sign-in";
+    url.search = "";
     url.searchParams.set("next", pathname);
+    // A session cookie that no longer validates means the session ended, as opposed to
+    // someone who was never signed in: only then does sign-in explain what happened.
+    if (request.cookies.getAll().some((cookie) => cookie.name.startsWith(supabaseCookieOptions.name))) {
+      url.searchParams.set("reason", "expired");
+    }
     return NextResponse.redirect(url);
   }
 

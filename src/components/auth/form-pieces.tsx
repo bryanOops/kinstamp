@@ -1,6 +1,6 @@
 "use client";
 
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useState, type ComponentProps } from "react";
 import { useFormStatus } from "react-dom";
@@ -106,6 +106,17 @@ export function SubmitButton({ children, pendingLabel }: { children: React.React
     <Button type="submit" size="lg" className="w-full" disabled={pending} aria-busy={pending}>
       {pending ? pendingLabel : children}
     </Button>
+  );
+}
+
+/** Quiet, non-error context above a form (e.g. why the person was signed out). */
+export function FormNotice({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <Alert role="status" className="border-line bg-canvas">
+      <InfoIcon aria-hidden="true" className="text-ink-muted" />
+      <AlertDescription className="text-ink-muted">{message}</AlertDescription>
+    </Alert>
   );
 }
 

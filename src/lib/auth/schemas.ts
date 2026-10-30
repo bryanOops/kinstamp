@@ -19,6 +19,15 @@ export const signInSchema = z.object({
 export type SignUpInput = z.infer<typeof signUpSchema>;
 export type SignInInput = z.infer<typeof signInSchema>;
 
+export const signInReasons = ["idle", "expired"] as const;
+export type SignInReason = (typeof signInReasons)[number];
+
+/** Why the person is back at sign-in (`?reason=`); anything else shows no notice. */
+export function signInReason(value: unknown): SignInReason | null {
+  const parsed = z.enum(signInReasons).safeParse(value);
+  return parsed.success ? parsed.data : null;
+}
+
 /** Only same-site relative paths are allowed as a post-sign-in destination. */
 export function safeNextPath(value: unknown): string | null {
   if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) {

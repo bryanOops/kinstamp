@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
-import { FormError, PasswordField, SubmitButton, TextField, useAuthError } from "@/components/auth/form-pieces";
+import { FormError, FormNotice, PasswordField, SubmitButton, TextField, useAuthError } from "@/components/auth/form-pieces";
+import type { SignInReason } from "@/lib/auth/schemas";
 import { signIn, type AuthFormState } from "@/server/actions/auth";
 
 type SignInFormProps = {
@@ -11,9 +12,11 @@ type SignInFormProps = {
   next?: string | null;
   /** Error carried in the URL, e.g. `confirmation` when the email link failed. */
   urlError?: string | null;
+  /** Why the person is back here (`?reason=`): signed out for inactivity, or the session ended. */
+  reason?: SignInReason | null;
 };
 
-export function SignInForm({ next, urlError }: SignInFormProps) {
+export function SignInForm({ next, urlError, reason }: SignInFormProps) {
   const t = useTranslations("auth");
   const translateError = useAuthError();
   const [state, action] = useActionState<AuthFormState, FormData>(signIn, {});
@@ -22,6 +25,7 @@ export function SignInForm({ next, urlError }: SignInFormProps) {
   return (
     <form action={action} className="flex flex-col gap-5" noValidate>
       {next && <input type="hidden" name="next" value={next} />}
+      {reason && <FormNotice message={t(`notices.${reason}`)} />}
       <FormError message={translateError(state.error ?? urlError ?? undefined)} />
 
       <TextField

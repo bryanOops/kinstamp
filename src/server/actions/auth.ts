@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 import { defaultLocale, isLocale, localeCookieName } from "@/i18n/config";
 import { safeNextPath, signInSchema, signUpSchema } from "@/lib/auth/schemas";
 import { siteUrl } from "@/lib/env";
@@ -89,8 +90,12 @@ export async function signIn(_prev: AuthFormState, formData: FormData): Promise<
   redirect(next ?? homePathFor(profile?.role === "attorney" ? "attorney" : "client"));
 }
 
-export async function signOut(): Promise<void> {
+const signOutReasonSchema = z.enum(["idle"]).optional();
+
+/** Signs out. With `reason: "idle"` (the idle-timeout dialog) the person lands on sign-in with a notice instead of the landing page. */
+export async function signOut(reason?: unknown): Promise<void> {
+  const parsed = signOutReasonSchema.safeParse(reason);
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/");
+  redirect(parsed.success && parsed.data === "idle" ? "/sign-in?reason=idle" : "/");
 }
