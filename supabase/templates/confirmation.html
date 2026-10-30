@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <body style="margin:0;padding:32px 16px;background:#f6f6f8;font-family:Inter,Arial,sans-serif;color:#0b0b0f">
+    <table role="presentation" width="100%" style="max-width:520px;margin:0 auto;background:#ffffff;border:1px solid #e6e6ea;border-radius:8px">
+      <tr>
+        <td style="padding:32px">
+          <p style="margin:0 0 24px;font-family:Georgia,serif;font-size:24px">
+            <span style="color:#e5532d">&#9635;</span> Kinstamp
+          </p>
+          <h1 style="margin:0 0 12px;font-family:Georgia,serif;font-size:22px;font-weight:400">Confirm your email</h1>
+          <p style="margin:0 0 24px;line-height:1.5;color:#5c5c66">
+            Confirm your email to start tracking your USCIS cases.<br />
+            Confirma tu correo para empezar a seguir tus casos de USCIS.
+          </p>
+          <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email"
+             style="display:inline-block;padding:12px 20px;background:#0b0b0f;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600">
+            Confirm email · Confirmar correo
+          </a>
+          <p style="margin:24px 0 0;font-size:13px;line-height:1.5;color:#5c5c66">
+            If you did not create a Kinstamp account, ignore this email.<br />
+            Si no creaste una cuenta en Kinstamp, ignora este correo.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
