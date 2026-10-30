@@ -84,9 +84,15 @@ export async function signIn(_prev: AuthFormState, formData: FormData): Promise<
     return { error: "invalidCredentials", values };
   }
 
+  // The language chosen on the public pages is the person's latest choice: keep it and save it
+  // to the profile. Without a choice, the profile's language applies.
   const { data: profile } = await supabase.from("profiles").select("role, locale").eq("id", data.user.id).single();
-  if (profile && isLocale(profile.locale)) {
-    (await cookies()).set(localeCookieName, profile.locale, localeCookieOptions);
+  const cookieStore = await cookies();
+  const chosenLocale = cookieStore.get(localeCookieName)?.value;
+  if (isLocale(chosenLocale)) {
+    if (profile && profile.locale !== chosenLocale) await supabase.from("profiles").update({ locale: chosenLocale }).eq("id", data.user.id);
+  } else if (profile && isLocale(profile.locale)) {
+    cookieStore.set(localeCookieName, profile.locale, localeCookieOptions);
   }
 
   const next = safeNextPath(formData.get("next"));
