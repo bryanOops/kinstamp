@@ -17,9 +17,9 @@
     "db:reset": "supabase db reset",
     "test:db": "supabase test db",
     "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts",
-    "record:sandbox": "tsx scripts/record-sandbox.ts",
-    "precheck:sandbox": "tsx --conditions=react-server scripts/precheck-sandbox.ts",
-    "seed:demo": "tsx --conditions=react-server scripts/seed-demo.ts"
+    "record:sandbox": "tsx scripts/record-sandbox.mts",
+    "precheck:sandbox": "tsx --conditions=react-server scripts/precheck-sandbox.mts",
+    "seed:demo": "tsx --conditions=react-server scripts/seed-demo.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
