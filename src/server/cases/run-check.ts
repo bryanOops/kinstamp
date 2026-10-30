@@ -4,6 +4,7 @@ import { categorizeStatus } from "@/lib/cases/categorize";
 import { easternDayStart } from "@/lib/time";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getUscisClient, type UscisErrorCode } from "@/lib/uscis";
+import { notifyStatusChange } from "@/server/notifications";
 
 /** Stop calling USCIS a little before the sandbox's 1,000 daily checks run out. */
 export const DAILY_CHECK_BUDGET = 900;
@@ -122,6 +123,8 @@ export async function runCheck(params: {
     http_status: result.httpStatus,
     duration_ms: durationMs,
   });
+
+  if (outcome.changed) await notifyStatusChange(params.caseId);
 
   return { ok: true, changed: outcome.changed, checkedAt: now.toISOString() };
 }
