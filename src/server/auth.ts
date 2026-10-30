@@ -1,5 +1,6 @@
 import "server-only";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 export type Role = "client" | "attorney";
@@ -15,8 +16,9 @@ export type CurrentProfile = {
 /**
  * Data Access Layer entry point: the verified signed-in person, or null.
  * `getClaims` validates the JWT, so this is safe to use for authorization.
+ * Memoized per request, so the top bar and the page share one lookup.
  */
-export async function getCurrentProfile(): Promise<CurrentProfile | null> {
+export const getCurrentProfile = cache(async (): Promise<CurrentProfile | null> => {
   const supabase = await createClient();
   const { data: claims } = await supabase.auth.getClaims();
   const userId = claims?.claims.sub;
@@ -36,7 +38,7 @@ export async function getCurrentProfile(): Promise<CurrentProfile | null> {
     role: profile.role === "attorney" ? "attorney" : "client",
     locale: profile.locale === "es" ? "es" : "en",
   };
-}
+});
 
 /** The signed-in person; redirects to sign-in, or to their own home when the role does not match. */
 export async function requireProfile(role?: Role): Promise<CurrentProfile> {

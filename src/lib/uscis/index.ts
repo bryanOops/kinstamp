@@ -1,4 +1,6 @@
 import "server-only";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { createUscisClient, type GetCaseResult, type UscisClient } from "./client";
 import { parseCaseStatusResponse } from "./parse-response";
 import { classifyUscisError } from "./classify-error";
@@ -38,8 +40,9 @@ export function getUscisClient(): UscisClient {
 function createRecordedUscisClient(): UscisClient {
   return {
     async getCase(receiptNumber): Promise<GetCaseResult> {
-      const recording = await import(`./__fixtures__/recorded/${receiptNumber}.json`)
-        .then((module: { default: { status: number; body: unknown } }) => module.default)
+      const file = path.join(process.cwd(), "src/lib/uscis/__fixtures__/recorded", `${receiptNumber}.json`);
+      const recording = await readFile(file, "utf8")
+        .then((text) => JSON.parse(text) as { status: number; body: unknown })
         .catch(() => null);
       if (!recording) {
         return { ok: false, error: classifyUscisError(404, { message: "No recording for this receipt" }), httpStatus: 404 };
