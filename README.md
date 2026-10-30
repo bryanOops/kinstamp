@@ -11,6 +11,10 @@ Kinstamp (*kin* + *stamp*: built for families waiting on USCIS) lets a family sa
 
 ## Try it
 
+### The mental model
+
+USCIS's case status is a public board: anyone who knows a receipt number can read that case's status there, and the board never shows personal data. Kinstamp is a family's private notebook on top of that board: which cases they follow, what they call them, the deadlines they copy from USCIS letters, which attorney may look, and a daily check that writes down every change and emails them. The board is public; the notebook is theirs alone. The first sign-in walks new accounts through this, and the Help button replays it.
+
 ### Demo accounts
 
 The demo accounts hold only USCIS sandbox data, so their credentials are public on purpose (in a real product they would never be published). If someone changes them, `npm run seed:demo -- --production` restores them.
@@ -64,6 +68,16 @@ Then `npm run seed:demo` creates the demo accounts locally.
 **Without USCIS credentials** the app answers from real sandbox responses recorded in [`src/lib/uscis/__fixtures__/recorded`](src/lib/uscis/__fixtures__/recorded), so everything works at any hour. To use the live sandbox, create an app on the [USCIS developer portal](https://developer.uscis.gov/) and fill `USCIS_CLIENT_ID` / `USCIS_CLIENT_SECRET` in `.env.local` (see [`.env.example`](.env.example) for every variable).
 
 To develop without the app container: `npm run setup -- --no-app`, then `npm run dev`.
+
+### Seeing a status change
+
+Sandbox cases never change, so the change detection, the "New" timeline event and the status-change email cannot be triggered from USCIS itself. Locally you can provoke one honestly (production never simulates data, [ADR 0003](docs/adr/0003-never-simulate-uscis-data-in-production.md)):
+
+1. Sign in as the demo client, open *Mom's petition* (`EAC9999103403`) and keep "Email me when a case status changes" on in Settings.
+2. In Supabase Studio (http://127.0.0.1:54323) → `status_events`, find that case's row with `origin = observed` and change its `text_en` to `Case Was Received`.
+3. Wait a minute (a check younger than 60 seconds is reused) and press **Refresh**.
+
+USCIS still answers "Case Was Approved", so Kinstamp sees a change: the page shows *Status changed*, the timeline gets a new event marked *Observed by Kinstamp*, `case_checks` records `result = changed`, and the email lands in the local inbox (http://127.0.0.1:54324). The daily cron does exactly this for every tracked case.
 
 ### Useful scripts
 

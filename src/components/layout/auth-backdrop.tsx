@@ -6,11 +6,52 @@ type AuthBackdropProps = {
   className?: string;
 };
 
+type Point = readonly [number, number];
+type Curve = { c1: Point; c2: Point; to: Point };
+
+/**
+ * The case path in viewBox units (1200 x 800): a start knot and three cubic curves.
+ * Control points are spelled out so the stage markers can be derived from the same
+ * geometry as the path instead of being typed by hand (a hand-typed marker once sat
+ * 20 units under the curve). `globals.css` carries the same curve, in `S` shorthand,
+ * for the traveller's `offset-path`; keep both in sync when changing the shape.
+ */
+const pathStart: Point = [-40, 560];
+const pathCurves: readonly Curve[] = [
+  { c1: [180, 560], c2: [220, 240], to: [440, 240] },
+  { c1: [660, 240], c2: [700, 560], to: [920, 560] },
+  { c1: [1140, 560], c2: [1120, 240], to: [1260, 240] },
+];
+
+const pathD = pathCurves.reduce(
+  (d, { c1, c2, to }) => `${d} C ${c1[0]} ${c1[1]}, ${c2[0]} ${c2[1]}, ${to[0]} ${to[1]}`,
+  `M${pathStart[0]} ${pathStart[1]}`,
+);
+
+function pointOnCurve(from: Point, { c1, c2, to }: Curve, t: number): Point {
+  const u = 1 - t;
+  const w = [u * u * u, 3 * u * u * t, 3 * u * t * t, t * t * t];
+  return [
+    w[0] * from[0] + w[1] * c1[0] + w[2] * c2[0] + w[3] * to[0],
+    w[0] * from[1] + w[1] * c1[1] + w[2] * c2[1] + w[3] * to[1],
+  ];
+}
+
+/** Four stages: the midpoint of the first rise, its knot, the midpoint of the fall, and its knot. */
+const stages: readonly Point[] = [
+  pointOnCurve(pathStart, pathCurves[0], 0.5),
+  pathCurves[0].to,
+  pointOnCurve(pathCurves[0].to, pathCurves[1], 0.5),
+  pathCurves[1].to,
+];
+
 /**
  * Backdrop for the auth screens: a faint ink grid, a dotted "case path" with four
  * stages, and a small vermilion mark that travels the path. Pure SVG + CSS, no
- * library. Under `prefers-reduced-motion` the global rule freezes every animation on
- * its last frame, which leaves the mark resting on the final stage.
+ * library. Path, stage dots, ring and traveller all live in the same SVG and share
+ * its viewBox, so they scale together at every viewport. Under
+ * `prefers-reduced-motion` the global rule freezes every animation on its last
+ * frame, which leaves the mark resting on the final stage.
  */
 export function AuthBackdrop({ children, className }: AuthBackdropProps) {
   return (
@@ -28,7 +69,7 @@ export function AuthBackdrop({ children, className }: AuthBackdropProps) {
         >
           <path
             id="auth-case-path"
-            d="M-40 560 C 180 560, 220 240, 440 240 S 700 560, 920 560 S 1120 240, 1260 240"
+            d={pathD}
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
@@ -36,18 +77,15 @@ export function AuthBackdrop({ children, className }: AuthBackdropProps) {
             strokeLinecap="round"
             className="opacity-[0.18]"
           />
-          {[
-            [200, 420],
-            [440, 240],
-            [680, 400],
-            [920, 560],
-          ].map(([x, y], i) => (
+          {stages.map(([x, y], i) => (
             <g key={i} transform={`translate(${x} ${y})`} className="opacity-[0.22]">
               <circle r="5" fill="currentColor" />
-              {i === 3 && <circle r="14" fill="none" stroke="var(--color-stamp)" strokeWidth="1.5" className="auth-backdrop-ring" />}
+              {i === stages.length - 1 && (
+                <circle r="14" fill="none" stroke="var(--color-stamp)" strokeWidth="1.5" className="auth-backdrop-ring" />
+              )}
             </g>
           ))}
-          {/* Traveller: a small stamp ring that moves along the path over 24s. */}
+          {/* Traveller: a small stamp ring that moves along the path over 24s (CSS `offset-path`, same curve). */}
           <g className="auth-backdrop-traveller">
             <circle r="9" fill="var(--color-canvas)" stroke="var(--color-stamp)" strokeWidth="2" />
             <circle r="3" fill="var(--color-stamp)" />
