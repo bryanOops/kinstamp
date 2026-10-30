@@ -160,6 +160,7 @@
   "auth": {
     "errors": {
       "invalidEmail": "Ingresa un correo electrónico válido.",
+      "emailTaken": "Ya existe una cuenta con este correo. Inicia sesión.",
       "nameRequired": "Ingresa tu nombre completo.",
       "nameTooLong": "Ese nombre es demasiado largo (máximo 120 caracteres).",
       "passwordTooShort": "Usa al menos 8 caracteres.",
@@ -224,7 +225,6 @@
       "nextStepTitle": "Abre el enlace para confirmar tu cuenta",
       "nextStep": "El enlace inicia tu sesión y te lleva a tus casos.",
       "spam": "¿No lo ves? Revisa la carpeta de spam. El remitente es Kinstamp.",
-      "existing": "¿Ya tenías una cuenta con este correo? Entonces no se envía un correo nuevo: solo inicia sesión.",
       "goToSignIn": "Ir a iniciar sesión"
     }
   },

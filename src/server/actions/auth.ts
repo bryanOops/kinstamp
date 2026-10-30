@@ -48,7 +48,7 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
   const { fullName, email, password, role, insightsConsent } = parsed.data;
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -64,8 +64,11 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
     return { error: "signUpFailed", values };
   }
 
-  // Same outcome whether or not the email already had an account,
-  // so sign-up cannot be used to find out who is registered.
+  // With email confirmation on, Supabase answers an existing address with a user that has no
+  // identities and sends nothing. Saying so reveals that the email is registered, which is the
+  // usual tradeoff at sign-up; sign-in still never says which of the two fields is wrong.
+  if (data.user && data.user.identities?.length === 0) return { fieldErrors: { email: "emailTaken" }, values };
+
   redirect(`/check-email?email=${encodeURIComponent(email)}`);
 }
 
