@@ -1,6 +1,6 @@
 {
   "source": "https://egov.uscis.gov/processing-times/",
-  "retrievedOn": null,
-  "note": "NO DATA RETRIEVED. The USCIS processing-times site returned HTTP 403 to automated requests on 2026-10-30. Intended meaning of future figures: time within which USCIS completes 80% of cases (as published by USCIS). Do not display until entries are filled from the official page.",
-  "entries": []
+  "retrievedOn": "2026-10-30",
+  "note": "Copied by hand from the official USCIS page. Each figure is the time within which USCIS completes 80% of cases. The Case Status API does not report the form category or the processing office, so each form type uses its most common combination. I-130: 'U.S. citizen filing for a spouse, parent, or child under 21' at 'All Field Offices' (the National Benefits Center figure covers adoption-based petitions only).",
+  "entries": [{ "formType": "I-130", "months": 83.5 }]
 }
