@@ -200,7 +200,8 @@
         "invalidReceipt": "Eso no parece un número de recibo. Debe tener 3 letras y 10 dígitos.",
         "receiptNotFound": "USCIS no tiene ningún caso con ese número de recibo. Revisa el aviso e inténtalo de nuevo.",
         "nicknameTooLong": "Usa como máximo 80 caracteres.",
-        "somethingWentWrong": "No pudimos agregar el caso. Inténtalo de nuevo."
+        "somethingWentWrong": "No pudimos agregar el caso. Inténtalo de nuevo.",
+        "tooManyChecks": "Consultaste muchos casos en la última hora. Vuelve a intentarlo en un rato."
       }
     },
     "errors": {
@@ -445,7 +446,6 @@
         "alreadyShared": "Este caso ya está compartido con ese correo.",
         "invalidEmail": "Ingresa un correo electrónico válido.",
         "cannotShareWithYourself": "No puedes compartir un caso contigo mismo.",
-        "notAnAttorney": "Ese correo pertenece a una cuenta de cliente, no de abogado.",
         "somethingWentWrong": "No pudimos compartir el caso. Inténtalo de nuevo."
       },
       "shared": "Compartido. Verá el caso en cuanto inicie sesión."
@@ -688,6 +688,19 @@
       "dailyLimitReached": "Llegaste al límite de 20 preguntas de hoy. Vuelve mañana.",
       "assistantUnavailable": "El asistente no está disponible en este momento. Los datos de tu caso no se ven afectados.",
       "network": "El asistente no pudo responder. Revisa tu conexión e inténtalo de nuevo."
+    },
+    "notices": {
+      "refused": "No puedo ayudarte con eso. Consúltalo con tu abogado.",
+      "failed": "El asistente no está disponible en este momento. Inténtalo más tarde."
+    }
+  },
+  "emails": {
+    "statusChange": {
+      "subject": "Novedad en {caseName}",
+      "heading": "Tu caso tiene un estado nuevo",
+      "cta": "Abrir en Kinstamp",
+      "footer": "Recibes este correo porque sigues este caso en Kinstamp. Puedes desactivarlos en Configuración.",
+      "fallbackCaseName": "tu caso"
     }
   }
 }

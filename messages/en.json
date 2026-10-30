@@ -200,7 +200,8 @@
         "invalidReceipt": "That doesn't look like a receipt number. It should be 3 letters and 10 digits.",
         "receiptNotFound": "USCIS has no case with that receipt number. Check the notice and try again.",
         "nicknameTooLong": "Use at most 80 characters.",
-        "somethingWentWrong": "We couldn't add the case. Please try again."
+        "somethingWentWrong": "We couldn't add the case. Please try again.",
+        "tooManyChecks": "You have checked many cases in the last hour. Please try again in a little while."
       }
     },
     "errors": {
@@ -445,7 +446,6 @@
         "alreadyShared": "This case is already shared with that email.",
         "invalidEmail": "Enter a valid email address.",
         "cannotShareWithYourself": "You can't share a case with yourself.",
-        "notAnAttorney": "That email belongs to a client account, not an attorney.",
         "somethingWentWrong": "We couldn't share the case. Please try again."
       },
       "shared": "Shared. They'll see the case as soon as they sign in."
@@ -688,6 +688,19 @@
       "dailyLimitReached": "You've reached today's limit of 20 questions. Come back tomorrow.",
       "assistantUnavailable": "The assistant isn't available right now. Your case data is unaffected.",
       "network": "The assistant couldn't answer. Check your connection and try again."
+    },
+    "notices": {
+      "refused": "I can't help with that one. Please ask your attorney.",
+      "failed": "The assistant is unavailable right now. Please try again later."
+    }
+  },
+  "emails": {
+    "statusChange": {
+      "subject": "Update on {caseName}",
+      "heading": "Your case has a new status",
+      "cta": "Open in Kinstamp",
+      "footer": "You get this email because you track this case in Kinstamp. You can turn these emails off in Settings.",
+      "fallbackCaseName": "your case"
     }
   }
 }

@@ -10,8 +10,8 @@ import { notifyStatusChange } from "@/server/notifications";
 export const DAILY_CHECK_BUDGET = 900;
 /** A successful check younger than this is reused instead of calling USCIS again. */
 export const FRESH_CHECK_MS = 60_000;
-/** Refreshes one person can request per hour. */
-export const REFRESHES_PER_HOUR = 30;
+/** Checks one person can trigger per hour (adding cases and refreshing). */
+export const CHECKS_PER_PERSON_PER_HOUR = 30;
 
 export type CheckTrigger = "add" | "refresh" | "scheduled";
 
@@ -131,7 +131,7 @@ export async function runCheck(params: {
 
 /** Errors after which the receipt may still be valid: retry later instead of marking the case as failed. */
 function isTransient(code: UscisErrorCode): boolean {
-  return ["unavailable", "timeout", "rate_limited", "quota_exhausted", "auth_failed", "unknown"].includes(code);
+  return ["unavailable", "timeout", "rate_limited", "quota_exhausted"].includes(code);
 }
 
 async function dailyBudgetSpent(): Promise<boolean> {
@@ -143,13 +143,13 @@ async function dailyBudgetSpent(): Promise<boolean> {
   return (count ?? 0) >= DAILY_CHECK_BUDGET;
 }
 
-/** Refreshes this person requested in the last hour, for the per-person limit. */
-export async function refreshesInLastHour(personId: string): Promise<number> {
+/** Checks this person triggered in the last hour (adds and refreshes), for the per-person limit. */
+export async function checksRequestedInLastHour(personId: string): Promise<number> {
   const { count } = await createAdminClient()
     .from("case_checks")
     .select("id", { count: "exact", head: true })
     .eq("requested_by", personId)
-    .eq("trigger", "refresh")
+    .in("trigger", ["add", "refresh"])
     .gte("created_at", new Date(Date.now() - 3_600_000).toISOString());
   return count ?? 0;
 }

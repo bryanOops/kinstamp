@@ -7,9 +7,15 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { parseReceiptNumber, type UscisErrorCode } from "@/lib/uscis";
 import { requireProfile } from "@/server/auth";
-import { FRESH_CHECK_MS, REFRESHES_PER_HOUR, refreshesInLastHour, runCheck } from "@/server/cases/run-check";
+import { CHECKS_PER_PERSON_PER_HOUR, checksRequestedInLastHour, FRESH_CHECK_MS, runCheck } from "@/server/cases/run-check";
 
 // Error values are i18n keys under `cases.errors`.
+
+/** Ids arrive from the browser: validate them before they reach a query. */
+const idSchema = z.uuid();
+
+/** Errors after which the receipt may still be valid: the case is kept and checked again later. */
+const USCIS_UNREACHABLE = new Set<UscisErrorCode>(["unavailable", "timeout", "rate_limited", "quota_exhausted"]);
 
 /** A case already checked within this window is linked without calling USCIS again. */
 const RECENT_CHECK_MS = 60 * 60_000;
@@ -36,6 +42,8 @@ export async function addCase(_prev: AddCaseState, formData: FormData): Promise<
   if (!receipt.ok) return { fieldErrors: { receiptNumber: "invalidReceipt" }, values };
   const nickname = nicknameSchema.safeParse(values.nickname);
   if (!nickname.success) return { fieldErrors: { nickname: "nicknameTooLong" }, values };
+
+  if ((await checksRequestedInLastHour(profile.id)) >= CHECKS_PER_PERSON_PER_HOUR) return { error: "tooManyChecks", values };
 
   const supabase = await createClient();
   const admin = createAdminClient();
@@ -67,12 +75,14 @@ export async function addCase(_prev: AddCaseState, formData: FormData): Promise<
     caseId = created.id;
 
     const check = await runCheck({ caseId, receiptNumber: receipt.value, trigger: "add", requestedBy: profile.id });
-    if (!check.ok && (check.errorCode === "not_found" || check.errorCode === "invalid_receipt")) {
-      // USCIS does not know this receipt: do not keep a case for it.
+    if (!check.ok && !USCIS_UNREACHABLE.has(check.errorCode)) {
+      // USCIS answered and did not give us the case: keep nothing (docs/spec.md, 4.2).
       await admin.from("cases").delete().eq("id", caseId);
-      return { fieldErrors: { receiptNumber: check.errorCode === "not_found" ? "receiptNotFound" : "invalidReceipt" }, values };
+      if (check.errorCode === "not_found") return { fieldErrors: { receiptNumber: "receiptNotFound" }, values };
+      if (check.errorCode === "invalid_receipt") return { fieldErrors: { receiptNumber: "invalidReceipt" }, values };
+      return { error: "somethingWentWrong", values };
     }
-    // Any other failure (USCIS offline, quota): keep it as "awaiting first check".
+    // USCIS could not be reached (offline, timeout, quota): keep it as "awaiting first check".
   } else {
     const lastSuccess = existingCase?.last_successful_check_at;
     if (!lastSuccess || Date.now() - new Date(lastSuccess).getTime() > RECENT_CHECK_MS) {
@@ -100,6 +110,7 @@ export type RefreshState =
 
 /** Refreshes a tracked case for its client or for an attorney it is shared with. */
 export async function refreshCase(trackedCaseId: string, _prev: RefreshState): Promise<RefreshState> {
+  idSchema.parse(trackedCaseId);
   const profile = await requireProfile();
   const supabase = await createClient();
 
@@ -116,7 +127,7 @@ export async function refreshCase(trackedCaseId: string, _prev: RefreshState): P
   if (lastSuccess && Date.now() - new Date(lastSuccess).getTime() < FRESH_CHECK_MS) {
     return { status: "reused", checkedAt: lastSuccess };
   }
-  if ((await refreshesInLastHour(profile.id)) >= REFRESHES_PER_HOUR) {
+  if ((await checksRequestedInLastHour(profile.id)) >= CHECKS_PER_PERSON_PER_HOUR) {
     return { status: "error", errorCode: "rate_limited_person", outsideHours: false };
   }
 
@@ -134,6 +145,7 @@ export async function refreshCase(trackedCaseId: string, _prev: RefreshState): P
 
 /** Marks a tracked case as seen, for the "changed since your last visit" marker. */
 export async function markCaseViewed(trackedCaseId: string): Promise<void> {
+  idSchema.parse(trackedCaseId);
   const profile = await requireProfile("client");
   const supabase = await createClient();
   await supabase
@@ -146,6 +158,7 @@ export async function markCaseViewed(trackedCaseId: string): Promise<void> {
 export type SimpleState = { error?: string; ok?: boolean };
 
 export async function renameTrackedCase(trackedCaseId: string, _prev: SimpleState, formData: FormData): Promise<SimpleState> {
+  idSchema.parse(trackedCaseId);
   const profile = await requireProfile("client");
   const nickname = nicknameSchema.safeParse(String(formData.get("nickname") ?? ""));
   if (!nickname.success) return { error: "nicknameTooLong" };
@@ -161,6 +174,7 @@ export async function renameTrackedCase(trackedCaseId: string, _prev: SimpleStat
 }
 
 export async function untrackCase(trackedCaseId: string): Promise<void> {
+  idSchema.parse(trackedCaseId);
   const profile = await requireProfile("client");
   const supabase = await createClient();
   await supabase.from("tracked_cases").delete().eq("id", trackedCaseId).eq("client_id", profile.id);
@@ -171,19 +185,14 @@ export async function untrackCase(trackedCaseId: string): Promise<void> {
 const emailSchema = z.string().trim().toLowerCase().pipe(z.email());
 
 export async function shareCase(trackedCaseId: string, _prev: SimpleState, formData: FormData): Promise<SimpleState> {
+  idSchema.parse(trackedCaseId);
   const profile = await requireProfile("client");
   const email = emailSchema.safeParse(String(formData.get("attorneyEmail") ?? ""));
   if (!email.success) return { error: "invalidEmail" };
   if (email.data === profile.email) return { error: "cannotShareWithYourself" };
 
-  // Shares go to attorneys only. An unknown email is fine: it stays pending until they sign up.
-  const { data: existingAccount } = await createAdminClient()
-    .from("profiles")
-    .select("role")
-    .eq("email", email.data)
-    .maybeSingle();
-  if (existingAccount && existingAccount.role !== "attorney") return { error: "notAnAttorney" };
-
+  // No lookup of the email here, so sharing cannot reveal who has an account. A share
+  // only ever opens to a confirmed attorney account with that email (RLS); otherwise it stays pending.
   const supabase = await createClient();
   const { error } = await supabase.from("shares").insert({ tracked_case_id: trackedCaseId, attorney_email: email.data });
   if (error) return { error: error.code === "23505" ? "alreadyShared" : "somethingWentWrong" };
@@ -192,6 +201,7 @@ export async function shareCase(trackedCaseId: string, _prev: SimpleState, formD
 }
 
 export async function revokeShare(shareId: string): Promise<void> {
+  idSchema.parse(shareId);
   await requireProfile("client");
   const supabase = await createClient();
   // RLS lets only the owning client update the share.
@@ -219,6 +229,7 @@ export type KeyDateState = { error?: string; fieldErrors?: Partial<Record<keyof 
 
 /** Adds a key date copied from a USCIS notice. Clients and shared attorneys can add them. */
 export async function addKeyDate(trackedCaseId: string, _prev: KeyDateState, formData: FormData): Promise<KeyDateState> {
+  idSchema.parse(trackedCaseId);
   const profile = await requireProfile();
   const parsed = keyDateSchema.safeParse({
     kind: formData.get("kind"),
@@ -245,6 +256,7 @@ export async function addKeyDate(trackedCaseId: string, _prev: KeyDateState, for
 }
 
 export async function deleteKeyDate(keyDateId: string): Promise<void> {
+  idSchema.parse(keyDateId);
   await requireProfile();
   const supabase = await createClient();
   // RLS allows the creator or the owning client.
@@ -253,6 +265,7 @@ export async function deleteKeyDate(keyDateId: string): Promise<void> {
 }
 
 export async function setInsightsConsent(granted: boolean): Promise<void> {
+  z.boolean().parse(granted);
   const profile = await requireProfile();
   const supabase = await createClient();
   if (granted) {
@@ -271,6 +284,7 @@ export async function setInsightsConsent(granted: boolean): Promise<void> {
 }
 
 export async function setNotifyOnChange(enabled: boolean): Promise<void> {
+  z.boolean().parse(enabled);
   const profile = await requireProfile();
   const supabase = await createClient();
   await supabase.from("profiles").update({ notify_on_change: enabled }).eq("id", profile.id);
