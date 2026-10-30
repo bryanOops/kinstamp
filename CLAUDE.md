@@ -20,7 +20,7 @@ These rules are the reference for `/mp-code-review`.
 
 ### React and Next.js (App Router)
 - Server Components by default. `"use client"` only on the leaf component that needs state, events or browser APIs, never on whole pages or layouts.
-- Read data in Server Components. Mutations go through Server Actions validated with Zod. Route Handlers only for non-UI entry points (cron, webhooks).
+- Read data in Server Components. Mutations go through Server Actions validated with Zod. Route Handlers only for non-UI entry points (cron, webhooks), file downloads (`.ics`) and streaming responses (the case assistant).
 - Form and action state with `useActionState` and `useFormStatus`; `useOptimistic` where it improves perceived speed.
 - No `useEffect` to fetch data or derive state: data comes from the server, derived values are computed during render.
 - Reusable client logic lives in custom hooks (`useXxx`) under `src/hooks/`.

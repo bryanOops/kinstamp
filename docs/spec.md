@@ -53,7 +53,7 @@ Extras, in build order (cut from the bottom if time runs out):
 | `/cases` | Client | Tracked cases with status, last change and a "changed since your last visit" marker; "Add a case" dialog with sandbox sample receipts. |
 | `/cases/[trackedCaseId]` | Client | Case detail: header (nickname, receipt, form), current status (EN/ES), refresh, plain-English card, "Is my case slow?", key dates, shares, mini insight, timeline, assistant. |
 | `/attorney` | Attorney | Shared cases table, filters, urgency order. |
-| `/attorney/cases/[shareId]` | Attorney | Same case detail without edit, share or delete actions; can refresh and add key dates. |
+| `/attorney/cases/[trackedCaseId]` | Attorney | Same case detail without edit, share or delete actions; can refresh and add key dates. RLS returns the tracked case only while a share to the attorney is active. |
 | `/insights` | Client | Insights by form type, highlighting the client's own case if they have one. |
 | `/settings` | Both | Profile, language, consent, email notifications, delete account. |
 | `/api/cron/scheduled-checks` | Vercel Cron | Runs scheduled checks. Protected by `CRON_SECRET`. |
@@ -81,12 +81,13 @@ Email confirmation is a security requirement, not just polish: shares are matche
    - **Success:** create the case, its reported events and an initial observed event for the current status, then the tracked case.
    - **Not found:** show the error, create nothing. **[fixtures]** (exact status code to confirm)
    - **USCIS unavailable or quota reached:** create the case as *awaiting first check* plus the tracked case, and tell the client it will be checked automatically when USCIS is back. The client keeps a working list even on weekends.
-   - **Other errors:** show the error, create nothing.
+   - **Other errors** (authentication, unreadable response, unknown): show the error, create nothing.
+   - Adding counts toward the same per-person limit as refreshing (30 checks per hour), and every call to USCIS stays in `case_checks` even when its case is removed, so the daily budget cannot be bypassed.
 
 ### 4.3 Refresh (client or attorney)
 1. Access check through RLS (tracked case or active share).
 2. If the case was checked successfully less than 60 s ago, return that result immediately ("Checked 20 seconds ago").
-3. Per-person limit: 30 refreshes per hour. Global guard: once 900 checks have run today (Eastern day), stop calling USCIS and return the saved status with a notice.
+3. Per-person limit: 30 checks per hour (adds and refreshes). Global guard: once 900 checks have run today (Eastern day), stop calling USCIS and return the saved status with a notice.
 4. Run the check (section 6). Record it in `case_checks`.
 5. Return the result to the screen: changed (new event highlighted on the timeline), unchanged, or error with the last saved status.
 
@@ -104,7 +105,7 @@ Email confirmation is a security requirement, not just polish: shares are matche
 4. The creator or the client can delete a key date.
 
 ### 4.6 Scheduled checks
-1. Vercel Cron calls `/api/cron/scheduled-checks` on weekdays at 10:00 Eastern (`0 14 * * 1-5` in UTC during daylight saving time; `0 15 * * 1-5` otherwise).
+1. Vercel Cron calls `/api/cron/scheduled-checks` on weekdays at 14:00 and 15:00 UTC, so one run always lands at 10:00 Eastern with or without daylight saving time; the second run skips cases checked in the last 6 hours, so it costs nothing extra.
 2. Every case that has at least one tracked case is checked sequentially, 250 ms apart (under 5 per second), skipping cases checked in the last 6 hours, and stopping at the global guard.
 3. For each observed status event, every tracking client with notifications on receives one email in their language. `notifications_sent` prevents duplicates.
 
@@ -188,7 +189,7 @@ Module `src/lib/uscis/`, server-only.
 - **Token:** cached in memory until 60 s before expiry; renewed on a `401` once.
 - **Request:** `GET /case-status/{receipt}` with an 8 s timeout. One retry with backoff on network errors, timeouts and 5xx, except the out-of-hours 503, which is not retried.
 - **Parsing:** Zod schema for the success body; `submittedDate`, `modifiedDate` and `hist_case_status` are optional (IOE receipts, cases without history). Dates are parsed from `MM-DD-YYYY HH:mm:ss` (assumed Eastern) and `YYYY-MM-DD`.
-- **Errors** map to: `invalid_receipt`, `not_found`, `unavailable`, `rate_limited`, `quota_exhausted`, `timeout`, `auth_failed`, `unknown`. The parser accepts the three error shapes in `docs/uscis-api.md`. Every code has an EN/ES message.
+- **Errors** map to: `invalid_receipt`, `not_found`, `unavailable`, `rate_limited`, `quota_exhausted`, `timeout`, `auth_failed`, `unexpected_response` (a 200 whose body cannot be read), `unknown`. The parser accepts the three error shapes in `docs/uscis-api.md`. Every code has an EN/ES message.
 - **Mock provider:** when `USCIS_CLIENT_ID` is missing, the client reads responses from `src/lib/uscis/__fixtures__/` (real recorded responses). Never used when credentials are set (ADR 0003).
 
 Module `src/lib/cases/` (pure, test-first):
@@ -200,8 +201,8 @@ Module `src/lib/cases/` (pure, test-first):
 ## 7. Case assistant (E7)
 
 - Route Handler that runs a tool-use loop with the Claude API (model chosen when implementing, using the `claude-api` skill) and streams the answer.
-- Tools are server functions that query Supabase **as the signed-in user**, so RLS applies: `get_case_overview`, `get_timeline`, `get_key_dates`, `get_official_processing_time`, `get_insights`, `explain_status_category`.
-- System prompt: answer only from tool results, say so when data is missing, reply in the user's locale, never give legal advice and add a short note saying so.
+- Tools are server functions that query Supabase **as the signed-in user**, so RLS applies: `get_case_overview`, `get_timeline`, `get_key_dates`, `get_official_processing_time`, `get_insights`. General explanations of a status come from the model itself, grounded in the status and description USCIS returned.
+- System prompt: answer only from tool results, say so when data is missing, reply in the language the person writes in (the UI starts in their locale), never give legal advice and add a short note saying so.
 - Limit: 20 messages per person per day (`assistant_usage`). No conversation is stored.
 
 ## 8. Internationalization
