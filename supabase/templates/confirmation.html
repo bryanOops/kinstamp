@@ -1,27 +1,120 @@
 <!doctype html>
-<html>
-  <body style="margin:0;padding:32px 16px;background:#f6f6f8;font-family:Inter,Arial,sans-serif;color:#0b0b0f">
-    <table role="presentation" width="100%" style="max-width:520px;margin:0 auto;background:#ffffff;border:1px solid #e6e6ea;border-radius:8px">
-      <tr>
-        <td style="padding:32px">
-          <p style="margin:0 0 24px;font-family:Georgia,serif;font-size:24px">
-            <span style="color:#e5532d">&#9635;</span> Kinstamp
-          </p>
-          <h1 style="margin:0 0 12px;font-family:Georgia,serif;font-size:22px;font-weight:400">Confirm your email</h1>
-          <p style="margin:0 0 24px;line-height:1.5;color:#5c5c66">
-            Confirm your email to start tracking your USCIS cases.<br />
-            Confirma tu correo para empezar a seguir tus casos de USCIS.
-          </p>
-          <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email"
-             style="display:inline-block;padding:12px 20px;background:#0b0b0f;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600">
-            Confirm email · Confirmar correo
-          </a>
-          <p style="margin:24px 0 0;font-size:13px;line-height:1.5;color:#5c5c66">
-            If you did not create a Kinstamp account, ignore this email.<br />
-            Si no creaste una cuenta en Kinstamp, ignora este correo.
-          </p>
-        </td>
-      </tr>
-    </table>
-  </body>
+<html lang="{{ if eq .Data.locale "es" }}es{{ else }}en{{ end }}" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>{{ if eq .Data.locale "es" }}Confirma tu correo{{ else }}Confirm your email{{ end }}</title>
+  <!--
+    Kinstamp account confirmation (Supabase Auth, Go template).
+    Copy lives here because Supabase renders this file itself; the language comes from the
+    sign-up locale stored in user metadata (.Data.locale), defaulting to English.
+    Layout follows docs/design/DESIGN.md: tables, inline styles, system fonts, no images.
+  -->
+  <style>
+    @media (prefers-color-scheme: dark) {
+      .k-body { background: #0b0b0f !important; }
+      .k-card { background: #15151a !important; border-color: #2a2a31 !important; }
+      .k-ink { color: #f3f3f5 !important; }
+      .k-muted { color: #a0a0a8 !important; }
+      .k-line { border-color: #2a2a31 !important; }
+      .k-mark { border-color: #f3f3f5 !important; }
+      .k-btn { background: #ffffff !important; }
+      .k-btn a { color: #0b0b0f !important; }
+      .k-footer a, .k-link a { color: #a0a0a8 !important; }
+    }
+    @media only screen and (max-width: 600px) {
+      .k-frame { padding: 24px 12px !important; }
+      .k-card-pad { padding: 24px 20px !important; }
+      .k-title { font-size: 24px !important; line-height: 30px !important; }
+      .k-btn-table { width: 100% !important; }
+    .k-btn, .k-btn a { display: block !important; text-align: center !important; }
+    }
+  </style>
+</head>
+<body class="k-body" style="margin:0;padding:0;background:#f6f6f8;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%">
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f6f6f8">{{ if eq .Data.locale "es" }}Confirma tu correo para empezar a seguir tus casos de USCIS.{{ else }}Confirm your email to start tracking your USCIS cases.{{ end }}&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="k-body" style="background:#f6f6f8">
+    <tr>
+      <td align="center" class="k-frame" style="padding:40px 16px">
+        <!--[if mso]><table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;margin:0 auto">
+          <tr>
+            <td style="padding:0 4px 20px">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td valign="middle" style="padding-right:8px">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td class="k-mark" align="center" valign="middle" style="width:14px;height:14px;border:2px solid #0b0b0f;border-radius:5px;font-size:0;line-height:0">
+                          <div style="width:6px;height:6px;border-radius:3px;background:#e5532d;margin:0 auto;font-size:0;line-height:0">&nbsp;</div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td valign="middle" class="k-ink" style="font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:18px;line-height:20px;font-weight:600;letter-spacing:-0.03em;color:#0b0b0f">Kinstamp</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="k-card k-card-pad" style="background:#ffffff;border:1px solid #e6e6ea;border-radius:12px;padding:32px">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:0 0 16px">
+                    <h1 class="k-ink k-title" style="margin:0;font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:28px;line-height:34px;letter-spacing:-0.02em;font-weight:600;color:#0b0b0f">{{ if eq .Data.locale "es" }}Confirma tu correo{{ else }}Confirm your email{{ end }}</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:0 0 28px">
+                    <p class="k-ink" style="margin:0;font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:24px;letter-spacing:-0.004em;color:#0b0b0f">
+                      {{ if eq .Data.locale "es" }}{{ if .Data.full_name }}Hola, {{ .Data.full_name }}. {{ else }}Hola. {{ end }}Gracias por crear tu cuenta en Kinstamp. Confirma tu correo para empezar a seguir tus casos de USCIS y compartirlos con tu abogado.{{ else }}{{ if .Data.full_name }}Hi {{ .Data.full_name }}, {{ else }}Hi, {{ end }}thanks for creating a Kinstamp account. Confirm your email address to start tracking your USCIS cases and share them with your attorney.{{ end }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:0 0 28px">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="k-btn-table">
+                      <tr>
+                        <td class="k-btn" style="background:#0b0b0f;border-radius:12px;mso-padding-alt:0">
+                          <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email" style="display:inline-block;padding:14px 24px;font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:20px;font-weight:600;letter-spacing:-0.004em;color:#ffffff;text-decoration:none;border-radius:12px">{{ if eq .Data.locale "es" }}Confirmar correo{{ else }}Confirm email{{ end }}</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="k-line" style="padding:24px 0 0;border-top:1px solid #e6e6ea">
+                    <p class="k-muted" style="margin:0;font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:13px;line-height:20px;color:#5c5c66">
+                      {{ if eq .Data.locale "es" }}Si el botón no funciona, copia y pega este enlace en tu navegador:{{ else }}If the button does not work, copy and paste this link into your browser:{{ end }}
+                    </p>
+                    <p class="k-link" style="margin:8px 0 0;font-family:'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;font-size:12px;line-height:18px;word-break:break-all">
+                      <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email" style="color:#5c5c66;text-decoration:underline;text-underline-offset:2px">{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email</a>
+                    </p>
+                    <p class="k-muted" style="margin:20px 0 0;font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:13px;line-height:20px;color:#5c5c66">
+                      {{ if eq .Data.locale "es" }}Si no creaste una cuenta en Kinstamp, puedes ignorar este correo: no pasará nada sin tu confirmación.{{ else }}If you did not create a Kinstamp account, you can ignore this email: nothing happens without your confirmation.{{ end }}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="k-footer" style="padding:24px 4px 0">
+              <p class="k-muted" style="margin:0;font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:13px;line-height:20px;color:#5c5c66">
+                {{ if eq .Data.locale "es" }}Recibes este correo porque esta dirección se usó para crear una cuenta en Kinstamp.{{ else }}You received this email because this address was used to create a Kinstamp account.{{ end }}
+              </p>
+              <p class="k-muted" style="margin:8px 0 0;font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;font-size:13px;line-height:20px;color:#5c5c66">
+                {{ if eq .Data.locale "es" }}Kinstamp no tiene afiliación con USCIS ni con el gobierno de EE. UU.{{ else }}Kinstamp is not affiliated with USCIS or the U.S. government.{{ end }}
+              </p>
+            </td>
+          </tr>
+        </table>
+        <!--[if mso]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+  </table>
+</body>
 </html>

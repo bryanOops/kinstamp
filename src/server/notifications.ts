@@ -1,8 +1,9 @@
 import "server-only";
 import { getTranslations } from "next-intl/server";
 import { isLocale } from "@/i18n/config";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { renderStatusChangeEmail } from "@/lib/emails/status-change";
 import { siteUrl } from "@/lib/env";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
  * Emails every client tracking the case (with notifications on) about its latest observed
@@ -40,28 +41,38 @@ export async function notifyStatusChange(caseId: string): Promise<void> {
 
     const locale = isLocale(person.locale) ? person.locale : "en";
     const t = await getTranslations({ locale, namespace: "emails.statusChange" });
-    const caseName = tracker.nickname ?? tracker.cases?.receipt_number ?? t("fallbackCaseName");
+    const receiptNumber = tracker.cases?.receipt_number ?? "";
+    const caseName = tracker.nickname || receiptNumber || t("fallbackCaseName");
     const status = (locale === "es" && event.text_es) || event.text_en;
     const description = (locale === "es" && event.description_es) || event.description_en || "";
-    const url = `${siteUrl()}/cases/${tracker.id}`;
 
-    const sent = await sendEmail({
-      to: person.email,
-      subject: t("subject", { caseName }),
-      html: `<div style="font-family:Inter,Arial,sans-serif;color:#0b0b0f;max-width:520px">
-        <p style="color:#5c5c66;margin:0 0 8px">${escapeHtml(caseName)}</p>
-        <h1 style="font-size:20px;margin:0 0 12px">${escapeHtml(t("heading"))}: ${escapeHtml(status)}</h1>
-        <p style="line-height:1.5;color:#3a3a42">${escapeHtml(description)}</p>
-        <p><a href="${url}" style="display:inline-block;padding:10px 16px;background:#0b0b0f;color:#fff;border-radius:8px;text-decoration:none">${escapeHtml(t("cta"))}</a></p>
-        <p style="font-size:12px;color:#5c5c66">${escapeHtml(t("footer"))}</p>
-      </div>`,
+    const { html, text } = renderStatusChangeEmail({
+      lang: locale,
+      caseName,
+      receiptNumber,
+      status,
+      description,
+      url: `${siteUrl()}/cases/${tracker.id}`,
+      settingsUrl: `${siteUrl()}/settings`,
+      copy: {
+        heading: t("heading"),
+        caseLabel: t("caseLabel"),
+        receiptLabel: t("receiptLabel"),
+        descriptionLabel: t("descriptionLabel"),
+        cta: t("cta"),
+        footer: t("footer"),
+        manageNotifications: t("manageNotifications"),
+        notAffiliated: t("notAffiliated"),
+      },
     });
+
+    const sent = await sendEmail({ to: person.email, subject: t("subject", { caseName }), html, text });
     if (!sent) await admin.from("notifications_sent").delete().eq("id", claim.id);
   }
 }
 
 /** Sends through Resend; returns false when it could not be sent (skipped or failed). */
-async function sendEmail(message: { to: string; subject: string; html: string }): Promise<boolean> {
+async function sendEmail(message: { to: string; subject: string; html: string; text: string }): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   if (!apiKey || !from) {
@@ -81,8 +92,4 @@ async function sendEmail(message: { to: string; subject: string; html: string })
     console.error("[notifications] Resend request failed", error);
     return false;
   }
-}
-
-function escapeHtml(value: string): string {
-  return value.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 }

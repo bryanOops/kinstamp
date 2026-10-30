@@ -698,8 +698,13 @@
     "statusChange": {
       "subject": "Novedad en {caseName}",
       "heading": "Tu caso tiene un estado nuevo",
+      "caseLabel": "Caso",
+      "receiptLabel": "Número de recibo",
+      "descriptionLabel": "Lo que indica USCIS",
       "cta": "Abrir en Kinstamp",
-      "footer": "Recibes este correo porque sigues este caso en Kinstamp. Puedes desactivarlos en Configuración.",
+      "footer": "Recibes este correo porque sigues este caso en Kinstamp.",
+      "manageNotifications": "Desactiva estos correos en Configuración",
+      "notAffiliated": "Kinstamp no tiene afiliación con USCIS ni con el gobierno de EE. UU.",
       "fallbackCaseName": "tu caso"
     }
   }

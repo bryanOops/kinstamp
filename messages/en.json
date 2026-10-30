@@ -698,8 +698,13 @@
     "statusChange": {
       "subject": "Update on {caseName}",
       "heading": "Your case has a new status",
+      "caseLabel": "Case",
+      "receiptLabel": "Receipt number",
+      "descriptionLabel": "What USCIS says",
       "cta": "Open in Kinstamp",
-      "footer": "You get this email because you track this case in Kinstamp. You can turn these emails off in Settings.",
+      "footer": "You get this email because you track this case in Kinstamp.",
+      "manageNotifications": "Turn these emails off in Settings",
+      "notAffiliated": "Kinstamp is not affiliated with USCIS or the U.S. government.",
       "fallbackCaseName": "your case"
     }
   }
