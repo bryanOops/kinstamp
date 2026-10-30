@@ -235,3 +235,24 @@ export async function hasInsightsConsent(personId: string): Promise<boolean> {
     .is("revoked_at", null);
   return (count ?? 0) > 0;
 }
+
+export type FormTypeInsight = {
+  formType: string;
+  caseCount: number;
+  medianDays: number;
+  p25Days: number;
+  p75Days: number;
+};
+
+/** Anonymized processing durations by form type (ADR 0005); empty until 5+ consented cases exist per form. */
+export async function listInsights(): Promise<FormTypeInsight[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("insights_by_form_type");
+  return (data ?? []).map((row) => ({
+    formType: row.form_type,
+    caseCount: row.case_count,
+    medianDays: Number(row.median_days),
+    p25Days: Number(row.p25_days),
+    p75Days: Number(row.p75_days),
+  }));
+}

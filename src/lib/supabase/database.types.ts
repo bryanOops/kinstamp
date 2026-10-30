@@ -255,6 +255,11 @@ isOneToOne: false
 "current_attorney_email":
 { Args: Record<PropertyKey, never>; Returns: string
                            },
+"insights_by_form_type":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "case_count": number,"form_type": string,"median_days": number,"p25_days": number,"p75_days": number
+            }[]
+                           },
 "is_shared_attorney":
 { Args: { "target_tracked_case_id": string }; Returns: boolean
                            },
