@@ -45,14 +45,14 @@ isOneToOne: false
                   ]
                 },"case_checks": {
                   Row: {
-                    "case_id": string,"created_at": string,"duration_ms": number,"error_code": string | null,"http_status": number | null,"id": string,"requested_by": string | null,"result": string,"trigger": string
+                    "case_id": string | null,"created_at": string,"duration_ms": number,"error_code": string | null,"http_status": number | null,"id": string,"requested_by": string | null,"result": string,"trigger": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "case_id": string,"created_at"?: string,"duration_ms": number,"error_code"?: string | null,"http_status"?: number | null,"id"?: string,"requested_by"?: string | null,"result": string,"trigger": string
+                    "case_id"?: string | null,"created_at"?: string,"duration_ms": number,"error_code"?: string | null,"http_status"?: number | null,"id"?: string,"requested_by"?: string | null,"result": string,"trigger": string
                   }
                   Update: {
-                    "case_id"?: string,"created_at"?: string,"duration_ms"?: number,"error_code"?: string | null,"http_status"?: number | null,"id"?: string,"requested_by"?: string | null,"result"?: string,"trigger"?: string
+                    "case_id"?: string | null,"created_at"?: string,"duration_ms"?: number,"error_code"?: string | null,"http_status"?: number | null,"id"?: string,"requested_by"?: string | null,"result"?: string,"trigger"?: string
                   }
                   Relationships: [
                     {
@@ -251,6 +251,9 @@ isOneToOne: false
                            },
 "can_read_case":
 { Args: { "target_case_id": string }; Returns: boolean
+                           },
+"confirmed_attorney_emails":
+{ Args: { "candidate_emails": (string)[] }; Returns: string[]
                            },
 "current_attorney_email":
 { Args: Record<PropertyKey, never>; Returns: string

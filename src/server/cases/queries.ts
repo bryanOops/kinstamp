@@ -1,4 +1,5 @@
 import "server-only";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { StatusCategory } from "@/lib/cases/categorize";
 
@@ -286,15 +287,14 @@ export async function getNotifyOnChange(personId: string): Promise<boolean> {
 }
 
 /**
- * Which of the given emails belong to an attorney account, so a share can be shown as
+ * Which of the given emails belong to a confirmed attorney account, so a share can be shown as
  * active instead of pending. Uses the service role because profiles are not readable
  * across accounts; it returns emails only, never other profile fields.
  */
 export async function attorneyAccountEmails(emails: string[]): Promise<Set<string>> {
   if (emails.length === 0) return new Set();
-  const { createAdminClient } = await import("@/lib/supabase/admin");
-  const { data } = await createAdminClient().from("profiles").select("email").in("email", emails).eq("role", "attorney");
-  return new Set((data ?? []).map((row) => row.email));
+  const { data } = await createAdminClient().rpc("confirmed_attorney_emails", { candidate_emails: emails });
+  return new Set((data ?? []) as string[]);
 }
 
 /** When the person's current insights consent was granted, or null without consent. */

@@ -14,20 +14,20 @@ insert into auth.users (id, email, raw_user_meta_data) values
 insert into public.cases (id, receipt_number, form_type)
 select
   ('20000000-0000-0000-0000-' || lpad(n::text, 12, '0'))::uuid,
-  'EAC' || lpad(n::text, 10, '0'),
+  'ZZY' || lpad(n::text, 10, '0'),
   case when n <= 6 then 'I-130' when n <= 10 then 'I-485' else 'I-765' end
 from generate_series(1, 16) as n;
 
 insert into public.status_events (case_id, origin, occurred_on, text_en, category)
-select c.id, 'reported', date '2025-01-01', 'We received your form.', 'received' from public.cases c
+select c.id, 'reported', date '2025-01-01', 'We received your form.', 'received' from public.cases c where c.receipt_number like 'ZZY%'
 union all
 select c.id, 'reported', date '2025-01-01' + (90 + 10 * (right(c.receipt_number, 2)::int)), 'We approved your form.', 'approved'
-from public.cases c;
+from public.cases c where c.receipt_number like 'ZZY%';
 
 insert into public.tracked_cases (case_id, client_id)
 select id, case when form_type = 'I-765' then '00000000-0000-0000-0000-0000000000a2'::uuid
                 else '00000000-0000-0000-0000-0000000000a1'::uuid end
-from public.cases;
+from public.cases where receipt_number like 'ZZY%';
 
 set local role authenticated;
 set local request.jwt.claims to '{"sub":"00000000-0000-0000-0000-0000000000a2","role":"authenticated"}';
