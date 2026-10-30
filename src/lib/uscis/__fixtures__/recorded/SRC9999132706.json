@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:49.977Z",
+  "receiptNumber": "SRC9999132706",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "SRC9999132706",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:51",
+      "modifiedDate": "09-05-2023 14:28:51",
+      "current_case_status_text_en": "Travel Authorization Decision Posted",
+      "current_case_status_desc_en": "On September 5, 2023, we received your  travel authorization decision from CBP for Receipt Number SRC9999132706. Please log into your USCIS online account and follow the instructions.",
+      "current_case_status_text_es": "Publicación De La Decisión De Autorización De Viaje",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, recibimos la decisión de autorización de viaje de CBP para su Número de Recibo SRC9999132706. Inicie sesión en su cuenta en línea de USCIS y siga las instrucciones.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'SRC9999132706'}"
+  }
+}

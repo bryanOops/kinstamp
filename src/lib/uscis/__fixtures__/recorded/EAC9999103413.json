@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:43.794Z",
+  "receiptNumber": "EAC9999103413",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103413",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Case Was Sent To The Department of State",
+      "current_case_status_desc_en": "On September 5, 2023, we sent your case, Receipt Number EAC9999103413, to the Department of State for visa processing. You can find general information on Consular Processing by visiting our website at www.uscis.gov . The website will provide information on what to do next, who to contact, and how to inform us of any changes in your situation or address.",
+      "current_case_status_text_es": "Caso Enviado Al Departamento De Estado",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, enviamos su caso, Número de Recibo EAC9999103413, aprobado o reafirmado al Departamento de Estado para el trámite de la visa. Puede encontrar información general sobre Procesamiento Consular visitando nuestro sitio web en www.uscis.gov. El sitio web proporcionará información sobre qué hacer a continuación, a quién contactar y cómo informarnos de cualquier cambio en su situación o dirección.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103413'}"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:43.413Z",
+  "receiptNumber": "EAC9999103412",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103412",
+      "formType": "",
+      "submittedDate": "",
+      "modifiedDate": "",
+      "current_case_status_text_en": "CASE STATUS",
+      "current_case_status_desc_en": "At this time USCIS cannot provide you with information for your case. Please contact the USCIS Contact Center at 1-800-375-5283 for additional information.",
+      "current_case_status_text_es": "EL ESTATUS DE CASO",
+      "current_case_status_desc_es": "En este momento USCIS no le puede proporcionar información para su caso. Por favor, llame a nuestro Centro de Contacto de USCIS al 1-800-375-5283 para información adicional.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103412'}"
+  }
+}

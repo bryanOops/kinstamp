@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:41.860Z",
+  "receiptNumber": "EAC9999103406",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103406",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Case Is Ready For Oath Scheduling",
+      "current_case_status_desc_en": "We completed our quality review of your case, Receipt Number EAC9999103406. We will schedule you for your oath ceremony and mail you a notice when your ceremony is scheduled. You should receive your notice within 30 days. Please follow the instructions in the notice. If you move, go to <a href=\"https://www.uscis.gov/addresschange\" target=\"_blank\">www.uscis.gov/addresschange</a> to give us your new mailing address.",
+      "current_case_status_text_es": "Caso Listo Para Programación De Ceremonia De Juramentación",
+      "current_case_status_desc_es": "Completamos el control de calidad de su caso para su Número de Recibo EAC9999103406. Organizaremos la ceremonia de juramento y le enviaremos una notificación cuando la ceremonia se haya programado. Por favor, siga las instrucciones que aparecen en este aviso. Si cambia de domicilio, visite <a href=\"https://www.uscis.gov/es/cambiodedireccion\" target=\"_blank\">www.uscis.gov/es/cambiodedireccion</a> para notificarnos su nueva dirección postal.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103406'}"
+  }
+}

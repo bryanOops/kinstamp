@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-10-30T13:21:51.117Z",
+  "receiptNumber": "EAC12345",
+  "status": 422,
+  "body": {
+    "message": "The application receipt number is not formatted correctly, It should be a total of 13 characters (3 character prefix followed by 10 digits). Please check your receipt number and try again."
+  }
+}

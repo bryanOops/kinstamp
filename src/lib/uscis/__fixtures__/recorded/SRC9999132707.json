@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:50.366Z",
+  "receiptNumber": "SRC9999132707",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "SRC9999132707",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:51",
+      "modifiedDate": "09-05-2023 14:28:51",
+      "current_case_status_text_en": "Travel Authorization Decision Update",
+      "current_case_status_desc_en": "On September 5, 2023, we received your updated travel authorization decision from CBP for Receipt Number SRC9999132707. The original decision has changed. The new decision is posted to your USCIS online account. Please review the decision and follow the instructions.",
+      "current_case_status_text_es": "Actualización De La Decisión De Autorización De Viaje",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, recibimos una decisión de autorización de viaje actualizada de CBP para el Número de Recibo SRC9999132707. La decisión original ha cambiado. La nueva decisión se ha publicado en su cuenta en línea de USCIS. Por favor, revise la decisión y siga las instrucciones.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'SRC9999132707'}"
+  }
+}

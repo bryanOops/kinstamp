@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:46.499Z",
+  "receiptNumber": "EAC9999103426",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103426",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Document Was Mailed But I Did Not Receive It",
+      "current_case_status_desc_en": "On September 5, 2023, we mailed your document for Form I-130, Petition for Alien Relative, Receipt Number EAC9999103426, to the address you gave us. The Post Office has not returned it to us. If you do not receive your document by October 5, 2023, please go to <a href=\"https://egov.uscis.gov/e-request/\" target=\"_blank\">www.uscis.gov/e-request</a> to request a copy of the document. To avoid future mail delays, go to <a href=\"https://www.uscis.gov/addresschange\" target=\"_blank\">www.uscis.gov/addresschange</a> to give us your new mailing address.",
+      "current_case_status_text_es": "Documento Enviado Por Correo, Pero No Lo Recibí",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, le enviamos por correo su documento para I-130, Petición de Familiar Extranjero, Número de Recibo EAC9999103426, a la dirección que nos proporcionó. La oficina de correos no nos devolvió el documento. Si no recibe su documento para el 05 de Octubre de 2023, visite <a href=\"https://egov.uscis.gov/e-request/\" target=\"_blank\">www.uscis.gov/e-request</a> para solicitar una copia del documento. Para evitar futuras demoras postales, visite <a href=\"https://www.uscis.gov/es/cambiodedireccion\" target=\"_blank\">www.uscis.gov/es/cambiodedireccion</a> para informarnos su nueva dirección postal.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103426'}"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-30T13:21:32.322Z",
+  "receiptNumber": "EAC9999103410",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103410",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Case Was Approved",
+      "current_case_status_desc_en": "On September 5, 2023, we approved your Form I-130, Petition for Alien Relative, Receipt Number EAC9999103410. We sent you an approval notice. Please follow the instructions in the notice.",
+      "current_case_status_text_es": "Caso Fue Aprobado",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, aprobamos su Formulario I-130, Petición de Familiar Extranjero, Número de Recibo EAC9999103410. Le enviamos un aviso de aprobación. Por favor, siga las instrucciones en el aviso.",
+      "hist_case_status": [
+        {
+          "date": "2023-09-05",
+          "completed_text_en": "We approved your Form I-130, Petition for Alien Relative.",
+          "completed_text_es": "Aprobamos su Formulario I-130, Petición de Familiar Extranjero."
+        },
+        {
+          "date": "2023-09-05",
+          "completed_text_en": "We rejected your Form I-130, Petition for Alien Relative, because you did not sign your form.",
+          "completed_text_es": "Rechazamos su Formulario I-130, Petición de Familiar Extranjero, porque no firmó su formulario."
+        }
+      ]
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103410'}"
+  }
+}

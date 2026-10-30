@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:42.640Z",
+  "receiptNumber": "EAC9999103408",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103408",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Card Was Mailed To Me",
+      "current_case_status_desc_en": "On September 5, 2023, we mailed your new card for your Form I-130, Petition for Alien Relative, Receipt Number EAC9999103408, to the address you gave us. The tracking number assigned is 1. You can use your tracking number at www.USPS.com in the Quick Tools Tracking section. If you do not receive your card by September 20, 2023, please go to <a href=\"https://egov.uscis.gov/e-request/\" target=\"_blank\">www.uscis.gov/e-request</a>  to request that we resend the card to you. If you move, go to <a href=\"https://www.uscis.gov/addresschange\" target=\"_blank\">www.uscis.gov/addresschange</a>  to give us your new mailing address.",
+      "current_case_status_text_es": "Tarjeta Enviada Por Correo",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, le enviamos por correo su nueva tarjeta para su Formulario I-130, Petición de Familiar Extranjero, Número de Recibo EAC9999103408, a la dirección que nos proporcionó. El número de seguimiento asignado es 1. Puede usar su número de seguimiento en www.USPS.com en la sección Seguimiento de Herramientas rápidas. Si no recibe su tarjeta para el 20 de Septiembre de 2023, visite <a href=\"https://egov.uscis.gov/e-request/\" target=\"_blank\">www.uscis.gov/e-request</a> para solicitar que le reenviemos su nueva tarjeta. Si cambia de domicilio, visite <a href=\"https://www.uscis.gov/es/cambiodedireccion\" target=\"_blank\">www.uscis.gov/es/cambiodedireccion</a> para notificarnos su nueva dirección postal.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103408'}"
+  }
+}

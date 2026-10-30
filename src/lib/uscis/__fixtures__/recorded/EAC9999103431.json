@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:47.647Z",
+  "receiptNumber": "EAC9999103431",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103431",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Travel Document Was Returned to USCIS And Will Be Held For 60 Days",
+      "current_case_status_desc_en": "On September 5, 2023, your travel document for Receipt Number EAC9999103431, was returned to us because the post office could not deliver it. We will hold your travel document until November 4, 2023. Please go to <a href=\"https://egov.uscis.gov/e-request/\" target=\"_blank\">www.uscis.gov/e-request</a> to request the travel document. If you do not submit an online request or contact us at 1-800-375-5283 by November 4, 2023, we will destroy your document and you will need to file a new Form I-130, Petition for Alien Relative, with fee. If you move, go to <a href=\"https://www.uscis.gov/addresschange\" target=\"_blank\">www.uscis.gov/addresschange</a> to give us your new mailing address.",
+      "current_case_status_text_es": "Documento de Viaje Fue Devuelto a USCIS y lo Retendremos por 60 Días",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, nos fue devuelto su documento de viaje con Número de Recibo EAC9999103431 debido a que la oficina de correos no pudo entregarlo. Retendremos su documento de viaje hasta el 04 de Noviembre de 2023. Por favor, vaya a <a href=\"https://egov.uscis.gov/e-request/\" target=\"_blank\">www.uscis.gov/e-request</a> para solicitar el documento de viaje. Si no envía una solicitud en línea o se comunica con nosotros al 1-800-375-5283 en o antes del 04 de Noviembre de 2023, destruiremos su documento y usted tendrá que presentar un nuevo Formulario I-130, Petición de Familiar Extranjero, con la tarifa. Si se muda, vaya a <a href=\"https://www.uscis.gov/es/cambiodedireccion\" target=\"_blank\">www.uscis.gov/es/cambiodedireccion</a> para proporcionarnos su nueva dirección postal.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103431'}"
+  }
+}

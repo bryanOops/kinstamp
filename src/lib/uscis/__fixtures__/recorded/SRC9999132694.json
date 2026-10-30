@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:49.197Z",
+  "receiptNumber": "SRC9999132694",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "SRC9999132694",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:51",
+      "modifiedDate": "09-05-2023 14:28:51",
+      "current_case_status_text_en": "45-Day Premium Processing Clock Stopped for My Case",
+      "current_case_status_desc_en": "On September 5, 2023, we stopped the processing of your premium-processing case, Receipt Number SRC9999132694, and sent you a notice explaining why we took this action. This notice describes what you need to do to resume processing of your case. Please follow the instructions in the notice. You must respond to the notice within the time it specifies. Your premium-processing receipt notice contains contact information for direct inquiries on your case. If you move, contact the premium-processing unit directly to update your address.",
+      "current_case_status_text_es": "Periodo De Trámite Acelerado De 45 Días Para Caso Se Detuvo",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, detuvimos el trámite acelerado de su caso para su Número de Recibo SRC9999132694, y le enviamos una notificación en la que explicamos las razones específicas de esta medida. En este aviso se describen las medidas que debe tomar para reanudar la tramitación de su caso. Por favor, siga las instrucciones que aparecen en este aviso. Deberá responder a este aviso dentro del plazo estipulado. Su acuse de recibo de procesamiento premium contiene información de contacto para consultas directas sobre su caso. Si cambia de domicilio, comuníquese directamente con la unidad de trámites acelerados para actualizar su dirección.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'SRC9999132694'}"
+  }
+}

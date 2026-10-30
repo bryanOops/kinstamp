@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:48.397Z",
+  "receiptNumber": "LIN9999106501",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "LIN9999106501",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:47",
+      "modifiedDate": "09-05-2023 14:28:47",
+      "current_case_status_text_en": "Case Was Received",
+      "current_case_status_desc_en": "On September 5, 2023, we received your Form I-130, Petition for Alien Relative, Receipt Number LIN9999106501, and sent you the receipt notice that describes how we will process your case. Please follow the instructions in the notice. If you have any questions, visit the USCIS Contact Center webpage at <a href=\"https://www.uscis.gov/contactcenter\" target=\"_blank\">www.uscis.gov/contactcenter</a>. If you move, go to <a href=\"https://www.uscis.gov/addresschange\" target=\"_blank\">www.uscis.gov/addresschange</a> to give us your new mailing address.",
+      "current_case_status_text_es": "Caso Recibido",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, recibimos su Formulario I-130, Petición de Familiar Extranjero, número de recibo LIN9999106501, y le enviamos la notificación de recibo que describe cómo procesaremos su caso. Siga las instrucciones de la notificación. Si tiene alguna pregunta, visite la página web del Centro de Contacto de USCIS en <a href=\"https://www.uscis.gov/es/centrocontacto\" target=\"_blank\">www.uscis.gov/es/centrocontacto</a>. Si cambia de domicilio, visite <a href=\"https://www.uscis.gov/es/cambiodedireccion\" target=\"_blank\">www.uscis.gov/es/cambiodedireccion</a> para notificarnos su nueva dirección postal.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'LIN9999106501'}"
+  }
+}

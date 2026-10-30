@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-30T13:21:39.037Z",
+  "receiptNumber": "SRC9999102785",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "SRC9999102785",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Case Was Approved",
+      "current_case_status_desc_en": "On September 5, 2023, we approved your Form I-130, Petition for Alien Relative, Receipt Number SRC9999102785. We sent you an approval notice. Please follow the instructions in the notice.",
+      "current_case_status_text_es": "Caso Fue Aprobado",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, aprobamos su Formulario I-130, Petición de Familiar Extranjero, Número de Recibo SRC9999102785. Le enviamos un aviso de aprobación. Por favor, siga las instrucciones en el aviso.",
+      "hist_case_status": [
+        {
+          "date": "2023-09-05",
+          "completed_text_en": "We approved your Form I-130, Petition for Alien Relative.",
+          "completed_text_es": "Aprobamos su Formulario I-130, Petición de Familiar Extranjero."
+        },
+        {
+          "date": "2023-09-05",
+          "completed_text_en": "The people associated with your Form I-130, Petition for Alien Relative, did not come to the in-person appointment we scheduled.",
+          "completed_text_es": "Las personas asociadas con su Formulario I-130, Petición de Familiar Extranjero, no comparecieron a la cita en persona que programamos."
+        }
+      ]
+    },
+    "message": "Query was successful for payload {'receipt_number': 'SRC9999102785'}"
+  }
+}

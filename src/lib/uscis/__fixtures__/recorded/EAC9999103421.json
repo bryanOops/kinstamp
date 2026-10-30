@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:45.331Z",
+  "receiptNumber": "EAC9999103421",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103421",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Intent To Rescind Notice Was Mailed",
+      "current_case_status_desc_en": "On September 5, 2023, we mailed you a notice explaining our intent to rescind the decision on your case, Receipt Number EAC9999103421. The notice explains what we will do. Please follow the instructions in the notice, and submit any requested materials. If you do not receive your notice before September 19, 2023, visit the USCIS Contact Center webpage at <a href=\"https://www.uscis.gov/contactcenter\" target=\"_blank\">www.uscis.gov/contactcenter</a>. If you move, go to <a href=\"https://www.uscis.gov/addresschange\" target=\"_blank\">www.uscis.gov/addresschange</a>  to give us your new mailing address.",
+      "current_case_status_text_es": "Notificación Sobre Intento De Rescindir Fue Enviada Por Correo.",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, le enviamos por correo una notificación que explica nuestra intención de revocar la decisión en su caso, Número de Recibo EAC9999103421. La notificación explica lo que vamos a hacer. Siga las instrucciones que aparecen en la notificación y presente cualquier material requerido. Si no recibe su notificación para el 19 de Septiembre de 2023, visite la página web del Centro de Contacto de USCIS en <a href=\"https://www.uscis.gov/es/centrocontacto\" target=\"_blank\">www.uscis.gov/es/centrocontacto</a>. Si cambia de domicilio, visite <a href=\"https://www.uscis.gov/es/cambiodedireccion\" target=\"_blank\">www.uscis.gov/es/cambiodedireccion</a> para notificarnos su nueva dirección postal.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103421'}"
+  }
+}

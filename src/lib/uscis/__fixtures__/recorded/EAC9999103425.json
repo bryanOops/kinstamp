@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:46.100Z",
+  "receiptNumber": "EAC9999103425",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103425",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Card Was Returned To USCIS",
+      "current_case_status_desc_en": "On September 5, 2023, the Post Office returned your new card for Form I-130, Petition for Alien Relative, Receipt Number EAC9999103425, to us. We mailed your card to the address you gave us, but the Post Office could not deliver it. The tracking number assigned is 1. You can use your tracking number at www.USPS.com in the Quick Tools Track a Package section. We will destroy your new card if we do not receive an address update by November 26, 2023. Please go to <a href=\"https://egov.uscis.gov/e-request/\" target=\"_blank\">www.uscis.gov/e-request</a> to request that we resend the card to you. If you move, go to <a href=\"https://www.uscis.gov/addresschange\" target=\"_blank\">www.uscis.gov/addresschange</a> to give us your new mailing address.",
+      "current_case_status_text_es": "Tarjeta Devuelta A USCIS",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, la oficina de correos nos devolvió su nueva tarjeta para su Formulario I-130, Petición de Familiar Extranjero, Número de Recibo EAC9999103425. Le enviamos por correo su tarjeta a la dirección que nos proporcionó, pero la oficina de correos no pudo entregarla. El número de seguimiento asignado es 1. Puede usar su número de seguimiento en www.USPS.com en la sección Herramientas Rápidas y Seguir un Paquete. Destruiremos su nueva tarjeta si no recibimos una actualización de dirección en 26 de Noviembre de 2023. Visite <a href=\"https://egov.uscis.gov/e-request/\" target=\"_blank\">www.uscis.gov/e-request</a> para solicitar que le reenviemos la tarjeta. Si cambia de domicilio, visite <a href=\"https://www.uscis.gov/es/cambiodedireccion\" target=\"_blank\">www.uscis.gov/es/cambiodedireccion</a> para notificarnos su nueva dirección postal.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103425'}"
+  }
+}

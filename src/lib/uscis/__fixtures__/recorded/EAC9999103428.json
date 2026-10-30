@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-30T13:21:46.873Z",
+  "receiptNumber": "EAC9999103428",
+  "status": 200,
+  "body": {
+    "case_status": {
+      "receiptNumber": "EAC9999103428",
+      "formType": "I-130",
+      "submittedDate": "09-05-2023 14:28:46",
+      "modifiedDate": "09-05-2023 14:28:46",
+      "current_case_status_text_en": "Document and Letter Was Received",
+      "current_case_status_desc_en": "On September 5, 2023, we received your document for your Form I-130, Petition for Alien Relative, Receipt Number EAC9999103428, and your letter explaining the reason for its return. We will review your letter and document and make a decision on any action we need to take. If you move, go to <a href=\"https://www.uscis.gov/addresschange\" target=\"_blank\">www.uscis.gov/addresschange</a> to give us your new mailing address.",
+      "current_case_status_text_es": "Documento Y La Carta Fueron Recibidos  ",
+      "current_case_status_desc_es": "El 05 de Septiembre de 2023, recibimos su documento para su Formulario I-130, Petición de Familiar Extranjero, Número de Recibo EAC9999103428, y su carta explicando la razón para su devolución. Revisaremos su carta y documento, y tomaremos una decisión respecto a cualquier acción que debamos realizar. Si cambia de domicilio, visite <a href=\"https://www.uscis.gov/es/cambiodedireccion\" target=\"_blank\">www.uscis.gov/es/cambiodedireccion</a> para notificarnos su nueva dirección postal.",
+      "hist_case_status": null
+    },
+    "message": "Query was successful for payload {'receipt_number': 'EAC9999103428'}"
+  }
+}
