@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { io } from "next/cache";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { AssistantControl } from "@/components/assistant/wired/assistant-control";
 import { CaseDetailView } from "@/components/cases/case-detail-view";
 import { toCaseDetail } from "@/components/cases/from-dto";
 import { AddKeyDateControl, DeleteKeyDateButton } from "@/components/cases/wired/key-date-controls";
@@ -34,6 +35,7 @@ export default async function AttorneyCasePage({ params }: PageProps<"/attorney/
         detail={detail}
         now={now}
         viewer="attorney"
+        assistantTrigger={<AssistantControl trackedCaseId={trackedCaseId} caseLabel={detail.nickname ?? detail.receiptNumber} />}
         refresh={
           <RefreshControl
             trackedCaseId={trackedCaseId}

@@ -673,6 +673,21 @@
     "inputLabel": "Tu pregunta",
     "placeholder": "Haz una pregunta sobre este caso…",
     "send": "Enviar",
-    "remaining": "Te quedan {count} preguntas hoy"
+    "stop": "Detener",
+    "notStored": "Las conversaciones no se guardan: desaparecen al cerrar este panel.",
+    "suggestions": {
+      "status": "¿Qué significa mi estado?",
+      "next": "¿Qué suele venir después?",
+      "duration": "¿Cuánto tardan los casos como el mío?",
+      "dates": "¿Qué fechas importan?"
+    },
+    "errors": {
+      "signedOut": "Tu sesión terminó. Inicia sesión de nuevo para seguir preguntando.",
+      "invalidRequest": "No se pudo enviar esa pregunta. Prueba una más corta.",
+      "notFound": "Este caso no está disponible para el asistente.",
+      "dailyLimitReached": "Llegaste al límite de 20 preguntas de hoy. Vuelve mañana.",
+      "assistantUnavailable": "El asistente no está disponible en este momento. Los datos de tu caso no se ven afectados.",
+      "network": "El asistente no pudo responder. Revisa tu conexión e inténtalo de nuevo."
+    }
   }
 }

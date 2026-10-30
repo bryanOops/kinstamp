@@ -334,7 +334,6 @@ export function DesignGallery() {
           caseLabel="Work permit"
           messages={messages}
           suggestions={sampleSuggestions}
-          remaining={17}
           open={assistantOpen}
           onOpenChange={setAssistantOpen}
           trigger={<Button variant="outline" onClick={() => setAssistantOpen(true)}>Open assistant panel</Button>}

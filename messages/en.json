@@ -673,6 +673,21 @@
     "inputLabel": "Your question",
     "placeholder": "Ask a question about this case…",
     "send": "Send",
-    "remaining": "{count} questions left today"
+    "stop": "Stop",
+    "notStored": "Conversations aren't stored: they disappear when you close this panel.",
+    "suggestions": {
+      "status": "What does my status mean?",
+      "next": "What usually comes next?",
+      "duration": "How long do cases like mine take?",
+      "dates": "Which dates matter?"
+    },
+    "errors": {
+      "signedOut": "Your session ended. Sign in again to keep asking.",
+      "invalidRequest": "That question couldn't be sent. Try a shorter one.",
+      "notFound": "This case isn't available to the assistant.",
+      "dailyLimitReached": "You've reached today's limit of 20 questions. Come back tomorrow.",
+      "assistantUnavailable": "The assistant isn't available right now. Your case data is unaffected.",
+      "network": "The assistant couldn't answer. Check your connection and try again."
+    }
   }
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { io } from "next/cache";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { AssistantControl } from "@/components/assistant/wired/assistant-control";
 import { CaseDetailView } from "@/components/cases/case-detail-view";
 import { toCaseDetail } from "@/components/cases/from-dto";
 import { CaseMenu } from "@/components/cases/wired/case-menu";
@@ -41,6 +42,7 @@ export default async function CaseDetailPage({ params }: PageProps<"/cases/[trac
         viewer="client"
         highlightedEventId={highlightedEventId}
         menu={<CaseMenu trackedCaseId={trackedCaseId} nickname={detail.nickname} receiptNumber={detail.receiptNumber} />}
+        assistantTrigger={<AssistantControl trackedCaseId={trackedCaseId} caseLabel={detail.nickname ?? detail.receiptNumber} />}
         refresh={
           <RefreshControl
             trackedCaseId={trackedCaseId}
