@@ -1,3 +1,4 @@
+import { cronSecret } from "@/lib/env";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runCheck } from "@/server/cases/run-check";
 
@@ -11,7 +12,8 @@ const SPACING_MS = 250;
 
 export async function GET(request: Request) {
   // Read the header first: it also keeps this handler out of build-time prerendering.
-  if (request.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}` || !process.env.CRON_SECRET) {
+  const secret = cronSecret();
+  if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
     return new Response(null, { status: 401 });
   }
 

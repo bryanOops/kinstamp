@@ -1,24 +1,13 @@
 import "server-only";
+import { getTranslations } from "next-intl/server";
+import { isLocale } from "@/i18n/config";
 import { createAdminClient } from "@/lib/supabase/admin";
-
-const copy = {
-  en: {
-    subject: (name: string) => `Update on ${name}`,
-    heading: "Your case has a new status",
-    cta: "Open in Kinstamp",
-    footer: "You get this email because you track this case in Kinstamp. You can turn these emails off in Settings.",
-  },
-  es: {
-    subject: (name: string) => `Novedad en ${name}`,
-    heading: "Tu caso tiene un estado nuevo",
-    cta: "Abrir en Kinstamp",
-    footer: "Recibes este correo porque sigues este caso en Kinstamp. Puedes desactivarlos en Configuración.",
-  },
-} as const;
+import { siteUrl } from "@/lib/env";
 
 /**
  * Emails every client tracking the case (with notifications on) about its latest observed
- * status event. `notifications_sent` makes it idempotent: nobody gets the same event twice.
+ * status event. `notifications_sent` makes it idempotent: nobody gets the same event twice,
+ * and a failed send releases its claim so the next status change or check retries it.
  */
 export async function notifyStatusChange(caseId: string): Promise<void> {
   const admin = createAdminClient();
@@ -42,44 +31,56 @@ export async function notifyStatusChange(caseId: string): Promise<void> {
     if (!person?.notify_on_change) continue;
 
     // Claim the notification first; a duplicate insert means it was already sent.
-    const { error } = await admin.from("notifications_sent").insert({ status_event_id: event.id, user_id: person.id });
-    if (error) continue;
+    const { data: claim, error } = await admin
+      .from("notifications_sent")
+      .insert({ status_event_id: event.id, user_id: person.id })
+      .select("id")
+      .single();
+    if (error || !claim) continue;
 
-    const locale = person.locale === "es" ? "es" : "en";
-    const t = copy[locale];
-    const caseName = tracker.nickname ?? tracker.cases?.receipt_number ?? "your case";
+    const locale = isLocale(person.locale) ? person.locale : "en";
+    const t = await getTranslations({ locale, namespace: "emails.statusChange" });
+    const caseName = tracker.nickname ?? tracker.cases?.receipt_number ?? t("fallbackCaseName");
     const status = (locale === "es" && event.text_es) || event.text_en;
     const description = (locale === "es" && event.description_es) || event.description_en || "";
-    const url = `${process.env.NEXT_PUBLIC_SITE_URL}/cases/${tracker.id}`;
+    const url = `${siteUrl()}/cases/${tracker.id}`;
 
-    await sendEmail({
+    const sent = await sendEmail({
       to: person.email,
-      subject: t.subject(caseName),
+      subject: t("subject", { caseName }),
       html: `<div style="font-family:Inter,Arial,sans-serif;color:#0b0b0f;max-width:520px">
         <p style="color:#5c5c66;margin:0 0 8px">${escapeHtml(caseName)}</p>
-        <h1 style="font-size:20px;margin:0 0 12px">${t.heading}: ${escapeHtml(status)}</h1>
+        <h1 style="font-size:20px;margin:0 0 12px">${escapeHtml(t("heading"))}: ${escapeHtml(status)}</h1>
         <p style="line-height:1.5;color:#3a3a42">${escapeHtml(description)}</p>
-        <p><a href="${url}" style="display:inline-block;padding:10px 16px;background:#0b0b0f;color:#fff;border-radius:8px;text-decoration:none">${t.cta}</a></p>
-        <p style="font-size:12px;color:#5c5c66">${t.footer}</p>
+        <p><a href="${url}" style="display:inline-block;padding:10px 16px;background:#0b0b0f;color:#fff;border-radius:8px;text-decoration:none">${escapeHtml(t("cta"))}</a></p>
+        <p style="font-size:12px;color:#5c5c66">${escapeHtml(t("footer"))}</p>
       </div>`,
     });
+    if (!sent) await admin.from("notifications_sent").delete().eq("id", claim.id);
   }
 }
 
-async function sendEmail(message: { to: string; subject: string; html: string }): Promise<void> {
+/** Sends through Resend; returns false when it could not be sent (skipped or failed). */
+async function sendEmail(message: { to: string; subject: string; html: string }): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   if (!apiKey || !from) {
     console.info(`[notifications] email skipped (Resend not configured): "${message.subject}"`);
-    return;
+    return false;
   }
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from, ...message }),
-    signal: AbortSignal.timeout(8_000),
-  });
-  if (!response.ok) console.error(`[notifications] Resend returned HTTP ${response.status}`);
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from, ...message }),
+      signal: AbortSignal.timeout(8_000),
+    });
+    if (!response.ok) console.error(`[notifications] Resend returned HTTP ${response.status}`);
+    return response.ok;
+  } catch (error) {
+    console.error("[notifications] Resend request failed", error);
+    return false;
+  }
 }
 
 function escapeHtml(value: string): string {

@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { caseAssistantTools } from "@/server/assistant/tools";
@@ -35,7 +36,7 @@ How to answer:
 
 export async function POST(request: Request) {
   const profile = await getCurrentProfile();
-  if (!profile) return new Response("Sign in first.", { status: 401 });
+  if (!profile) return Response.json({ error: "signedOut" }, { status: 401 });
 
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ error: "assistantUnavailable" }, { status: 503 });
@@ -74,10 +75,8 @@ export async function POST(request: Request) {
     stream: true,
   });
 
-  const notices =
-    profile.locale === "es"
-      ? { refused: "No puedo ayudarte con eso. Consúltalo con tu abogado.", failed: "El asistente no está disponible en este momento. Inténtalo más tarde." }
-      : { refused: "I can't help with that one. Please ask your attorney.", failed: "The assistant is unavailable right now. Please try again later." };
+  const t = await getTranslations({ locale: profile.locale, namespace: "assistant.notices" });
+  const notices = { refused: t("refused"), failed: t("failed") };
   const encoder = new TextEncoder();
   const body = new ReadableStream<Uint8Array>({
     async start(controller) {

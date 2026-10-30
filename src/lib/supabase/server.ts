@@ -3,15 +3,16 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "./database.types";
 import { supabaseCookieOptions } from "./cookie-options";
-import { supabaseServerUrl } from "./urls";
+import { supabaseEnv } from "@/lib/env";
 
 /** Supabase client acting as the signed-in person: every query goes through RLS. */
 export async function createClient() {
   const cookieStore = await cookies();
 
+  const { serverUrl, anonKey } = supabaseEnv();
   return createServerClient<Database>(
-    supabaseServerUrl(),
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    serverUrl,
+    anonKey,
     {
       cookieOptions: supabaseCookieOptions,
       cookies: {

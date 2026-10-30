@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { defaultLocale, isLocale, localeCookieName } from "@/i18n/config";
 import { safeNextPath, signInSchema, signUpSchema } from "@/lib/auth/schemas";
+import { siteUrl } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { homePathFor } from "@/server/auth";
 
@@ -50,7 +51,7 @@ export async function signUp(_prev: AuthFormState, formData: FormData): Promise<
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`,
+      emailRedirectTo: `${siteUrl()}/auth/confirm`,
       // Read by the `handle_new_user` trigger to create the profile and the consent.
       data: { full_name: fullName, role, locale, insights_consent: String(insightsConsent) },
     },

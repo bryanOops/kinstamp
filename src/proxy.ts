@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { supabaseCookieOptions } from "@/lib/supabase/cookie-options";
-import { supabaseServerUrl } from "@/lib/supabase/urls";
+import { supabaseEnv } from "@/lib/env";
 
 // Optimistic check only: refreshes the Supabase session cookie and sends signed-out
 // visitors away from private pages. Every page and Server Action still verifies
@@ -11,7 +11,8 @@ const privatePrefixes = ["/cases", "/attorney", "/insights", "/settings"];
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const supabase = createServerClient(supabaseServerUrl(), process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const { serverUrl, anonKey } = supabaseEnv();
+  const supabase = createServerClient(serverUrl, anonKey, {
     cookieOptions: supabaseCookieOptions,
     cookies: {
       getAll: () => request.cookies.getAll(),

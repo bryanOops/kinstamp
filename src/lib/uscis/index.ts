@@ -1,6 +1,7 @@
 import "server-only";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { uscisEnv } from "@/lib/env";
 import { createUscisClient, type GetCaseResult, type UscisClient } from "./client";
 import { parseCaseStatusResponse } from "./parse-response";
 import { classifyUscisError } from "./classify-error";
@@ -19,14 +20,14 @@ let client: UscisClient | null = null;
  */
 export function getUscisClient(): UscisClient {
   if (client) return client;
-  const { USCIS_CLIENT_ID, USCIS_CLIENT_SECRET, USCIS_TOKEN_URL, USCIS_API_BASE_URL } = process.env;
+  const env = uscisEnv();
 
-  if (USCIS_CLIENT_ID && USCIS_CLIENT_SECRET && USCIS_TOKEN_URL && USCIS_API_BASE_URL) {
+  if (env) {
     client = createUscisClient({
-      clientId: USCIS_CLIENT_ID,
-      clientSecret: USCIS_CLIENT_SECRET,
-      tokenUrl: USCIS_TOKEN_URL,
-      baseUrl: USCIS_API_BASE_URL,
+      clientId: env.USCIS_CLIENT_ID,
+      clientSecret: env.USCIS_CLIENT_SECRET,
+      tokenUrl: env.USCIS_TOKEN_URL,
+      baseUrl: env.USCIS_API_BASE_URL,
     });
   } else if (process.env.NODE_ENV === "production" && process.env.VERCEL_ENV === "production") {
     throw new Error("USCIS credentials are missing in production.");
