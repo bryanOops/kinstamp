@@ -2,7 +2,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(21);
+select plan(22);
 
 -- Fixtures: two clients, one attorney, one other attorney, one case tracked by both clients.
 insert into auth.users (id, email, raw_user_meta_data, email_confirmed_at) values
@@ -12,8 +12,9 @@ insert into auth.users (id, email, raw_user_meta_data, email_confirmed_at) value
   ('00000000-0000-0000-0000-00000000000d', 'other@firm.com', '{"role":"attorney","full_name":"Other"}', now()),
   ('00000000-0000-0000-0000-00000000000e', 'impostor@firm.com', '{"role":"attorney","full_name":"Unconfirmed"}', null);
 
-insert into public.cases (id, receipt_number, form_type, status_en, check_state)
-values ('10000000-0000-0000-0000-000000000001', 'ZZZ0000000001', 'I-130', 'Case Was Approved', 'ok');
+insert into public.cases (id, receipt_number, form_type, status_en, check_state) values
+  ('10000000-0000-0000-0000-000000000001', 'ZZZ0000000001', 'I-130', 'Case Was Approved', 'ok'),
+  ('10000000-0000-0000-0000-000000000002', 'ZZZ0000000002', 'I-130', 'Case Was Received', 'ok');
 
 insert into public.status_events (case_id, origin, occurred_on, text_en, category)
 values ('10000000-0000-0000-0000-000000000001', 'reported', '2023-09-05', 'We approved your Form I-130.', 'approved');
@@ -53,6 +54,12 @@ select throws_ok(
 select throws_ok(
   $$ update public.cases set status_en = 'Case Was Denied' $$,
   '42501', null, 'a client cannot write to cases'
+);
+
+-- The app adds a case with `insert ... returning id`: the select policy must see the new row in the same statement.
+select lives_ok(
+  $$ insert into public.tracked_cases (case_id, client_id, nickname) values ('10000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-00000000000a', 'Dad') returning id $$,
+  'a client can add a tracked case and read back its id'
 );
 
 -- As the attorney the case was shared with
