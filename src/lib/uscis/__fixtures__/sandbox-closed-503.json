@@ -1,0 +1,6 @@
+{
+  "error": {
+    "code": "503",
+    "message": "The Case Status API Sandbox is unavailable at this time. Please retry your API request during normal operation hours M-F 7:00AM EST - 8:00 PM EST"
+  }
+}
