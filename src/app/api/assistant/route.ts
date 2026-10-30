@@ -90,13 +90,13 @@ export async function POST(request: Request) {
           }
           const message = await messageStream.finalMessage();
           if (message.stop_reason === "refusal") {
-            controller.enqueue(encoder.encode("\n\nI can't help with that one. Please ask your attorney."));
+            controller.enqueue(encoder.encode(`\n\n${notices.refused}`));
             break;
           }
         }
       } catch (error) {
         console.error("[assistant]", error instanceof Anthropic.APIError ? `${error.status} ${error.message}` : error);
-        controller.enqueue(encoder.encode("\n\nThe assistant is unavailable right now. Please try again later."));
+        controller.enqueue(encoder.encode(`\n\n${notices.failed}`));
       } finally {
         controller.close();
       }
