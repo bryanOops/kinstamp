@@ -1,4 +1,5 @@
 import type { CaseSnapshot } from "@/lib/uscis/parse-response";
+import { easternDate } from "@/lib/time";
 import { categorizeStatus, type StatusCategory } from "./categorize";
 
 /** The part of an already saved status event that matters to decide what is new. */
@@ -82,7 +83,3 @@ function normalize(text: string): string {
   return text.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
-/** Calendar date in New York, where USCIS operates. */
-function easternDate(date: Date): string {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(date);
-}

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { easternOffsetMinutes } from "@/lib/time";
 
 /** What Kinstamp keeps from one USCIS case status response. */
 export type CaseSnapshot = {
@@ -74,15 +75,5 @@ function easternDateTimeToIso(value: string | null): string | null {
   if (!match) return null;
   const [, month, day, year, hour, minute, second] = match.map(Number);
   const asUtc = Date.UTC(year, month - 1, day, hour, minute, second);
-  return new Date(asUtc - easternOffsetMinutes(asUtc) * 60_000).toISOString();
-}
-
-function easternOffsetMinutes(utcMillis: number): number {
-  const offset = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", timeZoneName: "longOffset" })
-    .formatToParts(utcMillis)
-    .find((part) => part.type === "timeZoneName")?.value;
-  const match = offset?.match(/GMT([+-])(\d{2}):(\d{2})/);
-  if (!match) return 0;
-  const minutes = Number(match[2]) * 60 + Number(match[3]);
-  return match[1] === "-" ? -minutes : minutes;
+  return new Date(asUtc - easternOffsetMinutes(new Date(asUtc)) * 60_000).toISOString();
 }
