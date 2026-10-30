@@ -1,3 +1,4 @@
+import { io } from "next/cache";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/brand/logo";
@@ -12,6 +13,7 @@ import { getCurrentProfile, homePathFor } from "@/server/auth";
  * clients see Cases, Insights, Settings; attorneys see Clients' cases, Settings.
  */
 export async function AppTopBar() {
+  await io();
   const [profile, t] = await Promise.all([getCurrentProfile(), getTranslations("nav")]);
   if (!profile) return <AppTopBarFrame />;
 

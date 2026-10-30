@@ -17,12 +17,21 @@
   },
   "language": {
     "label": "Language",
-    "short": { "en": "EN", "es": "ES" },
-    "name": { "en": "English", "es": "Español" }
+    "short": {
+      "en": "EN",
+      "es": "ES"
+    },
+    "name": {
+      "en": "English",
+      "es": "Español"
+    }
   },
   "userMenu": {
     "open": "Account menu for {name}",
-    "role": { "client": "Client", "attorney": "Attorney" },
+    "role": {
+      "client": "Client",
+      "attorney": "Attorney"
+    },
     "settings": "Settings",
     "signOut": "Sign out",
     "signingOut": "Signing out…"
@@ -141,6 +150,52 @@
     "empty": {
       "title": "No cases yet",
       "description": "Add your first case from the receipt number on your USCIS notice."
+    },
+    "card": {
+      "changed": "Changed",
+      "form": "Form {form}",
+      "awaitingFirstCheck": "Waiting for the first check",
+      "lastChange": "Last change {date}",
+      "noChangesYet": "No status yet"
+    },
+    "list": {
+      "summary": "{count, plural, one {# case} other {# cases}} · {changed, plural, =0 {no changes this week} one {# changed this week} other {# changed this week}}",
+      "lastChecked": "last checked {time}",
+      "empty": {
+        "title": "No cases yet",
+        "description": "Add your first case from the receipt number on your USCIS notice."
+      }
+    },
+    "add": {
+      "trigger": "Add a case",
+      "title": "Add a case",
+      "description": "Enter the receipt number from your USCIS notice. We'll look it up and keep its history from now on.",
+      "receipt": {
+        "label": "Receipt number",
+        "placeholder": "e.g. EAC9999103403",
+        "hint": "3 letters followed by 10 digits, found on your USCIS notice."
+      },
+      "nickname": {
+        "label": "Nickname (optional)",
+        "placeholder": "e.g. Mom's green card",
+        "hint": "Only you see it. It helps tell cases apart."
+      },
+      "sandbox": {
+        "title": "Try a sandbox receipt",
+        "description": "The USCIS sandbox only answers for these test receipts.",
+        "use": "Use receipt {receipt}"
+      },
+      "submit": "Find case",
+      "pending": "Looking it up…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidFormat": "That doesn't look like a receipt number. It should be 3 letters and 10 digits.",
+        "notFound": "USCIS has no case with that receipt number. Check the notice and try again.",
+        "alreadyTracked": "You already track this case.",
+        "unavailable": "USCIS can't be reached right now. We saved the case and will check it when USCIS is back.",
+        "rateLimited": "Too many lookups in a row. Wait a minute and try again.",
+        "unknown": "We couldn't add the case. Please try again."
+      }
     }
   },
   "caseDetail": {
@@ -150,6 +205,215 @@
       "title": "We couldn't find that case",
       "description": "There is no tracked case {id} in your account, or it was removed.",
       "back": "Back to your cases"
+    },
+    "breadcrumbClientsCases": "Clients' cases",
+    "header": {
+      "form": "Form {form}"
+    },
+    "status": {
+      "title": "Current status",
+      "readIn": {
+        "en": "Read in English",
+        "es": "Leer en español"
+      },
+      "awaiting": {
+        "title": "Waiting for the first check",
+        "description": "USCIS could not be reached when this case was added. We'll check it automatically when USCIS is back and keep its history from then on."
+      },
+      "checked": "Checked {time}",
+      "lastChange": "Last change {date}"
+    },
+    "plain": {
+      "title": "In plain language",
+      "nextTitle": "What usually comes next",
+      "disclaimer": "General information based on the status category. It is not legal advice.",
+      "received": {
+        "meaning": "USCIS has your filing and assigned it a receipt number. Nothing is needed from you right now.",
+        "next": {
+          "1": "A biometrics appointment notice, if your form requires fingerprints.",
+          "2": "Weeks or months of waiting while the case sits in the queue for its form type.",
+          "3": "A request for evidence or a decision."
+        }
+      },
+      "biometrics": {
+        "meaning": "USCIS scheduled or completed the collection of your fingerprints and photo.",
+        "next": {
+          "1": "Attend the appointment on the notice, or wait for the results if it already happened.",
+          "2": "Background checks run in the background; no action is needed.",
+          "3": "The case moves to review by an officer."
+        }
+      },
+      "interview": {
+        "meaning": "An officer wants to see you in person. The notice gives the date, place and what to bring.",
+        "next": {
+          "1": "Prepare the documents listed on the notice.",
+          "2": "Attend the interview; your attorney may accompany you.",
+          "3": "A decision, sometimes the same day, sometimes weeks later."
+        }
+      },
+      "evidence_requested": {
+        "meaning": "USCIS needs more documents before deciding. The notice lists exactly what is missing and the deadline to respond.",
+        "next": {
+          "1": "Gather everything the notice asks for; send it in one package before the deadline.",
+          "2": "USCIS confirms it received your response.",
+          "3": "The case goes back to review and then to a decision."
+        }
+      },
+      "evidence_received": {
+        "meaning": "USCIS received the documents you sent in response to its request.",
+        "next": {
+          "1": "An officer reviews the new evidence.",
+          "2": "A decision, or in rare cases another request."
+        }
+      },
+      "approved": {
+        "meaning": "USCIS approved your filing. An approval notice is on its way or already with you.",
+        "next": {
+          "1": "Keep the approval notice; it is proof of the decision.",
+          "2": "If a card is involved, USCIS produces and mails it next.",
+          "3": "Check whether a next step depends on this approval, for example a visa interview or a new filing."
+        }
+      },
+      "card_produced": {
+        "meaning": "Your card was printed and is about to be mailed.",
+        "next": {
+          "1": "Expect the card by mail within a couple of weeks.",
+          "2": "A tracking number may appear on the USCIS case status page."
+        }
+      },
+      "card_delivered": {
+        "meaning": "The post office reports that your card was delivered.",
+        "next": {
+          "1": "Check that the details on the card are correct.",
+          "2": "Contact USCIS if the card did not arrive."
+        }
+      },
+      "transferred": {
+        "meaning": "USCIS moved your case to a different office to balance workloads. It does not restart the process.",
+        "next": {
+          "1": "A notice from the new office with its address.",
+          "2": "Processing continues from where it was."
+        }
+      },
+      "denied": {
+        "meaning": "USCIS denied the filing. The notice explains the reasons and whether you can appeal or file a motion.",
+        "next": {
+          "1": "Read the denial notice carefully and note any deadline.",
+          "2": "Talk to an attorney about options such as an appeal, a motion to reopen or a new filing."
+        }
+      },
+      "withdrawn": {
+        "meaning": "The filing was withdrawn, so USCIS will not decide on it.",
+        "next": {
+          "1": "If this was not intended, contact USCIS or your attorney."
+        }
+      },
+      "other": {
+        "meaning": "USCIS gave this case a status we don't have a plain-language explanation for yet. The full USCIS text above is the best source.",
+        "next": {
+          "1": "Keep checking: Kinstamp records every change with its date."
+        }
+      }
+    },
+    "slow": {
+      "title": "Is my case slow?",
+      "noReceivedDate": "We'll compare this case with the official processing time once USCIS reports the date it was received.",
+      "noOfficialTime": "USCIS does not publish a processing time for this form type, so there is nothing to compare against.",
+      "verdict": {
+        "early": "Your case is {months} months old. USCIS currently lists {min}–{max} months for this form, so it is within the normal range.",
+        "within": "Your case is {months} months old, inside the {min}–{max} months USCIS currently lists for this form.",
+        "outside": "Your case is {months} months old, beyond the {min}–{max} months USCIS currently lists for this form. You can ask USCIS about it."
+      },
+      "ageLabel": "{days} days so far",
+      "rangeLabel": "{min}–{max} months",
+      "eRequest": "Ask USCIS about a case outside normal processing time",
+      "source": "Official processing time read from USCIS on {date}.",
+      "sourceLink": "Source"
+    },
+    "keyDates": {
+      "title": "Key dates",
+      "empty": "No key dates yet. Add the due date or appointment from a USCIS notice and we'll count down to it.",
+      "add": "Add a key date",
+      "kind": {
+        "due_date": "Due date",
+        "appointment": "Appointment"
+      },
+      "download": "Add {title} to your calendar",
+      "delete": "Delete {title}"
+    },
+    "shares": {
+      "title": "Shared with",
+      "empty": "Not shared with anyone. Your attorney can follow this case if you share it with their email.",
+      "activeSince": "Active since {date}",
+      "pending": "Pending · they don't have an account yet",
+      "revoke": "Revoke"
+    },
+    "insight": {
+      "title": "Cases like this",
+      "notEnough": "Not enough consented {form} cases yet to show how long they take.",
+      "noForm": "We'll show how long similar cases take once USCIS reports this case's form type.",
+      "summary": "{form} cases usually take {min}–{max} months from received to approved (median {median} days).",
+      "p25": "Faster quarter",
+      "median": "Median",
+      "p75": "Slower quarter",
+      "days": "{days} days",
+      "yourCase": "Your case: {days} days so far",
+      "basis": "Based on {count} anonymized cases from people who opted in.",
+      "link": "See all insights"
+    },
+    "refresh": {
+      "button": "Refresh",
+      "pendingButton": "Checking…",
+      "pending": "Checking with USCIS…",
+      "recent": "Checked {time}",
+      "unchanged": "No changes since {date}",
+      "changed": "Status changed",
+      "showingSaved": "Showing the last saved status from {date}.",
+      "errors": {
+        "unavailable": "USCIS is offline (Mon–Fri, 7am–8pm ET).",
+        "timeout": "USCIS took too long to answer.",
+        "rate_limited": "You refreshed too many times. Try again in a few minutes.",
+        "quota_exhausted": "Kinstamp reached its daily USCIS limit. Scheduled checks resume tomorrow.",
+        "not_found": "USCIS no longer finds this receipt number.",
+        "unknown": "USCIS could not be reached."
+      }
+    },
+    "share": {
+      "trigger": "Share with attorney",
+      "title": "Share with your attorney",
+      "description": "Your attorney will see this case and its history and can refresh its status and add key dates. They can't edit or share it. You can revoke access anytime.",
+      "email": {
+        "label": "Attorney's email",
+        "placeholder": "attorney@lawfirm.com",
+        "hint": "They'll see the case as soon as they sign in to Kinstamp with this email."
+      },
+      "submit": "Share",
+      "pending": "Sharing…",
+      "listTitle": "Current shares",
+      "listEmpty": "Not shared with anyone yet.",
+      "status": {
+        "active": "Active since {date}",
+        "pending": "Pending · they don't have an account yet",
+        "revoked": "Revoked {date}"
+      },
+      "revoke": "Revoke",
+      "close": "Done",
+      "errors": {
+        "ownEmail": "You can't share a case with yourself.",
+        "clientEmail": "That email belongs to a client account, not an attorney.",
+        "alreadyShared": "This case is already shared with that email.",
+        "invalidEmail": "Enter a valid email address.",
+        "unknown": "We couldn't share the case. Please try again."
+      }
+    },
+    "offline": {
+      "title": "USCIS is offline (Mon–Fri, 7am–8pm ET).",
+      "description": "Showing the last saved status from {time}.",
+      "descriptionNoSaved": "We'll check this case automatically when USCIS is back."
+    },
+    "timeline": {
+      "title": "Timeline",
+      "description": "Every status event, newest first, with where it came from."
     }
   },
   "attorney": {
@@ -158,6 +422,33 @@
     "empty": {
       "title": "No cases shared with you yet",
       "description": "Ask your clients to share a case using your email:"
+    },
+    "table": {
+      "summary": "{cases, plural, one {# case} other {# cases}} · {clients, plural, one {# client} other {# clients}} · {changed, plural, =0 {no changes this week} one {# changed this week} other {# changed this week}}",
+      "search": "Search",
+      "searchPlaceholder": "Search by client, nickname or receipt",
+      "statusFilter": "Status",
+      "allStatuses": "All statuses",
+      "sort": "Sort",
+      "sortUrgency": "Most urgent first",
+      "sortRecent": "Recently changed",
+      "changedLast7": "Changed in the last 7 days",
+      "columns": {
+        "client": "Client",
+        "case": "Case",
+        "status": "Status",
+        "lastChange": "Last change",
+        "nextKeyDate": "Next key date"
+      },
+      "awaiting": "Waiting for the first check",
+      "empty": {
+        "title": "No cases shared with you yet",
+        "description": "Ask your clients to share a case using your email:"
+      },
+      "noMatches": {
+        "title": "No matching cases",
+        "description": "Try another name or receipt number, or clear the filters."
+      }
     }
   },
   "insights": {
@@ -166,6 +457,26 @@
     "empty": {
       "title": "Not enough data yet",
       "description": "Insights appear once at least 5 consented cases of a form type have been received and approved."
+    },
+    "view": {
+      "formTypes": "Form types",
+      "yours": "{count, plural, one {# yours} other {# yours}}",
+      "chartTitle": "{form}: from received to approved",
+      "chartSubtitle": "Days between the first \"received\" event and the first \"approved\" event.",
+      "median": "Median",
+      "p25": "25th percentile",
+      "p75": "75th percentile",
+      "cases": "Cases",
+      "days": "{days} days",
+      "legendRange": "Middle 50% of cases",
+      "legendMedian": "Median",
+      "legendYours": "Your cases",
+      "soFar": "{days} days so far",
+      "basis": "Based on {count} anonymized cases from people who opted in. Groups with fewer than 5 cases are hidden.",
+      "empty": {
+        "title": "Not enough data yet",
+        "description": "Insights appear once at least 5 consented cases of a form type have been received and approved."
+      }
     }
   },
   "settings": {
@@ -178,12 +489,54 @@
       "email": "Email",
       "role": "Role",
       "roleHint": "Chosen at sign-up. It can't be changed.",
-      "roles": { "client": "Client", "attorney": "Attorney" }
+      "roles": {
+        "client": "Client",
+        "attorney": "Attorney"
+      }
     },
     "language": {
       "title": "Language",
       "description": "Used across the app and in the emails we send you.",
       "label": "Interface language"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "How your case data contributes to insights.",
+      "consent": {
+        "label": "Share my case data anonymously for insights",
+        "hint": "Only form types and dates, never receipt numbers or names. Groups under 5 cases are hidden.",
+        "grantedAt": "Consent given on {date}. Only form types and dates are used."
+      },
+      "download": {
+        "label": "Download my data",
+        "hint": "Everything Kinstamp stores about you, as JSON.",
+        "button": "Download"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Emails about your cases.",
+      "email": {
+        "label": "Email me when a case status changes",
+        "hint": "One email per change, in your language."
+      }
+    },
+    "danger": {
+      "title": "Delete account",
+      "description": "Removes your profile, tracked cases, shares and key dates. It cannot be undone.",
+      "delete": {
+        "label": "Delete my account",
+        "hint": "Cases nobody else tracks are deleted with their history."
+      },
+      "dialog": {
+        "trigger": "Delete account",
+        "title": "Delete your account?",
+        "description": "Your profile, tracked cases, shares, key dates and consent are deleted immediately. Attorneys lose access to your cases.",
+        "confirmLabel": "Type {email} to confirm",
+        "cancel": "Cancel",
+        "confirm": "Delete account",
+        "pending": "Deleting…"
+      }
     }
   },
   "landing": {
@@ -240,5 +593,19 @@
       "title": "Your data stays yours.",
       "body": "Kinstamp only checks cases you add. Processing-time insights use anonymized data from people who opt in, and only for groups large enough that no case can be singled out."
     }
+  },
+  "assistant": {
+    "trigger": "Ask about this case",
+    "title": "Ask about this case",
+    "about": "Answers use only the data of {case}.",
+    "empty": "Ask anything about this case: what a status means, what comes next, or how long similar cases take.",
+    "you": "You",
+    "assistant": "Kinstamp",
+    "thinking": "Thinking",
+    "disclaimer": "Based on your case history and anonymized insights. Not legal advice.",
+    "inputLabel": "Your question",
+    "placeholder": "Ask a question about this case…",
+    "send": "Send",
+    "remaining": "{count} questions left today"
   }
 }

@@ -1,5 +1,6 @@
 import { FolderOpenIcon } from "lucide-react";
 import type { Metadata } from "next";
+import { io } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/layout/page-header";
 import { EmptyState } from "@/components/status/empty-state";
@@ -11,6 +12,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CasesPage() {
+  // Session reads depend on the request; keep them out of any static shell.
+  await io();
   const [profile, t] = await Promise.all([requireProfile("client"), getTranslations("cases")]);
 
   return (

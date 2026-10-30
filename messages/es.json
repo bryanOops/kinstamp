@@ -17,12 +17,21 @@
   },
   "language": {
     "label": "Idioma",
-    "short": { "en": "EN", "es": "ES" },
-    "name": { "en": "English", "es": "Español" }
+    "short": {
+      "en": "EN",
+      "es": "ES"
+    },
+    "name": {
+      "en": "English",
+      "es": "Español"
+    }
   },
   "userMenu": {
     "open": "Menú de la cuenta de {name}",
-    "role": { "client": "Cliente", "attorney": "Abogado" },
+    "role": {
+      "client": "Cliente",
+      "attorney": "Abogado"
+    },
     "settings": "Configuración",
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión…"
@@ -141,6 +150,52 @@
     "empty": {
       "title": "Todavía no tienes casos",
       "description": "Agrega tu primer caso con el número de recibo de tu aviso de USCIS."
+    },
+    "card": {
+      "changed": "Cambió",
+      "form": "Formulario {form}",
+      "awaitingFirstCheck": "Esperando la primera consulta",
+      "lastChange": "Último cambio {date}",
+      "noChangesYet": "Sin estado todavía"
+    },
+    "list": {
+      "summary": "{count, plural, one {# caso} other {# casos}} · {changed, plural, =0 {sin cambios esta semana} one {# cambió esta semana} other {# cambiaron esta semana}}",
+      "lastChecked": "última consulta {time}",
+      "empty": {
+        "title": "Todavía no tienes casos",
+        "description": "Agrega tu primer caso con el número de recibo de tu aviso de USCIS."
+      }
+    },
+    "add": {
+      "trigger": "Agregar un caso",
+      "title": "Agregar un caso",
+      "description": "Ingresa el número de recibo de tu aviso de USCIS. Lo buscaremos y guardaremos su historial desde ahora.",
+      "receipt": {
+        "label": "Número de recibo",
+        "placeholder": "p. ej. EAC9999103403",
+        "hint": "3 letras seguidas de 10 dígitos; está en tu aviso de USCIS."
+      },
+      "nickname": {
+        "label": "Nombre (opcional)",
+        "placeholder": "p. ej. Green card de mamá",
+        "hint": "Solo tú lo ves. Ayuda a distinguir los casos."
+      },
+      "sandbox": {
+        "title": "Probar con un recibo de prueba",
+        "description": "El sandbox de USCIS solo responde con estos recibos de prueba.",
+        "use": "Usar el recibo {receipt}"
+      },
+      "submit": "Buscar caso",
+      "pending": "Buscando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalidFormat": "Eso no parece un número de recibo. Debe tener 3 letras y 10 dígitos.",
+        "notFound": "USCIS no tiene ningún caso con ese número de recibo. Revisa el aviso e inténtalo de nuevo.",
+        "alreadyTracked": "Ya sigues este caso.",
+        "unavailable": "No se puede contactar a USCIS ahora. Guardamos el caso y lo consultaremos cuando USCIS vuelva.",
+        "rateLimited": "Demasiadas búsquedas seguidas. Espera un minuto e inténtalo de nuevo.",
+        "unknown": "No pudimos agregar el caso. Inténtalo de nuevo."
+      }
     }
   },
   "caseDetail": {
@@ -150,6 +205,215 @@
       "title": "No encontramos ese caso",
       "description": "No existe el caso {id} en tu cuenta, o fue eliminado.",
       "back": "Volver a tus casos"
+    },
+    "breadcrumbClientsCases": "Casos de clientes",
+    "header": {
+      "form": "Formulario {form}"
+    },
+    "status": {
+      "title": "Estado actual",
+      "readIn": {
+        "en": "Read in English",
+        "es": "Leer en español"
+      },
+      "awaiting": {
+        "title": "Esperando la primera consulta",
+        "description": "No se pudo contactar a USCIS cuando se agregó este caso. Lo consultaremos automáticamente cuando USCIS vuelva y guardaremos su historial desde entonces."
+      },
+      "checked": "Consultado {time}",
+      "lastChange": "Último cambio {date}"
+    },
+    "plain": {
+      "title": "En lenguaje sencillo",
+      "nextTitle": "Qué suele venir después",
+      "disclaimer": "Información general según la categoría del estado. No es asesoría legal.",
+      "received": {
+        "meaning": "USCIS tiene tu solicitud y le asignó un número de recibo. Por ahora no necesitas hacer nada.",
+        "next": {
+          "1": "Un aviso de cita de datos biométricos, si tu formulario requiere huellas.",
+          "2": "Semanas o meses de espera mientras el caso avanza en la fila de su tipo de formulario.",
+          "3": "Una solicitud de evidencia o una decisión."
+        }
+      },
+      "biometrics": {
+        "meaning": "USCIS programó o completó la toma de tus huellas y tu foto.",
+        "next": {
+          "1": "Asiste a la cita del aviso, o espera los resultados si ya pasó.",
+          "2": "Las verificaciones de antecedentes corren por su cuenta; no hace falta hacer nada.",
+          "3": "El caso pasa a revisión por un oficial."
+        }
+      },
+      "interview": {
+        "meaning": "Un oficial quiere verte en persona. El aviso indica fecha, lugar y qué llevar.",
+        "next": {
+          "1": "Prepara los documentos que indica el aviso.",
+          "2": "Asiste a la entrevista; tu abogado puede acompañarte.",
+          "3": "Una decisión, a veces el mismo día y a veces semanas después."
+        }
+      },
+      "evidence_requested": {
+        "meaning": "USCIS necesita más documentos antes de decidir. El aviso dice exactamente qué falta y el plazo para responder.",
+        "next": {
+          "1": "Reúne todo lo que pide el aviso y envíalo en un solo paquete antes del plazo.",
+          "2": "USCIS confirma que recibió tu respuesta.",
+          "3": "El caso vuelve a revisión y luego a una decisión."
+        }
+      },
+      "evidence_received": {
+        "meaning": "USCIS recibió los documentos que enviaste en respuesta a su solicitud.",
+        "next": {
+          "1": "Un oficial revisa la nueva evidencia.",
+          "2": "Una decisión o, en casos raros, otra solicitud."
+        }
+      },
+      "approved": {
+        "meaning": "USCIS aprobó tu solicitud. El aviso de aprobación va en camino o ya lo tienes.",
+        "next": {
+          "1": "Guarda el aviso de aprobación; es la prueba de la decisión.",
+          "2": "Si hay una tarjeta de por medio, USCIS la produce y la envía después.",
+          "3": "Revisa si algún paso siguiente depende de esta aprobación, por ejemplo una entrevista de visa o una nueva solicitud."
+        }
+      },
+      "card_produced": {
+        "meaning": "Tu tarjeta fue impresa y está por enviarse.",
+        "next": {
+          "1": "Espera la tarjeta por correo en un par de semanas.",
+          "2": "Puede aparecer un número de rastreo en la página de estado de USCIS."
+        }
+      },
+      "card_delivered": {
+        "meaning": "El correo reporta que tu tarjeta fue entregada.",
+        "next": {
+          "1": "Revisa que los datos de la tarjeta sean correctos.",
+          "2": "Contacta a USCIS si la tarjeta no llegó."
+        }
+      },
+      "transferred": {
+        "meaning": "USCIS movió tu caso a otra oficina para equilibrar la carga de trabajo. El proceso no empieza de nuevo.",
+        "next": {
+          "1": "Un aviso de la nueva oficina con su dirección.",
+          "2": "El trámite continúa desde donde estaba."
+        }
+      },
+      "denied": {
+        "meaning": "USCIS denegó la solicitud. El aviso explica las razones y si puedes apelar o presentar una moción.",
+        "next": {
+          "1": "Lee el aviso de denegación con cuidado y anota cualquier plazo.",
+          "2": "Habla con un abogado sobre opciones como una apelación, una moción de reapertura o una nueva solicitud."
+        }
+      },
+      "withdrawn": {
+        "meaning": "La solicitud fue retirada, así que USCIS no decidirá sobre ella.",
+        "next": {
+          "1": "Si no era tu intención, contacta a USCIS o a tu abogado."
+        }
+      },
+      "other": {
+        "meaning": "USCIS le dio a este caso un estado para el que todavía no tenemos una explicación sencilla. El texto completo de USCIS, arriba, es la mejor fuente.",
+        "next": {
+          "1": "Sigue revisando: Kinstamp registra cada cambio con su fecha."
+        }
+      }
+    },
+    "slow": {
+      "title": "¿Mi caso va lento?",
+      "noReceivedDate": "Compararemos este caso con el tiempo de proceso oficial cuando USCIS reporte la fecha en que fue recibido.",
+      "noOfficialTime": "USCIS no publica un tiempo de proceso para este formulario, así que no hay con qué comparar.",
+      "verdict": {
+        "early": "Tu caso tiene {months} meses. USCIS indica actualmente {min}–{max} meses para este formulario, así que está dentro del rango normal.",
+        "within": "Tu caso tiene {months} meses, dentro de los {min}–{max} meses que USCIS indica actualmente para este formulario.",
+        "outside": "Tu caso tiene {months} meses, más allá de los {min}–{max} meses que USCIS indica actualmente para este formulario. Puedes preguntarle a USCIS."
+      },
+      "ageLabel": "{days} días hasta ahora",
+      "rangeLabel": "{min}–{max} meses",
+      "eRequest": "Preguntar a USCIS por un caso fuera del tiempo normal",
+      "source": "Tiempo de proceso oficial leído de USCIS el {date}.",
+      "sourceLink": "Fuente"
+    },
+    "keyDates": {
+      "title": "Fechas clave",
+      "empty": "Todavía no hay fechas clave. Agrega el plazo o la cita de un aviso de USCIS y haremos la cuenta regresiva.",
+      "add": "Agregar fecha clave",
+      "kind": {
+        "due_date": "Plazo",
+        "appointment": "Cita"
+      },
+      "download": "Agregar {title} a tu calendario",
+      "delete": "Eliminar {title}"
+    },
+    "shares": {
+      "title": "Compartido con",
+      "empty": "No está compartido con nadie. Tu abogado puede seguir este caso si lo compartes con su correo.",
+      "activeSince": "Activo desde {date}",
+      "pending": "Pendiente · todavía no tiene cuenta",
+      "revoke": "Revocar"
+    },
+    "insight": {
+      "title": "Casos como este",
+      "notEnough": "Todavía no hay suficientes casos {form} con consentimiento para mostrar cuánto tardan.",
+      "noForm": "Mostraremos cuánto tardan los casos similares cuando USCIS reporte el formulario de este caso.",
+      "summary": "Los casos {form} suelen tardar {min}–{max} meses de recibido a aprobado (mediana de {median} días).",
+      "p25": "Cuarto más rápido",
+      "median": "Mediana",
+      "p75": "Cuarto más lento",
+      "days": "{days} días",
+      "yourCase": "Tu caso: {days} días hasta ahora",
+      "basis": "Basado en {count} casos anónimos de personas que dieron su consentimiento.",
+      "link": "Ver todas las tendencias"
+    },
+    "refresh": {
+      "button": "Actualizar",
+      "pendingButton": "Consultando…",
+      "pending": "Consultando a USCIS…",
+      "recent": "Consultado {time}",
+      "unchanged": "Sin cambios desde {date}",
+      "changed": "El estado cambió",
+      "showingSaved": "Mostrando el último estado guardado del {date}.",
+      "errors": {
+        "unavailable": "USCIS está fuera de línea (lun–vie, 7 a. m.–8 p. m. ET).",
+        "timeout": "USCIS tardó demasiado en responder.",
+        "rate_limited": "Actualizaste demasiadas veces. Inténtalo en unos minutos.",
+        "quota_exhausted": "Kinstamp alcanzó su límite diario de consultas a USCIS. Las consultas programadas siguen mañana.",
+        "not_found": "USCIS ya no encuentra este número de recibo.",
+        "unknown": "No se pudo contactar a USCIS."
+      }
+    },
+    "share": {
+      "trigger": "Compartir con abogado",
+      "title": "Comparte con tu abogado",
+      "description": "Tu abogado verá este caso y su historial, podrá actualizar su estado y agregar fechas clave. No puede editarlo ni compartirlo. Puedes revocar el acceso cuando quieras.",
+      "email": {
+        "label": "Correo del abogado",
+        "placeholder": "abogado@estudio.com",
+        "hint": "Verá el caso en cuanto inicie sesión en Kinstamp con este correo."
+      },
+      "submit": "Compartir",
+      "pending": "Compartiendo…",
+      "listTitle": "Accesos actuales",
+      "listEmpty": "Todavía no está compartido con nadie.",
+      "status": {
+        "active": "Activo desde {date}",
+        "pending": "Pendiente · todavía no tiene cuenta",
+        "revoked": "Revocado el {date}"
+      },
+      "revoke": "Revocar",
+      "close": "Listo",
+      "errors": {
+        "ownEmail": "No puedes compartir un caso contigo mismo.",
+        "clientEmail": "Ese correo pertenece a una cuenta de cliente, no de abogado.",
+        "alreadyShared": "Este caso ya está compartido con ese correo.",
+        "invalidEmail": "Ingresa un correo electrónico válido.",
+        "unknown": "No pudimos compartir el caso. Inténtalo de nuevo."
+      }
+    },
+    "offline": {
+      "title": "USCIS está fuera de línea (lun–vie, 7 a. m.–8 p. m. ET).",
+      "description": "Mostrando el último estado guardado del {time}.",
+      "descriptionNoSaved": "Consultaremos este caso automáticamente cuando USCIS vuelva."
+    },
+    "timeline": {
+      "title": "Línea de tiempo",
+      "description": "Cada evento de estado, del más reciente al más antiguo, con su origen."
     }
   },
   "attorney": {
@@ -158,6 +422,33 @@
     "empty": {
       "title": "Todavía no te han compartido casos",
       "description": "Pídeles a tus clientes que compartan un caso usando tu correo:"
+    },
+    "table": {
+      "summary": "{cases, plural, one {# caso} other {# casos}} · {clients, plural, one {# cliente} other {# clientes}} · {changed, plural, =0 {sin cambios esta semana} one {# cambió esta semana} other {# cambiaron esta semana}}",
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por cliente, nombre o recibo",
+      "statusFilter": "Estado",
+      "allStatuses": "Todos los estados",
+      "sort": "Ordenar",
+      "sortUrgency": "Más urgentes primero",
+      "sortRecent": "Cambios recientes",
+      "changedLast7": "Cambió en los últimos 7 días",
+      "columns": {
+        "client": "Cliente",
+        "case": "Caso",
+        "status": "Estado",
+        "lastChange": "Último cambio",
+        "nextKeyDate": "Próxima fecha clave"
+      },
+      "awaiting": "Esperando la primera consulta",
+      "empty": {
+        "title": "Todavía no te han compartido casos",
+        "description": "Pídeles a tus clientes que compartan un caso usando tu correo:"
+      },
+      "noMatches": {
+        "title": "Ningún caso coincide",
+        "description": "Prueba con otro nombre o número de recibo, o quita los filtros."
+      }
     }
   },
   "insights": {
@@ -166,6 +457,26 @@
     "empty": {
       "title": "Todavía no hay datos suficientes",
       "description": "Las tendencias aparecen cuando al menos 5 casos con consentimiento de un mismo formulario pasaron de recibido a aprobado."
+    },
+    "view": {
+      "formTypes": "Tipos de formulario",
+      "yours": "{count, plural, one {# tuyo} other {# tuyos}}",
+      "chartTitle": "{form}: de recibido a aprobado",
+      "chartSubtitle": "Días entre el primer evento \"recibido\" y el primer evento \"aprobado\".",
+      "median": "Mediana",
+      "p25": "Percentil 25",
+      "p75": "Percentil 75",
+      "cases": "Casos",
+      "days": "{days} días",
+      "legendRange": "50 % central de los casos",
+      "legendMedian": "Mediana",
+      "legendYours": "Tus casos",
+      "soFar": "{days} días hasta ahora",
+      "basis": "Basado en {count} casos anónimos de personas que dieron su consentimiento. Los grupos con menos de 5 casos se ocultan.",
+      "empty": {
+        "title": "Todavía no hay datos suficientes",
+        "description": "Las tendencias aparecen cuando al menos 5 casos con consentimiento de un mismo formulario pasaron de recibido a aprobado."
+      }
     }
   },
   "settings": {
@@ -178,12 +489,54 @@
       "email": "Correo electrónico",
       "role": "Rol",
       "roleHint": "Se elige al registrarse. No se puede cambiar.",
-      "roles": { "client": "Cliente", "attorney": "Abogado" }
+      "roles": {
+        "client": "Cliente",
+        "attorney": "Abogado"
+      }
     },
     "language": {
       "title": "Idioma",
       "description": "Se usa en toda la app y en los correos que te enviamos.",
       "label": "Idioma de la interfaz"
+    },
+    "privacy": {
+      "title": "Privacidad",
+      "description": "Cómo contribuyen los datos de tus casos a las tendencias.",
+      "consent": {
+        "label": "Compartir los datos de mis casos de forma anónima para tendencias",
+        "hint": "Solo tipos de formulario y fechas, nunca números de recibo ni nombres. Los grupos de menos de 5 casos se ocultan.",
+        "grantedAt": "Consentimiento dado el {date}. Solo se usan tipos de formulario y fechas."
+      },
+      "download": {
+        "label": "Descargar mis datos",
+        "hint": "Todo lo que Kinstamp guarda sobre ti, en JSON.",
+        "button": "Descargar"
+      }
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "description": "Correos sobre tus casos.",
+      "email": {
+        "label": "Avisarme por correo cuando cambie el estado de un caso",
+        "hint": "Un correo por cambio, en tu idioma."
+      }
+    },
+    "danger": {
+      "title": "Eliminar cuenta",
+      "description": "Elimina tu perfil, casos seguidos, accesos compartidos y fechas clave. No se puede deshacer.",
+      "delete": {
+        "label": "Eliminar mi cuenta",
+        "hint": "Los casos que nadie más sigue se eliminan con su historial."
+      },
+      "dialog": {
+        "trigger": "Eliminar cuenta",
+        "title": "¿Eliminar tu cuenta?",
+        "description": "Tu perfil, casos seguidos, accesos compartidos, fechas clave y consentimiento se eliminan de inmediato. Los abogados pierden acceso a tus casos.",
+        "confirmLabel": "Escribe {email} para confirmar",
+        "cancel": "Cancelar",
+        "confirm": "Eliminar cuenta",
+        "pending": "Eliminando…"
+      }
     }
   },
   "landing": {
@@ -240,5 +593,19 @@
       "title": "Tus datos siguen siendo tuyos.",
       "body": "Kinstamp solo consulta los casos que tú agregas. Las tendencias de tiempos usan datos anónimos de quienes dan su consentimiento, y solo para grupos lo bastante grandes como para que ningún caso pueda identificarse."
     }
+  },
+  "assistant": {
+    "trigger": "Preguntar sobre este caso",
+    "title": "Preguntar sobre este caso",
+    "about": "Las respuestas usan solo los datos de {case}.",
+    "empty": "Pregunta lo que quieras sobre este caso: qué significa un estado, qué viene después o cuánto tardan casos similares.",
+    "you": "Tú",
+    "assistant": "Kinstamp",
+    "thinking": "Pensando",
+    "disclaimer": "Basado en el historial de tu caso y en tendencias anónimas. No es asesoría legal.",
+    "inputLabel": "Tu pregunta",
+    "placeholder": "Haz una pregunta sobre este caso…",
+    "send": "Enviar",
+    "remaining": "Te quedan {count} preguntas hoy"
   }
 }

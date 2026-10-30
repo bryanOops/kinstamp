@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { io } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/layout/page-header";
 import { LanguageSwitch } from "@/components/layout/language-switch";
@@ -11,6 +12,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SettingsPage() {
+  // Session reads depend on the request; keep them out of any static shell.
+  await io();
   const [profile, t] = await Promise.all([requireProfile(), getTranslations("settings")]);
 
   return (

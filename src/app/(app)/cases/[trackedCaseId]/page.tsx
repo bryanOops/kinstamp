@@ -1,5 +1,6 @@
 import { FileSearchIcon } from "lucide-react";
 import type { Metadata } from "next";
+import { io } from "next/cache";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/layout/page-header";
@@ -13,6 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CaseDetailPage({ params }: PageProps<"/cases/[trackedCaseId]">) {
+  // Session reads depend on the request; keep them out of any static shell.
+  await io();
   const [{ trackedCaseId }, t] = await Promise.all([params, getTranslations("caseDetail")]);
   await requireProfile("client");
 
