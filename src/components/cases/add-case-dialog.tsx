@@ -143,7 +143,7 @@ export function AddCaseDialog({ action, state, trigger, open, onOpenChange }: Ad
                         setReceipt(sample);
                         setTouched(true);
                       }}
-                      className="rounded-md border border-line bg-surface px-2.5 py-1.5 transition-colors duration-(--duration-fast) hover:border-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+                      className="inline-flex min-h-11 items-center rounded-md border border-line bg-surface px-2.5 py-1.5 transition-colors sm:min-h-0 duration-(--duration-fast) hover:border-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                       aria-label={t("sandbox.use", { receipt: sample })}
                     >
                       <ReceiptNumber value={sample} size="sm" />

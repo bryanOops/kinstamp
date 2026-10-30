@@ -82,7 +82,7 @@ export function PasswordField({ label, hint, error, id, ...props }: TextFieldPro
           onClick={() => setVisible((v) => !v)}
           aria-label={visible ? t("hidePassword") : t("showPassword")}
           aria-pressed={visible}
-          className="absolute top-1/2 right-1.5 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          className="absolute top-1/2 right-0.5 inline-flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           {visible ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
         </button>

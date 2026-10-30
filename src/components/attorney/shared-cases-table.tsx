@@ -100,10 +100,10 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
             {t("search")}
           </Label>
           <SearchIcon className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-ink-muted" aria-hidden="true" />
-          <Input id={searchId} value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t("searchPlaceholder")} className="h-10 pl-10" />
+          <Input id={searchId} value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t("searchPlaceholder")} className="h-11 pl-10 md:h-10" />
         </div>
         <Select value={tone} onValueChange={(v) => setTone(v as ToneFilter)} items={toneItems}>
-          <SelectTrigger size="sm" className="h-10 md:w-48" aria-label={t("statusFilter")}>
+          <SelectTrigger className="w-full md:h-10 md:w-48" aria-label={t("statusFilter")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -115,7 +115,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
           </SelectContent>
         </Select>
         <Select value={sort} onValueChange={(v) => setSort(v as Sort)} items={sortItems}>
-          <SelectTrigger size="sm" className="h-10 md:w-44" aria-label={t("sort")}>
+          <SelectTrigger className="w-full md:h-10 md:w-44" aria-label={t("sort")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -126,7 +126,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
             ))}
           </SelectContent>
         </Select>
-        <Label htmlFor={changedId} className="flex h-10 cursor-pointer items-center gap-2.5 px-1 text-sm font-medium text-ink">
+        <Label htmlFor={changedId} className="flex h-11 cursor-pointer items-center gap-2.5 px-1 text-sm font-medium text-ink md:h-10">
           <Switch id={changedId} checked={changedOnly} onCheckedChange={setChangedOnly} />
           {t("changedLast7")}
         </Label>
@@ -135,7 +135,45 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
       {filtered.length === 0 ? (
         <EmptyState size="inline" title={t("noMatches.title")} description={t("noMatches.description")} className="rounded-xl border border-line bg-surface" />
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-line bg-surface shadow-card">
+        <>
+          {/* Phones: one card per case; the table needs 880px and would only scroll sideways. */}
+          <ul className="flex flex-col gap-3 md:hidden">
+            {filtered.map((row) => {
+              const status = localizedText(row.status, locale);
+              const awaiting = row.checkState === "awaiting_first_check" || !status;
+              const recent = isRecent(row.lastChangeOn, now);
+              return (
+                <li key={row.shareId}>
+                  <Link
+                    href={`/attorney/cases/${row.trackedCaseId}`}
+                    className="grid gap-3 rounded-xl border border-line bg-surface p-5 shadow-card transition-[border-color,box-shadow] duration-(--duration-base) ease-(--ease-out-expo) hover:border-ink-disabled hover:shadow-raised focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.995]"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-subheading truncate text-ink">{row.nickname ?? row.receiptNumber}</p>
+                      <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-muted">
+                        <ReceiptNumber value={row.receiptNumber} size="sm" />
+                        {row.formType && <span>{row.formType}</span>}
+                      </p>
+                    </div>
+                    <p className="text-sm text-ink">
+                      <span className="text-ink-muted">{t("columns.client")}: </span>
+                      <span className="font-medium">{row.clientName}</span>
+                    </p>
+                    <StatusIndicator label={awaiting ? t("awaiting") : status} category={awaiting ? null : row.statusCategory} />
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                      <span className={cn("tabular", recent ? "font-medium text-ink" : "text-ink-muted")}>
+                        <span className="font-normal text-ink-muted">{t("columns.lastChange")}: </span>
+                        {row.lastChangeOn ? format.dateTime(calendarDate(row.lastChangeOn), { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) : "—"}
+                      </span>
+                      {row.nextKeyDate && <KeyDateChip kind={row.nextKeyDate.kind} date={row.nextKeyDate.date} title={row.nextKeyDate.title} now={now} />}
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+        <div className="hidden overflow-x-auto rounded-xl border border-line bg-surface shadow-card md:block">
           <Table className="min-w-[880px]">
             <TableHeader>
               <TableRow className="hover:bg-transparent">
@@ -180,6 +218,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
             </TableBody>
           </Table>
         </div>
+        </>
       )}
     </div>
   );

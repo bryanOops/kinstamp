@@ -45,7 +45,7 @@ export function ReceiptNumber({ value, copyable = false, size = "md", className 
         <button
           type="button"
           onClick={copy}
-          className="inline-flex size-7 cursor-pointer items-center justify-center rounded-md text-ink-muted transition-colors duration-(--duration-fast) hover:bg-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="hit-area inline-flex size-7 cursor-pointer items-center justify-center rounded-md text-ink-muted transition-colors duration-(--duration-fast) hover:bg-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
           aria-label={copied ? t("copied") : t("copy")}
         >
           {copied ? <CheckIcon className="size-3.5 text-status-approved" /> : <CopyIcon className="size-3.5" />}

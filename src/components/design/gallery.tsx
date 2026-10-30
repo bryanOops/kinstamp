@@ -6,7 +6,7 @@ import { AssistantPanel, type AssistantMessage } from "@/components/assistant/as
 import { sampleConversation, sampleSuggestions } from "@/components/assistant/samples";
 import { sampleSharedCases } from "@/components/attorney/samples";
 import { SharedCasesTable } from "@/components/attorney/shared-cases-table";
-import { Logo, StampMark } from "@/components/brand/logo";
+import { LegacyMark, Logo, StampMark, StubMark, TimelineMark } from "@/components/brand/logo";
 import { AddCaseDialog } from "@/components/cases/add-case-dialog";
 import { CaseDetailView } from "@/components/cases/case-detail-view";
 import { CaseList } from "@/components/cases/case-list";
@@ -17,6 +17,7 @@ import { ShareDialog } from "@/components/cases/share-dialog";
 import type { RefreshState } from "@/server/actions/cases";
 import { sampleInsights, sampleOwnCases } from "@/components/insights/samples";
 import { InsightsView } from "@/components/insights/insights-view";
+import { AuthBackdrop } from "@/components/layout/auth-backdrop";
 import { LanguageSwitch } from "@/components/layout/language-switch";
 import { PageHeader } from "@/components/layout/page-header";
 import { DeleteAccountDialog } from "@/components/settings/delete-account-dialog";
@@ -42,8 +43,17 @@ const refreshStates: { label: string; state: RefreshState; pending?: boolean }[]
   { label: "error (rate limited)", state: { status: "error", errorCode: "rate_limited_person", outsideHours: false } },
 ];
 
+const logoCandidates = [
+  { name: "A · Postmark (recommended)", Mark: StampMark, note: "Stamp ring with a check; the ink dot sits in the gap. The USCIS stamp, approved." },
+  { name: "B · Receipt stub", Mark: StubMark, note: "Ticket with a vermilion perforation: the receipt notice every case starts from." },
+  { name: "C · Timeline", Mark: TimelineMark, note: "Three stages on a line, the latest in vermilion, like the timeline on every case." },
+  { name: "Previous mark", Mark: LegacyMark, note: "Rounded square with a dot, kept for comparison." },
+] as const;
+
 const sections = [
   "foundations",
+  "logo",
+  "backdrop",
   "status",
   "banners",
   "empty",
@@ -79,7 +89,7 @@ export function DesignGallery() {
 
       <nav aria-label="Sections" className="-mt-8 flex flex-wrap gap-2 text-sm">
         {sections.map((s) => (
-          <a key={s} href={`#${s}`} className="rounded-md border border-line bg-surface px-2.5 py-1 text-ink-muted hover:text-ink">
+          <a key={s} href={`#${s}`} className="inline-flex min-h-9 items-center rounded-md border border-line bg-surface px-2.5 py-1 text-ink-muted hover:text-ink">
             {s}
           </a>
         ))}
@@ -158,6 +168,53 @@ export function DesignGallery() {
             </ul>
           </Card>
         </div>
+      </Section>
+
+      <Section id="logo" title="Logo candidates">
+        <p className="mb-5 max-w-[70ch] text-sm text-ink-muted">
+          Each mark at 20px (top bar), 40px, 160px and in monochrome. All three keep the 2.25 stroke of the wordmark and one vermilion accent.
+        </p>
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {logoCandidates.map(({ name, Mark, note }) => (
+            <Card key={name} title={name}>
+              <div className="flex flex-col gap-5">
+                <div className="flex items-center justify-center rounded-lg border border-line bg-canvas py-6">
+                  <Mark className="size-40 text-ink" />
+                </div>
+                <div className="flex flex-wrap items-center gap-4">
+                  <span className="inline-flex items-center gap-2 font-semibold tracking-[-0.03em] text-ink">
+                    <Mark className="size-5" />
+                    <span className="text-[20px] leading-none">Kinstamp</span>
+                  </span>
+                  <Mark className="size-10 text-ink" />
+                  <Mark className="size-5 text-ink" monochrome />
+                  <span className="inline-flex items-center gap-3 rounded-lg bg-ink px-3 py-2 text-white">
+                    <Mark className="size-5" />
+                    <Mark className="size-5" monochrome />
+                  </span>
+                  <span className="inline-flex items-center justify-center rounded-md bg-stamp p-1.5 text-white">
+                    <Mark className="size-4" monochrome />
+                  </span>
+                </div>
+                <p className="text-sm text-ink-muted">{note}</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="backdrop" title="Auth backdrop">
+        <AuthBackdrop className="min-h-[420px] rounded-xl border border-line">
+          <div className="flex flex-1 items-center justify-center p-6">
+            <div className="w-full max-w-[360px] rounded-2xl border border-line bg-surface p-6 shadow-raised">
+              <p className="text-title text-ink">Hello again</p>
+              <p className="mt-2 text-md text-ink-muted">The card stays the focus; the backdrop is a faint grid and a dotted case path with a slow vermilion traveller.</p>
+              <Skeleton className="mt-6 h-11 w-full rounded-lg" />
+              <Skeleton className="mt-3 h-11 w-full rounded-lg" />
+            </div>
+          </div>
+        </AuthBackdrop>
+        <p className="mt-3 text-sm text-ink-muted">Pure SVG + CSS motion path. Static under prefers-reduced-motion: the traveller rests at the end of the path and the stage ring stops pulsing.</p>
       </Section>
 
       <Section id="status" title="Status, receipts, key dates">
@@ -346,7 +403,7 @@ export function DesignGallery() {
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
-    <section id={id} className="scroll-mt-6">
+    <section id={id}>
       <h2 className="text-heading mb-5 border-b border-line pb-3 text-ink">{title}</h2>
       {children}
     </section>

@@ -28,7 +28,7 @@ export function UserMenu({ fullName, email, role }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="inline-flex h-9 max-w-56 cursor-pointer items-center gap-2 rounded-lg px-2 text-sm font-medium text-white transition-colors duration-(--duration-fast) hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-ink focus-visible:outline-none aria-expanded:bg-white/10"
+        className="inline-flex h-11 max-w-56 cursor-pointer items-center gap-2 rounded-lg px-2.5 text-sm sm:h-9 sm:px-2 font-medium text-white transition-colors duration-(--duration-fast) hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-ink focus-visible:outline-none aria-expanded:bg-white/10"
         aria-label={t("open", { name: fullName })}
       >
         <UserRoundIcon className="size-4 shrink-0 text-white/80" aria-hidden="true" />

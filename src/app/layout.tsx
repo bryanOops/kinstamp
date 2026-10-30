@@ -33,6 +33,8 @@ export const viewport: Viewport = {
   themeColor: "#0b0b0f",
   width: "device-width",
   initialScale: 1,
+  // Lets the sticky bars extend under the notch; safe-area padding keeps content clear.
+  viewportFit: "cover",
 };
 
 // Every page is personal and the locale comes from a cookie, so the root layout

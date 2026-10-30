@@ -128,6 +128,31 @@
   --duration-slow: 280ms;
 }
 
+/*
+  Layout tokens that depend on the viewport live outside @theme:
+  - --gutter: the one horizontal page margin (16px on phones, 24px from sm).
+  - --header-offset: height of the sticky header, so anchors and scrollIntoView
+    land below it (56px bar + 44px nav row on phones; one row from md).
+*/
+:root {
+  --gutter: 1rem;
+  --header-offset: 6.25rem;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (width >= 40rem) {
+  :root {
+    --gutter: 1.5rem;
+  }
+}
+
+@media (width >= 48rem) {
+  :root {
+    --header-offset: 3.5rem;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -190,6 +215,11 @@
     text-wrap: pretty;
   }
 
+  /* Anchors and focus targets stop below the sticky header instead of under it. */
+  [id] {
+    scroll-margin-top: calc(var(--header-offset) + 1rem);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -242,6 +272,34 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* The page gutter, so containers, sheets and sticky bars share one horizontal margin. */
+@utility gutter-x {
+  padding-inline: var(--gutter);
+}
+
+/* Safe-area padding for bars that touch the top or bottom edge of a phone. */
+@utility pt-safe {
+  padding-top: var(--safe-top);
+}
+
+@utility pb-safe {
+  padding-bottom: var(--safe-bottom);
+}
+
+/* Minimum 44px hit area without changing the visual size (WCAG 2.5.8 target size). */
+@utility hit-area {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 50%;
+    width: max(100%, 2.75rem);
+    height: max(100%, 2.75rem);
+    transform: translate(-50%, -50%);
+  }
+}
+
 @utility surface {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
@@ -287,5 +345,52 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/*
+  Auth backdrop (src/components/layout/auth-backdrop.tsx). The traveller follows the
+  SVG path with CSS motion paths; browsers without offset-path just show it at rest.
+  Both animations are slow and low contrast on purpose: the form stays the focus.
+*/
+.auth-backdrop-traveller {
+  offset-path: path("M-40 560 C 180 560, 220 240, 440 240 S 700 560, 920 560 S 1120 240, 1260 240");
+  offset-rotate: 0deg;
+  offset-distance: 100%;
+  opacity: 0.55;
+  animation: auth-backdrop-travel 24s linear infinite both;
+}
+
+@supports not (offset-path: path("M0 0")) {
+  .auth-backdrop-traveller {
+    transform: translate(920px, 560px);
+    animation: none;
+  }
+}
+
+@keyframes auth-backdrop-travel {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+.auth-backdrop-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: auth-backdrop-pulse 4s var(--ease-standard) infinite both;
+}
+
+@keyframes auth-backdrop-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.35;
   }
 }

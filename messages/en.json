@@ -223,6 +223,7 @@
     },
     "status": {
       "title": "Current status",
+      "official": "What USCIS says",
       "readIn": {
         "en": "Read in English",
         "es": "Leer en español"

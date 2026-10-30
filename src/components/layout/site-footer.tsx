@@ -5,7 +5,7 @@ import { Container } from "@/components/layout/container";
 export function SiteFooter() {
   const t = useTranslations("footer");
   return (
-    <footer className="mt-auto border-t border-line bg-surface">
+    <footer className="mt-auto border-t border-line bg-surface pb-safe">
       <Container className="flex flex-col gap-3 py-6 text-sm text-ink-muted sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <Logo size="sm" />

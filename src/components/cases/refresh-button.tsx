@@ -50,7 +50,7 @@ export function RefreshButton({ state, pending = false, now, lastChangeOn, lastS
 
   return (
     <div className={cn("flex flex-col items-start gap-2 sm:items-end", className)}>
-      <Button onClick={onRefresh} disabled={pending} aria-busy={pending}>
+      <Button onClick={onRefresh} disabled={pending} aria-busy={pending} className="w-full sm:w-auto">
         <RefreshCwIcon aria-hidden="true" className={cn(pending && "animate-spin motion-reduce:animate-none")} />
         {pending ? t("pendingButton") : t("button")}
       </Button>

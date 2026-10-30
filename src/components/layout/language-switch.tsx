@@ -34,7 +34,7 @@ export function LanguageSwitch({ tone = "onLight", className }: LanguageSwitchPr
       aria-label={t("label")}
       aria-busy={pending || undefined}
       className={cn(
-        "inline-flex h-9 items-center rounded-lg p-0.5 text-xs font-semibold",
+        "inline-flex h-11 items-center rounded-lg p-0.5 text-xs font-semibold sm:h-9",
         dark ? "bg-white/10" : "bg-canvas-deep",
         className,
       )}

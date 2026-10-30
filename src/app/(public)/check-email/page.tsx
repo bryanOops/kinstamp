@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { z } from "zod";
 import { AuthCard } from "@/components/auth/auth-card";
+import { AuthBackdrop } from "@/components/layout/auth-backdrop";
 import { Container } from "@/components/layout/container";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,11 +19,13 @@ const emailParam = z.email();
 
 export default function CheckEmailPage({ searchParams }: PageProps<"/check-email">) {
   return (
-    <Container className="py-10 sm:py-16">
-      <Suspense fallback={<Skeleton className="mx-auto h-80 w-full max-w-[460px] rounded-2xl" />}>
-        <CheckEmailCard searchParams={searchParams} />
-      </Suspense>
-    </Container>
+    <AuthBackdrop>
+      <Container className="py-10 sm:py-16">
+        <Suspense fallback={<Skeleton className="mx-auto h-80 w-full max-w-[460px] rounded-2xl" />}>
+          <CheckEmailCard searchParams={searchParams} />
+        </Suspense>
+      </Container>
+    </AuthBackdrop>
   );
 }
 

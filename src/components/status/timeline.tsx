@@ -42,15 +42,19 @@ export function Timeline({ events, highlightedEventId, className }: TimelineProp
         const description = locale === "es" && event.descriptionEs ? event.descriptionEs : event.description;
 
         return (
-          <li key={event.id} className="grid grid-cols-[6.5rem_1.25rem_1fr] gap-x-3 sm:grid-cols-[7.5rem_1.25rem_1fr] sm:gap-x-4">
+          // Phones stack the date over the title next to the dot column; from `sm` the date gets its own column.
+          <li key={event.id} className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-3 sm:grid-cols-[7.5rem_1.25rem_minmax(0,1fr)] sm:gap-x-4">
             <time
               dateTime={event.occurredOn}
-              className={cn("pt-0.5 text-right text-sm tabular", isCurrent ? "font-medium text-ink" : "text-ink-muted")}
+              className={cn(
+                "col-start-2 row-start-1 pt-0.5 text-sm tabular sm:col-start-1 sm:text-right",
+                isCurrent ? "font-medium text-ink" : "text-ink-muted",
+              )}
             >
               {format.dateTime(date, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}
             </time>
 
-            <div className="relative flex justify-center">
+            <div className="relative col-start-1 row-span-2 row-start-1 flex justify-center sm:col-start-2 sm:row-span-1">
               <span
                 aria-hidden="true"
                 className={cn("relative z-10 mt-1.5 block size-3 rounded-full ring-4 ring-surface", isCurrent ? "bg-stamp" : "bg-ink")}
@@ -58,13 +62,13 @@ export function Timeline({ events, highlightedEventId, className }: TimelineProp
               {!isLast && <span aria-hidden="true" className="absolute top-4 bottom-0 w-px bg-line" />}
             </div>
 
-            <div className={cn("min-w-0", !isLast && "pb-7")}>
+            <div className={cn("col-start-2 row-start-2 min-w-0 sm:col-start-3 sm:row-start-1", !isLast && "pb-7")}>
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                 <h3 className={cn("text-md font-semibold tracking-[-0.01em] text-ink", isCurrent && "text-base")}>{title}</h3>
                 <span className="text-xs text-ink-muted">{event.origin === "reported" ? t("reportedByUscis") : t("observedByKinstamp")}</span>
                 {isNew && <span className="rounded-md bg-stamp-tint px-1.5 py-0.5 text-xs font-semibold text-stamp-ink">{t("new")}</span>}
               </div>
-              {description && <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-ink-muted">{description}</p>}
+              {description && <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-ink-muted [overflow-wrap:anywhere]">{description}</p>}
             </div>
           </li>
         );

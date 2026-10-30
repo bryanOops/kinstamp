@@ -81,7 +81,7 @@ export function AssistantPanel({ caseLabel, messages, suggestions = [], streamin
         {trigger}
       </SheetTrigger>
       <SheetContent side="right" className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
-        <SheetHeader className="border-b border-line px-5 py-4 text-left">
+        <SheetHeader className="border-b border-line px-5 py-4 pt-[calc(--spacing(4)+var(--safe-top))] text-left">
           <SheetTitle className="text-heading">{t("title")}</SheetTitle>
           <SheetDescription className="text-sm text-ink-muted">{t("about", { case: caseLabel })}</SheetDescription>
         </SheetHeader>
@@ -118,7 +118,7 @@ export function AssistantPanel({ caseLabel, messages, suggestions = [], streamin
           <p className="mt-5 text-xs text-ink-subtle">{t("disclaimer")}</p>
         </div>
 
-        <div className="border-t border-line bg-canvas/60 px-5 py-4">
+        <div className="border-t border-line bg-canvas/60 px-5 py-4 pb-[max(--spacing(4),var(--safe-bottom))]">
           {showSuggestions && (
             <ul className="mb-3 flex flex-wrap gap-2">
               {suggestions.map((s) => (
@@ -130,7 +130,7 @@ export function AssistantPanel({ caseLabel, messages, suggestions = [], streamin
                       onSend?.(s);
                     }}
                     disabled={streaming}
-                    className="cursor-pointer rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-medium text-ink transition-colors duration-(--duration-fast) hover:border-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50"
+                    className="min-h-11 cursor-pointer rounded-full border border-line bg-surface px-3.5 py-1.5 text-left text-sm font-medium text-ink sm:min-h-0 sm:px-3 sm:text-xs transition-colors duration-(--duration-fast) hover:border-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50"
                   >
                     {s}
                   </button>

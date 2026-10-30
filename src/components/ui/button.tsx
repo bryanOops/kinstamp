@@ -16,14 +16,15 @@ const buttonVariants = cva(
         link: "h-auto rounded-none p-0 font-medium text-ink underline underline-offset-4 hover:text-stamp-ink",
         inverse: "bg-white text-ink hover:bg-canvas",
       },
+      // Compact sizes grow to a 44px hit area on touch widths and shrink from `sm`.
       size: {
         default: "h-11 px-4",
-        sm: "h-9 px-3 text-sm",
-        xs: "h-8 gap-1.5 rounded-md px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3.5",
+        sm: "h-11 px-3.5 text-sm sm:h-9 sm:px-3",
+        xs: "h-9 gap-1.5 rounded-md px-2.5 text-xs sm:h-8 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-12 rounded-xl px-6 text-md",
         icon: "size-11",
-        "icon-sm": "size-9",
-        "icon-xs": "size-8 rounded-md [&_svg:not([class*='size-'])]:size-3.5",
+        "icon-sm": "size-11 sm:size-9",
+        "icon-xs": "size-9 rounded-md sm:size-8 [&_svg:not([class*='size-'])]:size-3.5",
       },
     },
     defaultVariants: {

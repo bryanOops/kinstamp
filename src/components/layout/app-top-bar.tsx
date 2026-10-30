@@ -5,6 +5,7 @@ import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/layout/container";
 import { LanguageSwitch } from "@/components/layout/language-switch";
 import { NavLinks, type NavItem } from "@/components/layout/nav-links";
+import { StickyHeader } from "@/components/layout/sticky-header";
 import { UserMenu } from "@/components/layout/user-menu";
 import { getCurrentProfile, homePathFor } from "@/server/auth";
 
@@ -53,11 +54,11 @@ export function AppTopBarFrame({
   right?: React.ReactNode;
 }) {
   return (
-    <header className="bg-ink text-white">
+    <StickyHeader tone="dark">
       <Container className="flex h-14 items-center gap-6">
         <Link
           href={home}
-          className="shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-ink focus-visible:outline-none"
+          className="inline-flex min-h-11 shrink-0 items-center rounded-md focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-ink focus-visible:outline-none"
         >
           <Logo tone="onDark" />
         </Link>
@@ -69,7 +70,7 @@ export function AppTopBarFrame({
           <Container className="h-11 overflow-x-auto no-scrollbar">{nav}</Container>
         </div>
       )}
-    </header>
+    </StickyHeader>
   );
 }
 
