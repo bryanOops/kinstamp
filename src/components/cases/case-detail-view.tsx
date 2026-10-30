@@ -48,7 +48,8 @@ export function CaseDetailView({
 }: CaseDetailViewProps) {
   const t = useTranslations("caseDetail");
   const format = useFormatter();
-  const offline = detail.checkState === "error" && detail.lastErrorCode === "unavailable";
+  // A successful check clears lastErrorCode, so any value means the latest check failed.
+  const offline = detail.lastErrorCode === "unavailable" || detail.lastErrorCode === "timeout";
   const awaiting = detail.checkState === "awaiting_first_check";
 
   return (
