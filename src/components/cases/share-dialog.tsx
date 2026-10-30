@@ -38,6 +38,7 @@ export function ShareDialog({ shares, action, state, onRevoke, trigger, open, on
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger
+        nativeButton={!trigger}
         render={
           trigger ? (
             <span />

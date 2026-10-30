@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 import { AuthCard } from "@/components/auth/auth-card";
 import { SignInForm } from "@/components/auth/sign-in-form";
 import { Container } from "@/components/layout/container";
+import { Skeleton } from "@/components/ui/skeleton";
 import { safeNextPath } from "@/lib/auth/schemas";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -11,9 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SignInPage({ searchParams }: PageProps<"/sign-in">) {
-  const [params, t] = await Promise.all([searchParams, getTranslations("auth.signIn")]);
-  const next = safeNextPath(Array.isArray(params.next) ? params.next[0] : params.next);
-  const error = params.error === "confirmation" ? "confirmation" : null;
+  const t = await getTranslations("auth.signIn");
 
   return (
     <Container className="py-10 sm:py-16">
@@ -26,8 +26,18 @@ export default async function SignInPage({ searchParams }: PageProps<"/sign-in">
           </p>
         }
       >
-        <SignInForm next={next} urlError={error} />
+        {/* The URL (next, error) is request data: read it inside Suspense so the card itself stays static. */}
+        <Suspense fallback={<Skeleton className="h-72 w-full rounded-lg" />}>
+          <SignInFromParams searchParams={searchParams} />
+        </Suspense>
       </AuthCard>
     </Container>
   );
+}
+
+async function SignInFromParams({ searchParams }: Pick<PageProps<"/sign-in">, "searchParams">) {
+  const params = await searchParams;
+  const next = safeNextPath(Array.isArray(params.next) ? params.next[0] : params.next);
+  const error = params.error === "confirmation" ? "confirmation" : null;
+  return <SignInForm next={next} urlError={error} />;
 }

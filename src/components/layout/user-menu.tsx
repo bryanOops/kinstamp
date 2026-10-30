@@ -7,6 +7,7 @@ import { useTransition } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -35,11 +36,13 @@ export function UserMenu({ fullName, email, role }: UserMenuProps) {
         <ChevronDownIcon className="size-3.5 shrink-0 text-white/60" aria-hidden="true" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64 rounded-xl p-1.5 shadow-overlay">
-        <DropdownMenuLabel className="px-2.5 py-2">
-          <p className="truncate text-sm font-semibold text-ink">{fullName}</p>
-          <p className="truncate text-xs font-normal text-ink-muted">{email}</p>
-          <p className="mt-1 text-xs font-medium text-ink-muted">{t(`role.${role}`)}</p>
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="px-2.5 py-2">
+            <p className="truncate text-sm font-semibold text-ink">{fullName}</p>
+            <p className="truncate text-xs font-normal text-ink-muted">{email}</p>
+            <p className="mt-1 text-xs font-medium text-ink-muted">{t(`role.${role}`)}</p>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           render={<Link href="/settings" />}

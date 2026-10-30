@@ -2,7 +2,7 @@ import { CalendarPlusIcon, DownloadIcon, Trash2Icon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { KeyDateChip } from "@/components/status/key-date-chip";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { KeyDate } from "./types";
 
@@ -52,9 +52,9 @@ export function KeyDatesCard({ keyDates, now, addAction, icsHref, onDelete }: Ke
                 </div>
                 <div className="flex items-center gap-1">
                   {icsHref && (
-                    <Button variant="ghost" size="icon-sm" render={<a href={icsHref(keyDate)} download />} aria-label={t("download", { title: keyDate.title })}>
+                    <a href={icsHref(keyDate)} download className={buttonVariants({ variant: "ghost", size: "icon-sm" })} aria-label={t("download", { title: keyDate.title })}>
                       <DownloadIcon aria-hidden="true" />
-                    </Button>
+                    </a>
                   )}
                   {keyDate.canDelete && onDelete && (
                     <Button variant="ghost" size="icon-sm" className="text-ink-muted hover:text-destructive" onClick={() => onDelete(keyDate)} aria-label={t("delete", { title: keyDate.title })}>

@@ -46,6 +46,7 @@ export function AssistantPanel({ caseLabel, messages, suggestions = [], pending,
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger
+        nativeButton={!trigger}
         render={
           trigger ? (
             <span />

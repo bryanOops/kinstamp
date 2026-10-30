@@ -50,6 +50,7 @@ export function AddCaseDialog({ action, state, trigger, open, onOpenChange }: Ad
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger
+        nativeButton={!trigger}
         render={
           trigger ? (
             <span />
