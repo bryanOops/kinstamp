@@ -17,10 +17,10 @@ export const demoAccounts = {
 } as const;
 
 const trackedCases = [
-  { receiptNumber: "EAC9999103403", nickname: "Mom's green card", shareWithAttorney: true },
-  { receiptNumber: "LIN9999106498", nickname: "Carlos's work permit", shareWithAttorney: true },
-  { receiptNumber: "SRC9999102777", nickname: "My travel document", shareWithAttorney: false },
-  { receiptNumber: "EAC9999103402", nickname: "Sofia's petition", shareWithAttorney: false },
+  { receiptNumber: "EAC9999103403", nickname: "Mom's petition", shareWithAttorney: true },
+  { receiptNumber: "EAC9999103424", nickname: "Carlos's petition", shareWithAttorney: true },
+  { receiptNumber: "LIN9999106501", nickname: "Sofia's petition", shareWithAttorney: false },
+  { receiptNumber: "EAC9999103408", nickname: "Dad's petition", shareWithAttorney: false },
 ];
 
 const admin = createAdminClient();

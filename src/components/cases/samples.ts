@@ -6,8 +6,6 @@ import type { CaseDetail, TrackedCaseSummary } from "./types";
  */
 export const sampleNow = new Date("2026-10-30T18:00:00Z");
 
-export const sandboxReceipts = ["EAC9999103403", "LIN9999106498", "SRC9999102777", "EAC9999103402"] as const;
-
 export const sampleTrackedCases: TrackedCaseSummary[] = [
   {
     trackedCaseId: "tc_1",

@@ -12,7 +12,8 @@ import { Label } from "@/components/ui/label";
 import { isReceiptNumber, normalizeReceiptNumber } from "@/lib/format/receipt";
 import { cn } from "@/lib/utils";
 
-const sandboxReceipts = ["EAC9999103403", "LIN9999106498", "SRC9999102777", "EAC9999103402"] as const;
+// Sandbox receipts with varied statuses that the demo account does not track yet.
+const sandboxReceipts = ["LIN9999106498", "EAC9999103406", "SRC9999132694", "EAC9999103429"] as const;
 
 export type AddCaseFormState = {
   /** i18n key under `cases.add.errors` */
