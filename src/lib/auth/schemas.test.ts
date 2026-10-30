@@ -40,9 +40,13 @@ describe("safeNextPath", () => {
     expect(safeNextPath(path)).toBe(path);
   });
 
-  it.each(["https://evil.com", "//evil.com", "/\\evil.com", "cases", undefined])("rejects %s", (path) => {
-    expect(safeNextPath(path)).toBeNull();
-  });
+  // Control characters are stripped by URL parsers: "/\t/evil.com" resolves to "//evil.com".
+  it.each(["https://evil.com", "//evil.com", "/\\evil.com", "/\t/evil.com", "/\n/evil.com", "/%09/evil.com", "cases", undefined])(
+    "rejects %s",
+    (path) => {
+      expect(safeNextPath(path)).toBeNull();
+    },
+  );
 });
 
 describe("signInReason", () => {

@@ -2,7 +2,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(24);
+select plan(25);
 
 -- Fixtures: two clients, one attorney, one other attorney, one case tracked by both clients.
 insert into auth.users (id, email, raw_user_meta_data, email_confirmed_at) values
@@ -65,6 +65,10 @@ select is(
   (select tours_completed from public.profiles where id = '00000000-0000-0000-0000-00000000000a'),
   '{cases}'::text[],
   'and reads it back'
+);
+select throws_ok(
+  $$ update public.profiles set tours_completed = '{cases,bogus}' where id = '00000000-0000-0000-0000-00000000000a' $$,
+  '23514', null, 'only known tour ids can be stored'
 );
 
 -- The app adds a case with `insert ... returning id`: the select policy must see the new row in the same statement.

@@ -33,5 +33,9 @@ export function safeNextPath(value: unknown): string | null {
   if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) {
     return null;
   }
-  return value;
+  // Control characters (tab, newline) are dropped by URL parsers, so "/\t/evil.com" would
+  // resolve to "//evil.com". Encoded forms are rejected too. Then let the parser decide.
+  if (/[\u0000-\u001f\u007f]/.test(value) || /%(0[0-9a-f]|1[0-9a-f]|7f)/i.test(value)) return null;
+  const origin = "https://kinstamp.invalid";
+  return new URL(value, origin).origin === origin ? value : null;
 }
