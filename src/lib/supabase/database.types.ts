@@ -241,7 +241,12 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "can_access_tracked_case":
+            "attorney_shared_cases":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "case_id": string,"check_state": string,"client_name": string,"form_type": string,"last_change_on": string,"last_successful_check_at": string,"next_key_date": string,"nickname": string,"receipt_number": string,"share_id": string,"shared_at": string,"status_category": string,"status_en": string,"status_es": string,"tracked_case_id": string
+            }[]
+                           },
+"can_access_tracked_case":
 { Args: { "target_tracked_case_id": string }; Returns: boolean
                            },
 "can_read_case":

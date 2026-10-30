@@ -2,7 +2,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(17);
+select plan(20);
 
 -- Fixtures: two clients, one attorney, one other attorney, one case tracked by both clients.
 insert into auth.users (id, email, raw_user_meta_data) values
@@ -63,14 +63,21 @@ select is((select count(*)::int from public.cases), 1, 'and reads the case');
 insert into public.key_dates (tracked_case_id, kind, date, title, created_by)
 values ('20000000-0000-0000-0000-00000000000a', 'due_date', '2026-12-01', 'RFE response', '00000000-0000-0000-0000-00000000000c');
 select is((select count(*)::int from public.key_dates), 1, 'the attorney can add a key date');
+select is(
+  (select client_name from public.attorney_shared_cases()),
+  'Maria',
+  'the attorney dashboard shows the client''s name for shared cases'
+);
 
 -- As another attorney
 set local request.jwt.claims to '{"sub":"00000000-0000-0000-0000-00000000000d","role":"authenticated"}';
 select is((select count(*)::int from public.cases), 0, 'an attorney without a share sees no cases');
+select is((select count(*)::int from public.attorney_shared_cases()), 0, 'and an empty dashboard');
 
 -- As Jose (other client tracking the same case)
 set local request.jwt.claims to '{"sub":"00000000-0000-0000-0000-00000000000b","role":"authenticated"}';
 select is((select count(*)::int from public.key_dates), 0, 'key dates of another client''s tracked case stay private');
+select is((select count(*)::int from public.attorney_shared_cases()), 0, 'a client gets nothing from the attorney dashboard');
 
 -- Revoking ends the attorney's access immediately
 set local request.jwt.claims to '{"sub":"00000000-0000-0000-0000-00000000000a","role":"authenticated"}';
