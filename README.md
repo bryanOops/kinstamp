@@ -119,6 +119,7 @@ The coding standards that every change (human or AI) follows are in [`CLAUDE.md`
 ### Security
 
 - **Authorization lives in Postgres row-level security**, not in application filters ([ADR 0004](docs/adr/0004-authorization-in-postgres-rls.md)). Clients read only cases they track; attorneys only cases actively shared with their **confirmed** email; nobody can change their role or write to cases or history. 26 pgTAP tests check this and the insights privacy rules with several accounts (`npm run test:db`).
+- **A receipt number is the only key to a case**, exactly as on USCIS's public status page: the API has no notion of ownership and returns no personal data, so two people can track the same receipt. Everything a person adds on top (that they track it, the nickname, key dates, shares) is theirs alone under RLS. Per-person hourly check limits and a daily USCIS budget stop receipt guessing.
 - Email confirmation is required: shares are matched by email, so an unconfirmed account must never claim an attorney's address.
 - USCIS credentials, the Supabase service-role key and the Anthropic key exist only on the server.
 - Post-sign-in redirects only accept same-site paths.
