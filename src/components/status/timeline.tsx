@@ -1,0 +1,84 @@
+import { useFormatter, useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
+
+export type TimelineEvent = {
+  id: string;
+  /** Calendar date `YYYY-MM-DD` as USCIS reports it. */
+  occurredOn: string;
+  title: string;
+  description?: string | null;
+  origin: "reported" | "observed";
+  category?: string | null;
+};
+
+type TimelineProps = {
+  /** Newest first. The first event is the current status and is highlighted. */
+  events: TimelineEvent[];
+  /** Id of an event to call out as newly observed ("Status changed"). */
+  highlightedEventId?: string | null;
+  className?: string;
+};
+
+export function Timeline({ events, highlightedEventId, className }: TimelineProps) {
+  const t = useTranslations("timeline");
+  const format = useFormatter();
+
+  if (events.length === 0) {
+    return <p className="text-sm text-ink-muted">{t("empty")}</p>;
+  }
+
+  return (
+    <ol className={cn("relative", className)}>
+      {events.map((event, index) => {
+        const isCurrent = index === 0;
+        const isLast = index === events.length - 1;
+        const isNew = event.id === highlightedEventId;
+        const date = new Date(`${event.occurredOn}T00:00:00Z`);
+
+        return (
+          <li key={event.id} className="grid grid-cols-[6.5rem_1.25rem_1fr] gap-x-3 sm:grid-cols-[7.5rem_1.25rem_1fr] sm:gap-x-4">
+            <time
+              dateTime={event.occurredOn}
+              className={cn(
+                "pt-0.5 text-right text-sm tabular",
+                isCurrent ? "font-medium text-ink" : "text-ink-muted",
+              )}
+            >
+              {format.dateTime(date, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}
+            </time>
+
+            <div className="relative flex justify-center">
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "relative z-10 mt-1.5 block size-3 rounded-full ring-4 ring-surface",
+                  isCurrent ? "bg-stamp" : "bg-ink",
+                )}
+              />
+              {!isLast && <span aria-hidden="true" className="absolute top-4 bottom-0 w-px bg-line" />}
+            </div>
+
+            <div className={cn("min-w-0", !isLast && "pb-7")}>
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <h3 className={cn("text-md font-semibold tracking-[-0.01em] text-ink", isCurrent && "text-base")}>
+                  {event.title}
+                </h3>
+                <span className="text-xs text-ink-muted">
+                  {event.origin === "reported" ? t("reportedByUscis") : t("observedByKinstamp")}
+                </span>
+                {isNew && (
+                  <span className="rounded-md bg-stamp-tint px-1.5 py-0.5 text-xs font-semibold text-stamp-ink">
+                    {t("new")}
+                  </span>
+                )}
+              </div>
+              {event.description && (
+                <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-ink-muted">{event.description}</p>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}

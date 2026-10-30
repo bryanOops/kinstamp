@@ -2,5 +2,243 @@
   "app": {
     "name": "Kinstamp",
     "tagline": "Seguimiento de casos de USCIS para familias y sus abogados."
+  },
+  "nav": {
+    "signIn": "Iniciar sesión",
+    "createAccount": "Crear cuenta",
+    "cases": "Casos",
+    "insights": "Tendencias",
+    "settings": "Configuración",
+    "clientsCases": "Casos de clientes"
+  },
+  "footer": {
+    "tagline": "Seguimiento de casos de USCIS para familias y sus abogados",
+    "notAffiliated": "Sin afiliación con USCIS ni con el gobierno de EE. UU."
+  },
+  "language": {
+    "label": "Idioma",
+    "short": { "en": "EN", "es": "ES" },
+    "name": { "en": "English", "es": "Español" }
+  },
+  "userMenu": {
+    "open": "Menú de la cuenta de {name}",
+    "role": { "client": "Cliente", "attorney": "Abogado" },
+    "settings": "Configuración",
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión…"
+  },
+  "status": {
+    "tone": {
+      "progress": "En proceso",
+      "action": "Requiere acción",
+      "approved": "Aprobado",
+      "denied": "Denegado",
+      "unknown": "Sin consultar todavía"
+    }
+  },
+  "receipt": {
+    "ariaLabel": "Número de recibo {value}",
+    "copy": "Copiar número de recibo",
+    "copied": "Copiado"
+  },
+  "timeline": {
+    "empty": "Todavía no hay eventos de estado. La línea de tiempo se completa después de la primera consulta.",
+    "reportedByUscis": "Reportado por USCIS",
+    "observedByKinstamp": "Observado por Kinstamp",
+    "new": "Nuevo"
+  },
+  "keyDates": {
+    "countdown": {
+      "due_date": {
+        "past": "Venció hace {days, plural, one {# día} other {# días}}",
+        "today": "Vence hoy",
+        "soon": "Vence en {days, plural, one {# día} other {# días}}",
+        "later": "Vence en {days} días"
+      },
+      "appointment": {
+        "past": "Cita hace {days, plural, one {# día} other {# días}}",
+        "today": "Cita hoy",
+        "soon": "Cita en {days, plural, one {# día} other {# días}}",
+        "later": "Cita en {days} días"
+      }
+    }
+  },
+  "auth": {
+    "errors": {
+      "invalidEmail": "Ingresa un correo electrónico válido.",
+      "nameRequired": "Ingresa tu nombre completo.",
+      "nameTooLong": "Ese nombre es demasiado largo (máximo 120 caracteres).",
+      "passwordTooShort": "Usa al menos 8 caracteres.",
+      "passwordTooLong": "Usa como máximo 72 caracteres.",
+      "passwordRequired": "Ingresa tu contraseña.",
+      "passwordWeak": "Esa contraseña es fácil de adivinar. Prueba una más larga con letras y números.",
+      "roleRequired": "Elige cómo vas a usar Kinstamp.",
+      "tooManyEmails": "Enviamos demasiados correos a esa dirección. Espera unos minutos e inténtalo de nuevo.",
+      "signUpFailed": "No pudimos crear tu cuenta. Inténtalo de nuevo.",
+      "emailNotConfirmed": "Primero confirma tu correo. Busca en tu bandeja el enlace que te enviamos.",
+      "invalidCredentials": "El correo y la contraseña no coinciden.",
+      "confirmation": "Ese enlace de confirmación no es válido o ya venció. Inicia sesión para pedir uno nuevo."
+    },
+    "fields": {
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "passwordHint": "Al menos 8 caracteres.",
+      "role": "¿Cómo vas a usar Kinstamp?",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña"
+    },
+    "roles": {
+      "client": {
+        "label": "Sigo mis casos o los de mi familia",
+        "hint": "Agrega casos por número de recibo y compártelos con tu abogado."
+      },
+      "attorney": {
+        "label": "Soy abogado",
+        "hint": "Ve los casos que tus clientes comparten con tu correo."
+      }
+    },
+    "consent": "Permitir que Kinstamp use los datos de mis casos de forma anónima para mostrar tendencias de tiempos de proceso. Puedes cambiarlo cuando quieras.",
+    "signUp": {
+      "metaTitle": "Crear cuenta",
+      "title": "Sigue tu caso, con calma.",
+      "description": "Una sola cuenta para todos los casos de la familia.",
+      "submit": "Crear cuenta",
+      "pending": "Creando tu cuenta…",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signInLink": "Inicia sesión"
+    },
+    "signIn": {
+      "metaTitle": "Iniciar sesión",
+      "title": "Hola de nuevo",
+      "description": "Inicia sesión para ver tus casos.",
+      "submit": "Iniciar sesión",
+      "pending": "Iniciando sesión…",
+      "noAccount": "¿Eres nuevo en Kinstamp?",
+      "signUpLink": "Crea una cuenta",
+      "demoNote": "¿Estás revisando esta demo? Usa las cuentas de prueba del README."
+    },
+    "checkEmail": {
+      "metaTitle": "Revisa tu correo",
+      "title": "Revisa tu correo",
+      "sentTo": "Enviamos un enlace de confirmación a <strong>{email}</strong>.",
+      "sentGeneric": "Te enviamos un enlace de confirmación.",
+      "nextStepTitle": "Abre el enlace para confirmar tu cuenta",
+      "nextStep": "El enlace inicia tu sesión y te lleva a tus casos.",
+      "spam": "¿No lo ves? Revisa la carpeta de spam. El remitente es Kinstamp.",
+      "goToSignIn": "Ir a iniciar sesión"
+    }
+  },
+  "errors": {
+    "title": "Algo salió mal",
+    "description": "No pudimos cargar esta página. Tus datos están a salvo; inténtalo de nuevo en un momento.",
+    "reference": "Referencia {id}",
+    "retry": "Intentar de nuevo"
+  },
+  "cases": {
+    "title": "Tus casos",
+    "greeting": "Hola, {name}. Cada caso que sigues, con su estado más reciente.",
+    "empty": {
+      "title": "Todavía no tienes casos",
+      "description": "Agrega tu primer caso con el número de recibo de tu aviso de USCIS."
+    }
+  },
+  "caseDetail": {
+    "title": "Caso",
+    "breadcrumbCases": "Casos",
+    "notFound": {
+      "title": "No encontramos ese caso",
+      "description": "No existe el caso {id} en tu cuenta, o fue eliminado.",
+      "back": "Volver a tus casos"
+    }
+  },
+  "attorney": {
+    "title": "Casos de clientes",
+    "description": "Todos los casos que tus clientes compartieron contigo, con los cambios más recientes primero.",
+    "empty": {
+      "title": "Todavía no te han compartido casos",
+      "description": "Pídeles a tus clientes que compartan un caso usando tu correo:"
+    }
+  },
+  "insights": {
+    "title": "Cuánto suelen tardar los casos",
+    "description": "Calculado solo con datos anónimos de personas que dieron su consentimiento. Los grupos con menos de 5 casos se ocultan.",
+    "empty": {
+      "title": "Todavía no hay datos suficientes",
+      "description": "Las tendencias aparecen cuando al menos 5 casos con consentimiento de un mismo formulario pasaron de recibido a aprobado."
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Tu perfil, idioma y preferencias de privacidad.",
+    "profile": {
+      "title": "Perfil",
+      "description": "Quién eres en Kinstamp. Tu correo también es la forma en que los abogados reciben los casos compartidos.",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "role": "Rol",
+      "roleHint": "Se elige al registrarse. No se puede cambiar.",
+      "roles": { "client": "Cliente", "attorney": "Abogado" }
+    },
+    "language": {
+      "title": "Idioma",
+      "description": "Se usa en toda la app y en los correos que te enviamos.",
+      "label": "Idioma de la interfaz"
+    }
+  },
+  "landing": {
+    "hero": {
+      "title": "Sabe en qué va tu caso. Sin entrar a USCIS todos los días.",
+      "subtitle": "Kinstamp guarda el historial completo de cada caso de USCIS que sigue tu familia, explica cada estado en lenguaje sencillo, en inglés o español, y deja que tu abogado lo siga contigo.",
+      "cta": "Crear una cuenta gratis",
+      "secondary": "Iniciar sesión",
+      "note": "Gratis para familias. Funciona con cualquier número de recibo de USCIS."
+    },
+    "preview": {
+      "ariaLabel": "Ejemplo del detalle de un caso con su línea de tiempo",
+      "nickname": "Green card de mamá",
+      "form": "Formulario {form}",
+      "timeline": "Línea de tiempo",
+      "caption": "Ejemplo con un recibo de prueba de USCIS."
+    },
+    "benefits": {
+      "title": "Todo sobre un caso, en un solo lugar tranquilo.",
+      "history": {
+        "title": "El historial completo, guardado para ti",
+        "body": "Cada estado que reporta USCIS, más cada cambio que Kinstamp observa entre consultas, con su fecha. Nada se edita ni se pierde."
+      },
+      "share": {
+        "title": "Comparte con tu abogado",
+        "body": "Dale acceso con su correo. Ve el caso y su historial, puede actualizarlo y agregar fechas clave, y nada más. Revócalo cuando quieras."
+      },
+      "plain": {
+        "title": "Explicaciones en lenguaje sencillo",
+        "body": "Qué significa un estado y qué suele venir después, en inglés y español. No es asesoría legal, solo claridad."
+      },
+      "slow": {
+        "title": "¿Mi caso va lento?",
+        "body": "Compara la antigüedad de tu caso con el tiempo de proceso que publica USCIS para ese formulario, con su fuente y fecha."
+      }
+    },
+    "how": {
+      "title": "Cómo funciona",
+      "subtitle": "Tres pasos, sin papeleo.",
+      "add": {
+        "title": "Agrega un caso",
+        "body": "Ingresa el número de recibo de tu aviso y ponle un nombre al caso."
+      },
+      "check": {
+        "title": "Consultamos a USCIS",
+        "body": "Actualiza cuando quieras. Kinstamp también consulta entre semana y te avisa por correo si algo cambia."
+      },
+      "share": {
+        "title": "Comparte si quieres",
+        "body": "Tu abogado ve solo lo que compartes, por el tiempo que tú decidas."
+      }
+    },
+    "privacy": {
+      "title": "Tus datos siguen siendo tuyos.",
+      "body": "Kinstamp solo consulta los casos que tú agregas. Las tendencias de tiempos usan datos anónimos de quienes dan su consentimiento, y solo para grupos lo bastante grandes como para que ningún caso pueda identificarse."
+    }
   }
 }

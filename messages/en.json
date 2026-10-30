@@ -2,5 +2,243 @@
   "app": {
     "name": "Kinstamp",
     "tagline": "USCIS case tracking for families and their attorneys."
+  },
+  "nav": {
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "cases": "Cases",
+    "insights": "Insights",
+    "settings": "Settings",
+    "clientsCases": "Clients' cases"
+  },
+  "footer": {
+    "tagline": "USCIS case tracking for families and their attorneys",
+    "notAffiliated": "Not affiliated with USCIS or the U.S. government."
+  },
+  "language": {
+    "label": "Language",
+    "short": { "en": "EN", "es": "ES" },
+    "name": { "en": "English", "es": "Español" }
+  },
+  "userMenu": {
+    "open": "Account menu for {name}",
+    "role": { "client": "Client", "attorney": "Attorney" },
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…"
+  },
+  "status": {
+    "tone": {
+      "progress": "In progress",
+      "action": "Action needed",
+      "approved": "Approved",
+      "denied": "Denied",
+      "unknown": "Not checked yet"
+    }
+  },
+  "receipt": {
+    "ariaLabel": "Receipt number {value}",
+    "copy": "Copy receipt number",
+    "copied": "Copied"
+  },
+  "timeline": {
+    "empty": "No status events yet. The timeline fills in after the first check.",
+    "reportedByUscis": "Reported by USCIS",
+    "observedByKinstamp": "Observed by Kinstamp",
+    "new": "New"
+  },
+  "keyDates": {
+    "countdown": {
+      "due_date": {
+        "past": "Due {days, plural, one {# day} other {# days}} ago",
+        "today": "Due today",
+        "soon": "Due in {days, plural, one {# day} other {# days}}",
+        "later": "Due in {days} days"
+      },
+      "appointment": {
+        "past": "Appointment {days, plural, one {# day} other {# days}} ago",
+        "today": "Appointment today",
+        "soon": "Appointment in {days, plural, one {# day} other {# days}}",
+        "later": "Appointment in {days} days"
+      }
+    }
+  },
+  "auth": {
+    "errors": {
+      "invalidEmail": "Enter a valid email address.",
+      "nameRequired": "Enter your full name.",
+      "nameTooLong": "That name is too long (120 characters max).",
+      "passwordTooShort": "Use at least 8 characters.",
+      "passwordTooLong": "Use at most 72 characters.",
+      "passwordRequired": "Enter your password.",
+      "passwordWeak": "That password is too easy to guess. Try a longer one with letters and numbers.",
+      "roleRequired": "Choose how you'll use Kinstamp.",
+      "tooManyEmails": "We sent too many emails to that address. Wait a few minutes and try again.",
+      "signUpFailed": "We couldn't create your account. Please try again.",
+      "emailNotConfirmed": "Confirm your email first. Check your inbox for the link we sent you.",
+      "invalidCredentials": "That email and password don't match.",
+      "confirmation": "That confirmation link is invalid or has expired. Sign in to request a new one."
+    },
+    "fields": {
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 8 characters.",
+      "role": "How will you use Kinstamp?",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
+    },
+    "roles": {
+      "client": {
+        "label": "I'm tracking my own or my family's cases",
+        "hint": "Add cases by receipt number and share them with your attorney."
+      },
+      "attorney": {
+        "label": "I'm an attorney",
+        "hint": "See the cases your clients share with your email."
+      }
+    },
+    "consent": "Allow Kinstamp to use my case data anonymously to show processing-time insights. You can change this anytime.",
+    "signUp": {
+      "metaTitle": "Create account",
+      "title": "Track your case, calmly.",
+      "description": "One account for every case in the family.",
+      "submit": "Create account",
+      "pending": "Creating your account…",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    },
+    "signIn": {
+      "metaTitle": "Sign in",
+      "title": "Welcome back",
+      "description": "Sign in to see your cases.",
+      "submit": "Sign in",
+      "pending": "Signing in…",
+      "noAccount": "New to Kinstamp?",
+      "signUpLink": "Create an account",
+      "demoNote": "Reviewing this demo? Use the demo accounts in the README."
+    },
+    "checkEmail": {
+      "metaTitle": "Check your email",
+      "title": "Check your email",
+      "sentTo": "We sent a confirmation link to <strong>{email}</strong>.",
+      "sentGeneric": "We sent you a confirmation link.",
+      "nextStepTitle": "Open the link to confirm your account",
+      "nextStep": "The link signs you in and takes you to your cases.",
+      "spam": "Don't see it? Check your spam folder. The sender is Kinstamp.",
+      "goToSignIn": "Go to sign in"
+    }
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "description": "We couldn't load this page. Your data is safe; try again in a moment.",
+    "reference": "Reference {id}",
+    "retry": "Try again"
+  },
+  "cases": {
+    "title": "Your cases",
+    "greeting": "Hi {name}. Every case you track, with its latest status.",
+    "empty": {
+      "title": "No cases yet",
+      "description": "Add your first case from the receipt number on your USCIS notice."
+    }
+  },
+  "caseDetail": {
+    "title": "Case",
+    "breadcrumbCases": "Cases",
+    "notFound": {
+      "title": "We couldn't find that case",
+      "description": "There is no tracked case {id} in your account, or it was removed.",
+      "back": "Back to your cases"
+    }
+  },
+  "attorney": {
+    "title": "Clients' cases",
+    "description": "Every case your clients shared with you, newest changes first.",
+    "empty": {
+      "title": "No cases shared with you yet",
+      "description": "Ask your clients to share a case using your email:"
+    }
+  },
+  "insights": {
+    "title": "How long cases usually take",
+    "description": "Built only from anonymized data of people who opted in. Groups with fewer than 5 cases are hidden.",
+    "empty": {
+      "title": "Not enough data yet",
+      "description": "Insights appear once at least 5 consented cases of a form type have been received and approved."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Your profile, language and privacy choices.",
+    "profile": {
+      "title": "Profile",
+      "description": "Who you are on Kinstamp. Your email is also how attorneys receive shares.",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "roleHint": "Chosen at sign-up. It can't be changed.",
+      "roles": { "client": "Client", "attorney": "Attorney" }
+    },
+    "language": {
+      "title": "Language",
+      "description": "Used across the app and in the emails we send you.",
+      "label": "Interface language"
+    }
+  },
+  "landing": {
+    "hero": {
+      "title": "Know where your case stands. Without refreshing USCIS every day.",
+      "subtitle": "Kinstamp keeps the full history of every USCIS case your family tracks, explains each status in plain English or Spanish, and lets your attorney follow along.",
+      "cta": "Create a free account",
+      "secondary": "Sign in",
+      "note": "Free for families. Works with any USCIS receipt number."
+    },
+    "preview": {
+      "ariaLabel": "Example of a case detail with its timeline",
+      "nickname": "Mom's green card",
+      "form": "Form {form}",
+      "timeline": "Timeline",
+      "caption": "Example with a USCIS sandbox receipt."
+    },
+    "benefits": {
+      "title": "Everything about a case, in one calm place.",
+      "history": {
+        "title": "The full history, kept for you",
+        "body": "Every status USCIS reports, plus every change Kinstamp observes between checks, with its date. Nothing is ever edited or lost."
+      },
+      "share": {
+        "title": "Share with your attorney",
+        "body": "Grant access with their email. They see the case and its history, can refresh it and add key dates, and nothing more. Revoke anytime."
+      },
+      "plain": {
+        "title": "Plain-language explanations",
+        "body": "What a status means and what usually comes next, in English and Spanish. Not legal advice, just clarity."
+      },
+      "slow": {
+        "title": "Is my case slow?",
+        "body": "Compare your case's age with the processing time USCIS publishes for that form, with its source and date."
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "subtitle": "Three steps, no paperwork.",
+      "add": {
+        "title": "Add a case",
+        "body": "Enter the receipt number from your notice and give the case a nickname."
+      },
+      "check": {
+        "title": "We check USCIS",
+        "body": "Refresh whenever you want. Kinstamp also checks on weekdays and emails you when something changes."
+      },
+      "share": {
+        "title": "Share if you want",
+        "body": "Your attorney sees only what you share, for as long as you want."
+      }
+    },
+    "privacy": {
+      "title": "Your data stays yours.",
+      "body": "Kinstamp only checks cases you add. Processing-time insights use anonymized data from people who opt in, and only for groups large enough that no case can be singled out."
+    }
   }
 }
