@@ -276,3 +276,29 @@ export async function setNotifyOnChange(enabled: boolean): Promise<void> {
   await supabase.from("profiles").update({ notify_on_change: enabled }).eq("id", profile.id);
   refresh();
 }
+
+/**
+ * Deletes the signed-in person's account and everything that cascades from it
+ * (tracked cases, shares, key dates, consent). Cases nobody tracks anymore because of
+ * this deletion are removed with their history (docs/spec.md, 4.7).
+ */
+export async function deleteAccount(): Promise<void> {
+  const profile = await requireProfile();
+  const admin = createAdminClient();
+
+  const { data: tracked } = await admin.from("tracked_cases").select("case_id").eq("client_id", profile.id);
+  const caseIds = (tracked ?? []).map((row) => row.case_id);
+
+  await admin.from("shares").delete().eq("attorney_email", profile.email);
+  const { error } = await admin.auth.admin.deleteUser(profile.id);
+  if (error) throw error;
+
+  for (const caseId of caseIds) {
+    const { count } = await admin.from("tracked_cases").select("id", { count: "exact", head: true }).eq("case_id", caseId);
+    if ((count ?? 0) === 0) await admin.from("cases").delete().eq("id", caseId);
+  }
+
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/");
+}
