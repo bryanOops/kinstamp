@@ -41,7 +41,7 @@ export function ShareDialog({ shares, action, state, rowActions, trigger, open, 
           trigger ? (
             <span />
           ) : (
-            <Button variant="outline">
+            <Button variant="outline" data-tour="share">
               <Share2Icon aria-hidden="true" />
               {t("trigger")}
             </Button>

@@ -157,14 +157,14 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "created_at": string,"email": string,"full_name": string,"id": string,"locale": string,"notify_on_change": boolean,"role": string
+                    "created_at": string,"email": string,"full_name": string,"id": string,"locale": string,"notify_on_change": boolean,"role": string,"tours_completed": (string)[]
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"email": string,"full_name"?: string,"id": string,"locale"?: string,"notify_on_change"?: boolean,"role": string
+                    "created_at"?: string,"email": string,"full_name"?: string,"id": string,"locale"?: string,"notify_on_change"?: boolean,"role": string,"tours_completed"?: (string)[]
                   }
                   Update: {
-                    "created_at"?: string,"email"?: string,"full_name"?: string,"id"?: string,"locale"?: string,"notify_on_change"?: boolean,"role"?: string
+                    "created_at"?: string,"email"?: string,"full_name"?: string,"id"?: string,"locale"?: string,"notify_on_change"?: boolean,"role"?: string,"tours_completed"?: (string)[]
                   }
                   Relationships: [
                     

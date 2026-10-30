@@ -7,6 +7,7 @@ import { CaseDetailView } from "@/components/cases/case-detail-view";
 import { toCaseDetail } from "@/components/cases/from-dto";
 import { AddKeyDateControl, DeleteKeyDateButton } from "@/components/cases/wired/key-date-controls";
 import { RefreshControl } from "@/components/cases/wired/refresh-control";
+import { TourLauncher } from "@/components/tour/tour-launcher";
 import { requireProfile } from "@/server/auth";
 import { getTrackedCaseDetail, listInsights } from "@/server/cases/queries";
 
@@ -48,6 +49,7 @@ export default async function AttorneyCasePage({ params }: PageProps<"/attorney/
         icsHref={(keyDate) => `/cases/${trackedCaseId}/key-dates/${keyDate.id}/ics`}
         keyDateActions={(keyDate) => (keyDate.canDelete ? <DeleteKeyDateButton keyDate={keyDate} /> : null)}
       />
+      <TourLauncher tour="case_detail" completed={profile.toursCompleted.includes("case_detail")} />
     </div>
   );
 }

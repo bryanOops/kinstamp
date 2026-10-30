@@ -71,7 +71,7 @@ export function AssistantPanel({ caseLabel, messages, suggestions = [], streamin
           trigger ? (
             <span />
           ) : (
-            <Button variant="outline">
+            <Button variant="outline" data-tour="assistant">
               <MessageSquareTextIcon aria-hidden="true" />
               {t("trigger")}
             </Button>

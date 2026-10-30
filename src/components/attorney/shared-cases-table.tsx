@@ -94,7 +94,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
     <div className="flex flex-col gap-4">
       <p className="text-sm text-ink-muted">{t("summary", { cases: rows.length, clients, changed: changedThisWeek })}</p>
 
-      <div className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-3 shadow-card md:flex-row md:items-center">
+      <div data-tour="case-filters" className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-3 shadow-card md:flex-row md:items-center">
         <div className="relative flex-1">
           <Label htmlFor={searchId} className="sr-only">
             {t("search")}
@@ -137,8 +137,8 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
       ) : (
         <>
           {/* Phones: one card per case; the table needs 880px and would only scroll sideways. */}
-          <ul className="flex flex-col gap-3 md:hidden">
-            {filtered.map((row) => {
+          <ul data-tour="shared-cases" className="flex flex-col gap-3 md:hidden">
+            {filtered.map((row, index) => {
               const status = localizedText(row.status, locale);
               const awaiting = row.checkState === "awaiting_first_check" || !status;
               const recent = isRecent(row.lastChangeOn, now);
@@ -146,6 +146,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
                 <li key={row.shareId}>
                   <Link
                     href={`/attorney/cases/${row.trackedCaseId}`}
+                    data-tour={index === 0 ? "shared-case-row" : undefined}
                     className="grid gap-3 rounded-xl border border-line bg-surface p-5 shadow-card transition-[border-color,box-shadow] duration-(--duration-base) ease-(--ease-out-expo) hover:border-ink-disabled hover:shadow-raised focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.995]"
                   >
                     <div className="min-w-0">
@@ -173,7 +174,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
             })}
           </ul>
 
-        <div className="hidden overflow-x-auto rounded-xl border border-line bg-surface shadow-card md:block">
+        <div data-tour="shared-cases" className="hidden overflow-x-auto rounded-xl border border-line bg-surface shadow-card md:block">
           <Table className="min-w-[880px]">
             <TableHeader>
               <TableRow className="hover:bg-transparent">
@@ -185,11 +186,11 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map((row) => {
+              {filtered.map((row, index) => {
                 const status = localizedText(row.status, locale);
                 const awaiting = row.checkState === "awaiting_first_check" || !status;
                 return (
-                  <TableRow key={row.shareId} className="group">
+                  <TableRow key={row.shareId} className="group" data-tour={index === 0 ? "shared-case-row" : undefined}>
                     <TableCell className="font-medium text-ink">{row.clientName}</TableCell>
                     <TableCell>
                       <Link

@@ -42,7 +42,7 @@ export function StatusHero({ detail, now, primaryAction, secondaryActions }: Sta
   const plainKey = isStatusCategory(detail.statusCategory) ? detail.statusCategory : "other";
 
   return (
-    <Card>
+    <Card data-tour="status-hero">
       <CardHeader className="grid-cols-[1fr_auto] items-center">
         <p className="text-caps text-ink-muted">{t("title")}</p>
         {hasOther && !awaiting && (

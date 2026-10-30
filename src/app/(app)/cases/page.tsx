@@ -5,6 +5,7 @@ import { CaseList } from "@/components/cases/case-list";
 import { toTrackedCaseSummary } from "@/components/cases/from-dto";
 import { AddCaseControl } from "@/components/cases/wired/add-case-control";
 import { PageHeader } from "@/components/layout/page-header";
+import { TourLauncher } from "@/components/tour/tour-launcher";
 import { requireProfile } from "@/server/auth";
 import { listTrackedCases } from "@/server/cases/queries";
 
@@ -29,6 +30,7 @@ export default async function CasesPage() {
         actions={cases.length > 0 ? <AddCaseControl /> : undefined}
       />
       <CaseList cases={cases} now={now} addCaseAction={<AddCaseControl />} />
+      <TourLauncher tour="cases" completed={profile.toursCompleted.includes("cases")} />
     </div>
   );
 }

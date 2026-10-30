@@ -23,7 +23,7 @@ export function KeyDatesCard({ keyDates, now, addAction, icsHref, rowActions }: 
   const sorted = [...keyDates].sort((a, b) => a.date.localeCompare(b.date));
 
   return (
-    <Card>
+    <Card data-tour="key-dates">
       <CardHeader>
         <CardTitle>{t("title")}</CardTitle>
         {addAction && <CardAction>{addAction}</CardAction>}

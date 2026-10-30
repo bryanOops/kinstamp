@@ -10,6 +10,7 @@ import { AddKeyDateControl, DeleteKeyDateButton } from "@/components/cases/wired
 import { MarkViewed } from "@/components/cases/wired/mark-viewed";
 import { RefreshControl } from "@/components/cases/wired/refresh-control";
 import { RevokeShareButton, ShareControl } from "@/components/cases/wired/share-control";
+import { TourLauncher } from "@/components/tour/tour-launcher";
 import { requireProfile } from "@/server/auth";
 import { attorneyAccountEmails, getTrackedCaseDetail, listInsights } from "@/server/cases/queries";
 
@@ -57,6 +58,7 @@ export default async function CaseDetailPage({ params }: PageProps<"/cases/[trac
         icsHref={(keyDate) => `/cases/${trackedCaseId}/key-dates/${keyDate.id}/ics`}
         keyDateActions={(keyDate) => (keyDate.canDelete ? <DeleteKeyDateButton keyDate={keyDate} /> : null)}
       />
+      <TourLauncher tour="case_detail" completed={profile.toursCompleted.includes("case_detail")} />
     </div>
   );
 }

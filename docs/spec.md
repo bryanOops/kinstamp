@@ -61,7 +61,11 @@ Extras, in build order (cut from the bottom if time runs out):
 
 Every route has loading, empty and error states. A banner appears on case screens when the last check failed because USCIS was unavailable: "USCIS is offline (Mon–Fri, 7am–8pm ET). Showing the last saved status from {time}."
 
-The language switch (EN/ES) is always in the top bar.
+The language switch (EN/ES) is always in the top bar, next to a Help button that replays the page's guided tour.
+
+**Guided tours.** The first time an account opens `/cases` (clients), `/attorney` (attorneys) or a case detail (both roles), a short spotlight tour (4–6 steps anchored to real elements) explains the screen: the "public board vs. private notebook" analogy, how to add a case, what a card shows, insights and settings; for attorneys, what is shared and the table's urgency order and filters; on a case, the status in plain language, the timeline and its origins, key dates, sharing (clients only) and the assistant. Finishing or skipping records the tour in `profiles.tours_completed`, so it does not start again on another device; Help replays it at any time.
+
+**Session timeout.** After 30 minutes without activity a "Still there?" dialog counts down 60 seconds; staying resets the clock, otherwise the person is signed out and lands on `/sign-in?reason=idle` with a notice. The countdown starts when the inactivity is noticed, so a device that slept through the limit shows the dialog on wake instead of signing out silently. A request to a private page with a session cookie that no longer validates is redirected by the proxy to `/sign-in?reason=expired&next=<path>` ("Your session ended. Sign in to continue where you left off."); `requireProfile` does the same as a fallback.
 
 ## 4. Flows
 

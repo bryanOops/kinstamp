@@ -110,7 +110,7 @@ export function CaseDetailView({
             </Slot>
           )}
           <Slot order="order-3">
-            <Card>
+            <Card data-tour="timeline">
               <CardHeader>
                 <CardTitle>{t("timeline.title")}</CardTitle>
                 <p className="text-sm text-ink-muted">{t("timeline.description")}</p>

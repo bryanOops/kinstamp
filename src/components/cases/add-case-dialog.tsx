@@ -56,7 +56,7 @@ export function AddCaseDialog({ action, state, trigger, open, onOpenChange }: Ad
           trigger ? (
             <span />
           ) : (
-            <Button>
+            <Button data-tour="add-case">
               <PlusIcon aria-hidden="true" />
               {t("trigger")}
             </Button>

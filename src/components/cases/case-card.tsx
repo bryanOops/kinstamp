@@ -34,6 +34,7 @@ export function CaseCard({ tracked, now, className }: CaseCardProps) {
   return (
     <Link
       href={`/cases/${tracked.trackedCaseId}`}
+      data-tour="case-card"
       className={cn(
         "group relative grid gap-4 rounded-xl border border-line bg-surface p-5 shadow-card transition-[border-color,box-shadow,transform] duration-(--duration-base) ease-(--ease-out-expo) hover:border-ink-disabled hover:shadow-raised focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.995] sm:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_auto] sm:items-center sm:gap-6",
         className,

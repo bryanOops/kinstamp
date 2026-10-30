@@ -7,6 +7,7 @@ import { LanguageSwitch } from "@/components/layout/language-switch";
 import { NavLinks, type NavItem } from "@/components/layout/nav-links";
 import { StickyHeader } from "@/components/layout/sticky-header";
 import { UserMenu } from "@/components/layout/user-menu";
+import { HelpButton } from "@/components/tour/help-button";
 import { getCurrentProfile, homePathFor } from "@/server/auth";
 
 /**
@@ -26,7 +27,7 @@ export async function AppTopBar() {
         ]
       : [
           { href: "/cases", label: t("cases") },
-          { href: "/insights", label: t("insights") },
+          { href: "/insights", label: t("insights"), tour: "nav-insights" },
           { href: "/settings", label: t("settings") },
         ];
 
@@ -36,6 +37,7 @@ export async function AppTopBar() {
       nav={<NavLinks items={items} className="h-full" />}
       right={
         <>
+          <HelpButton />
           <LanguageSwitch tone="onDark" />
           <UserMenu fullName={profile.fullName} email={profile.email} role={profile.role} />
         </>
