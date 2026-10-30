@@ -1,5 +1,8 @@
 import type { TimelineEvent } from "@/components/status/timeline";
 import type { KeyDateKind } from "@/components/status/key-date-chip";
+import type { OfficialProcessingTime } from "@/lib/processing-times/official";
+
+export type { OfficialProcessingTime };
 
 /** Localized pair as stored for USCIS texts (`status_en` / `status_es`). */
 export type Bilingual = { en: string; es: string | null };
@@ -15,13 +18,16 @@ export type TrackedCaseSummary = {
   status: Bilingual | null;
   statusCategory: string | null;
   checkState: CheckState;
-  /** ISO instant of the newest status event, if any. */
-  lastChangeAt: string | null;
+  /** `YYYY-MM-DD` of the newest status event, if any. */
+  lastChangeOn: string | null;
   lastSuccessfulCheckAt: string | null;
   /** True when a status event was observed after the client last viewed the case. */
   changedSinceLastVisit: boolean;
-  nextKeyDate: { kind: KeyDateKind; date: string; title: string } | null;
+  nextKeyDate: NextKeyDate | null;
 };
+
+/** The soonest key date; kind and title are unknown on screens that only load the date. */
+export type NextKeyDate = { date: string; kind?: KeyDateKind; title?: string };
 
 export type ShareStatus = "active" | "pending" | "revoked";
 
@@ -44,15 +50,6 @@ export type KeyDate = {
   canDelete: boolean;
 };
 
-export type OfficialProcessingTime = {
-  formType: string;
-  minMonths: number;
-  maxMonths: number;
-  sourceUrl: string;
-  /** `YYYY-MM-DD` when the figure was read from USCIS. */
-  readOn: string;
-};
-
 export type InsightSummary = {
   formType: string;
   count: number;
@@ -71,9 +68,9 @@ export type CaseDetail = {
   description: Bilingual | null;
   statusCategory: string | null;
   checkState: CheckState;
-  /** `YYYY-MM-DD` of the first received event, used for the case age. */
+  /** `YYYY-MM-DD` of the first received event (or the USCIS submitted date), used for the case age. */
   receivedOn: string | null;
-  lastChangeAt: string | null;
+  lastChangeOn: string | null;
   lastSuccessfulCheckAt: string | null;
   lastErrorCode: string | null;
   events: TimelineEvent[];
@@ -82,12 +79,3 @@ export type CaseDetail = {
   officialProcessingTime: OfficialProcessingTime | null;
   insight: InsightSummary | null;
 };
-
-/** Outcome of a refresh, as the screen shows it. */
-export type RefreshState =
-  | { kind: "idle" }
-  | { kind: "pending" }
-  | { kind: "recent"; checkedAt: string }
-  | { kind: "unchanged"; since: string }
-  | { kind: "changed"; newEventId: string }
-  | { kind: "error"; code: string; lastSavedAt: string | null };

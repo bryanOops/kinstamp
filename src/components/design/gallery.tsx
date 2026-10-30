@@ -1,6 +1,6 @@
 "use client";
 
-import { BriefcaseIcon } from "lucide-react";
+import { BriefcaseIcon, Trash2Icon } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { AssistantPanel, type AssistantMessage } from "@/components/assistant/assistant-panel";
 import { sampleConversation, sampleSuggestions } from "@/components/assistant/samples";
@@ -14,7 +14,7 @@ import { KeyDatesCard, AddKeyDateButton } from "@/components/cases/key-dates-car
 import { RefreshButton } from "@/components/cases/refresh-button";
 import { sampleApprovedCase, sampleCaseDetail, sampleNow, sampleOfflineCase, sampleTrackedCases } from "@/components/cases/samples";
 import { ShareDialog } from "@/components/cases/share-dialog";
-import type { RefreshState } from "@/components/cases/types";
+import type { RefreshState } from "@/server/actions/cases";
 import { sampleInsights, sampleOwnCases } from "@/components/insights/samples";
 import { InsightsView } from "@/components/insights/insights-view";
 import { LanguageSwitch } from "@/components/layout/language-switch";
@@ -32,13 +32,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const refreshStates: RefreshState[] = [
-  { kind: "idle" },
-  { kind: "pending" },
-  { kind: "recent", checkedAt: "2026-10-30T17:59:40Z" },
-  { kind: "unchanged", since: "2026-10-02T15:30:00Z" },
-  { kind: "changed", newEventId: "ev_4" },
-  { kind: "error", code: "unavailable", lastSavedAt: "2026-10-30T14:14:00Z" },
+const refreshStates: { label: string; state: RefreshState; pending?: boolean }[] = [
+  { label: "idle", state: { status: "idle" } },
+  { label: "pending", state: { status: "idle" }, pending: true },
+  { label: "reused", state: { status: "reused", checkedAt: "2026-10-30T17:59:40Z" } },
+  { label: "unchanged", state: { status: "unchanged", checkedAt: "2026-10-30T18:00:00Z" } },
+  { label: "changed", state: { status: "changed", checkedAt: "2026-10-30T18:00:00Z" } },
+  { label: "error (outside hours)", state: { status: "error", errorCode: "unavailable", outsideHours: true, checkedAt: "2026-10-30T18:00:00Z" } },
+  { label: "error (rate limited)", state: { status: "error", errorCode: "rate_limited_person", outsideHours: false } },
 ];
 
 const sections = [
@@ -232,7 +233,7 @@ export function DesignGallery() {
           open={addOpen}
           onOpenChange={setAddOpen}
           trigger={<Button onClick={() => setAddOpen(true)}>Open “Add a case”</Button>}
-          state={{ error: "notFound", values: { receiptNumber: "EAC9999103402" } }}
+          state={{ fieldErrors: { receiptNumber: "receiptNotFound" }, values: { receiptNumber: "EAC9999103402" } }}
         />
         <p className="mt-3 text-sm text-ink-muted">Shown with a server error state (“not found”) and inline format validation on blur.</p>
       </Section>
@@ -242,7 +243,7 @@ export function DesignGallery() {
           detail={sampleCaseDetail}
           now={now}
           viewer="client"
-          refresh={<RefreshButton state={{ kind: "changed", newEventId: "ev_4" }} now={now} />}
+          refresh={<RefreshButton state={{ status: "changed", checkedAt: "2026-10-30T18:00:00Z" }} now={now} lastChangeOn={sampleCaseDetail.lastChangeOn} />}
           shareTrigger={
             <Button variant="secondary" onClick={() => setShareOpen(true)}>
               Share with attorney
@@ -255,24 +256,37 @@ export function DesignGallery() {
           }
           addKeyDate={<AddKeyDateButton />}
           icsHref={(k) => `/api/key-dates/${k.id}.ics`}
-          onDeleteKeyDate={() => undefined}
-          onRevokeShare={() => undefined}
+          keyDateActions={() => (
+            <Button variant="ghost" size="icon-sm" className="text-ink-muted hover:text-destructive" aria-label="Delete">
+              <Trash2Icon aria-hidden="true" />
+            </Button>
+          )}
+          shareActions={() => (
+            <Button variant="destructive" size="xs">
+              Revoke
+            </Button>
+          )}
           highlightedEventId="ev_4"
         />
         <div className="mt-10">
-          <CaseDetailView detail={sampleApprovedCase} now={now} viewer="attorney" refresh={<RefreshButton state={{ kind: "idle" }} now={now} />} addKeyDate={<AddKeyDateButton />} />
+          <CaseDetailView detail={sampleApprovedCase} now={now} viewer="attorney" refresh={<RefreshButton state={{ status: "idle" }} now={now} />} addKeyDate={<AddKeyDateButton />} />
         </div>
       </Section>
 
       <Section id="offline" title="Case detail: USCIS offline">
-        <CaseDetailView detail={sampleOfflineCase} now={now} viewer="client" refresh={<RefreshButton state={{ kind: "error", code: "unavailable", lastSavedAt: "2026-10-30T14:14:00Z" }} now={now} />} />
+        <CaseDetailView
+          detail={sampleOfflineCase}
+          now={now}
+          viewer="client"
+          refresh={<RefreshButton state={{ status: "error", errorCode: "unavailable", outsideHours: true }} now={now} lastSuccessfulCheckAt={sampleOfflineCase.lastSuccessfulCheckAt} />}
+        />
       </Section>
 
       <Section id="refresh" title="Refresh button states">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {refreshStates.map((state) => (
-            <Card key={state.kind} title={state.kind}>
-              <RefreshButton state={state} now={now} />
+          {refreshStates.map(({ label, state, pending }) => (
+            <Card key={label} title={label}>
+              <RefreshButton state={state} pending={pending} now={now} lastChangeOn="2026-10-02" lastSuccessfulCheckAt="2026-10-30T14:14:00Z" />
             </Card>
           ))}
         </div>
@@ -287,8 +301,12 @@ export function DesignGallery() {
           open={shareOpen}
           onOpenChange={setShareOpen}
           trigger={<Button variant="secondary" onClick={() => setShareOpen(true)}>Open share dialog</Button>}
-          onRevoke={() => undefined}
-          state={{ error: "ownEmail", values: { attorneyEmail: "me@example.com" } }}
+          rowActions={() => (
+            <Button variant="destructive" size="xs">
+              Revoke
+            </Button>
+          )}
+          state={{ error: "cannotShareWithYourself" }}
         />
       </Section>
 

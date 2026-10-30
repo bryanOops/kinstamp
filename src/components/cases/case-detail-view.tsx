@@ -21,11 +21,13 @@ type CaseDetailViewProps = {
   refresh?: ReactNode;
   shareTrigger?: ReactNode;
   assistantTrigger?: ReactNode;
+  /** Extra header actions (rename, stop tracking…). */
+  menu?: ReactNode;
   addKeyDate?: ReactNode;
   icsHref?: (keyDate: KeyDate) => string;
-  onDeleteKeyDate?: (keyDate: KeyDate) => void;
-  onRevokeShare?: (share: Share) => void;
-  /** Id of the event observed by the latest refresh, highlighted on the timeline. */
+  keyDateActions?: (keyDate: KeyDate) => ReactNode;
+  shareActions?: (share: Share) => ReactNode;
+  /** Id of the event observed since the last visit, highlighted on the timeline. */
   highlightedEventId?: string | null;
 };
 
@@ -37,15 +39,17 @@ export function CaseDetailView({
   refresh,
   shareTrigger,
   assistantTrigger,
+  menu,
   addKeyDate,
   icsHref,
-  onDeleteKeyDate,
-  onRevokeShare,
+  keyDateActions,
+  shareActions,
   highlightedEventId,
 }: CaseDetailViewProps) {
   const t = useTranslations("caseDetail");
   const format = useFormatter();
   const offline = detail.checkState === "error" && detail.lastErrorCode === "unavailable";
+  const awaiting = detail.checkState === "awaiting_first_check";
 
   return (
     <div className="flex flex-col gap-8">
@@ -55,6 +59,7 @@ export function CaseDetailView({
         backLabel={viewer === "attorney" ? t("breadcrumbClientsCases") : t("breadcrumbCases")}
         actions={
           <>
+            {menu}
             {assistantTrigger}
             {viewer === "client" && shareTrigger}
             {refresh}
@@ -77,13 +82,15 @@ export function CaseDetailView({
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:items-start">
         <div className="flex flex-col gap-6">
           <CurrentStatusCard detail={detail} now={now} />
-          <PlainEnglishCard category={detail.checkState === "awaiting_first_check" ? null : detail.statusCategory} />
+          {!awaiting && <PlainEnglishCard category={detail.statusCategory} />}
           <SlowCard receivedOn={detail.receivedOn} officialTime={detail.officialProcessingTime} now={now} />
         </div>
         <div className="flex flex-col gap-6">
-          <KeyDatesCard keyDates={detail.keyDates} now={now} addAction={addKeyDate} icsHref={icsHref} onDelete={onDeleteKeyDate} />
-          {viewer === "client" && <SharedWithCard shares={detail.shares} shareAction={shareTrigger} onRevoke={onRevokeShare} />}
-          <InsightMiniCard insight={detail.insight} formType={detail.formType} receivedOn={detail.receivedOn} now={now} showLink={viewer === "client"} />
+          <KeyDatesCard keyDates={detail.keyDates} now={now} addAction={addKeyDate} icsHref={icsHref} rowActions={keyDateActions} />
+          {viewer === "client" && <SharedWithCard shares={detail.shares} shareAction={shareTrigger} rowActions={shareActions} />}
+          {detail.insight && (
+            <InsightMiniCard insight={detail.insight} formType={detail.formType} receivedOn={detail.receivedOn} now={now} showLink={viewer === "client"} />
+          )}
         </div>
       </div>
 

@@ -12,23 +12,21 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import type { Share } from "./types";
 
-export type ShareFormState = {
-  /** i18n key under `caseDetail.share.errors` */
-  error?: string;
-  values?: { attorneyEmail?: string };
-};
+/** Matches `SimpleState` from the share Server Action; `error` is an i18n key under `caseDetail.share.errors`. */
+export type ShareFormState = { error?: string; ok?: boolean };
 
 type ShareDialogProps = {
   shares: Share[];
   action?: (formData: FormData) => void | Promise<void>;
   state?: ShareFormState;
-  onRevoke?: (share: Share) => void;
+  /** Per-row control (the revoke button) for active and pending shares. */
+  rowActions?: (share: Share) => ReactNode;
   trigger?: ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
 
-export function ShareDialog({ shares, action, state, onRevoke, trigger, open, onOpenChange }: ShareDialogProps) {
+export function ShareDialog({ shares, action, state, rowActions, trigger, open, onOpenChange }: ShareDialogProps) {
   const t = useTranslations("caseDetail.share");
   const errorsT = useTranslations("caseDetail.share.errors");
   const format = useFormatter();
@@ -61,7 +59,12 @@ export function ShareDialog({ shares, action, state, onRevoke, trigger, open, on
         <form action={action} className="flex flex-col gap-4" noValidate>
           {state?.error && (
             <p role="alert" className="rounded-lg border border-destructive/30 bg-status-denied-tint px-3.5 py-2.5 text-sm text-destructive">
-              {errorsT.has(state.error) ? errorsT(state.error) : errorsT("unknown")}
+              {errorsT.has(state.error) ? errorsT(state.error) : errorsT("somethingWentWrong")}
+            </p>
+          )}
+          {state?.ok && (
+            <p role="status" className="rounded-lg border border-status-approved/30 bg-status-approved-tint px-3.5 py-2.5 text-sm text-status-approved">
+              {t("shared")}
             </p>
           )}
           <div className="flex flex-col gap-1.5">
@@ -76,7 +79,6 @@ export function ShareDialog({ shares, action, state, onRevoke, trigger, open, on
                 inputMode="email"
                 autoComplete="off"
                 placeholder={t("email.placeholder")}
-                defaultValue={state?.values?.attorneyEmail}
                 required
                 aria-invalid={state?.error ? true : undefined}
               />
@@ -105,11 +107,7 @@ export function ShareDialog({ shares, action, state, onRevoke, trigger, open, on
                       {share.status === "revoked" && share.revokedAt && t("status.revoked", { date: format.dateTime(new Date(share.revokedAt), { month: "short", day: "numeric" }) })}
                     </p>
                   </div>
-                  {share.status !== "revoked" && onRevoke && (
-                    <Button variant="destructive" size="xs" onClick={() => onRevoke(share)}>
-                      {t("revoke")}
-                    </Button>
-                  )}
+                  {share.status !== "revoked" && rowActions?.(share)}
                 </li>
               ))}
             </ul>

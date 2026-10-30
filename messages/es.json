@@ -69,6 +69,12 @@
         "today": "Cita hoy",
         "soon": "Cita en {days, plural, one {# día} other {# días}}",
         "later": "Cita en {days} días"
+      },
+      "generic": {
+        "past": "Hace {days, plural, one {# día} other {# días}}",
+        "today": "Hoy",
+        "soon": "En {days, plural, one {# día} other {# días}}",
+        "later": "En {days} días"
       }
     }
   },
@@ -156,7 +162,8 @@
       "form": "Formulario {form}",
       "awaitingFirstCheck": "Esperando la primera consulta",
       "lastChange": "Último cambio {date}",
-      "noChangesYet": "Sin estado todavía"
+      "noChangesYet": "Sin estado todavía",
+      "awaitingHint": "Lo consultaremos automáticamente cuando USCIS vuelva."
     },
     "list": {
       "summary": "{count, plural, one {# caso} other {# casos}} · {changed, plural, =0 {sin cambios esta semana} one {# cambió esta semana} other {# cambiaron esta semana}}",
@@ -190,12 +197,15 @@
       "cancel": "Cancelar",
       "errors": {
         "invalidFormat": "Eso no parece un número de recibo. Debe tener 3 letras y 10 dígitos.",
-        "notFound": "USCIS no tiene ningún caso con ese número de recibo. Revisa el aviso e inténtalo de nuevo.",
-        "alreadyTracked": "Ya sigues este caso.",
-        "unavailable": "No se puede contactar a USCIS ahora. Guardamos el caso y lo consultaremos cuando USCIS vuelva.",
-        "rateLimited": "Demasiadas búsquedas seguidas. Espera un minuto e inténtalo de nuevo.",
-        "unknown": "No pudimos agregar el caso. Inténtalo de nuevo."
+        "invalidReceipt": "Eso no parece un número de recibo. Debe tener 3 letras y 10 dígitos.",
+        "receiptNotFound": "USCIS no tiene ningún caso con ese número de recibo. Revisa el aviso e inténtalo de nuevo.",
+        "nicknameTooLong": "Usa como máximo 80 caracteres.",
+        "somethingWentWrong": "No pudimos agregar el caso. Inténtalo de nuevo."
       }
+    },
+    "errors": {
+      "nicknameTooLong": "Usa como máximo 80 caracteres.",
+      "somethingWentWrong": "Algo salió mal. Inténtalo de nuevo."
     }
   },
   "caseDetail": {
@@ -217,8 +227,8 @@
         "es": "Leer en español"
       },
       "awaiting": {
-        "title": "Esperando la primera consulta",
-        "description": "No se pudo contactar a USCIS cuando se agregó este caso. Lo consultaremos automáticamente cuando USCIS vuelva y guardaremos su historial desde entonces."
+        "title": "Esperando a USCIS",
+        "description": "No se pudo contactar a USCIS cuando se agregó este caso. Lo consultaremos automáticamente cuando USCIS vuelva (lun–vie, 7 a. m.–8 p. m. ET) y guardaremos su historial desde entonces."
       },
       "checked": "Consultado {time}",
       "lastChange": "Último cambio {date}"
@@ -318,17 +328,15 @@
     "slow": {
       "title": "¿Mi caso va lento?",
       "noReceivedDate": "Compararemos este caso con el tiempo de proceso oficial cuando USCIS reporte la fecha en que fue recibido.",
-      "noOfficialTime": "USCIS no publica un tiempo de proceso para este formulario, así que no hay con qué comparar.",
       "verdict": {
-        "early": "Tu caso tiene {months} meses. USCIS indica actualmente {min}–{max} meses para este formulario, así que está dentro del rango normal.",
-        "within": "Tu caso tiene {months} meses, dentro de los {min}–{max} meses que USCIS indica actualmente para este formulario.",
-        "outside": "Tu caso tiene {months} meses, más allá de los {min}–{max} meses que USCIS indica actualmente para este formulario. Puedes preguntarle a USCIS."
+        "within": "Tu caso tiene {months} meses. USCIS completa actualmente el 80 % de estos casos en {limit} meses, así que está dentro del rango normal.",
+        "outside": "Tu caso tiene {months} meses, más allá de los {limit} meses en que USCIS completa actualmente el 80 % de estos casos. Puedes preguntarle a USCIS."
       },
       "ageLabel": "{days} días hasta ahora",
-      "rangeLabel": "{min}–{max} meses",
       "eRequest": "Preguntar a USCIS por un caso fuera del tiempo normal",
       "source": "Tiempo de proceso oficial leído de USCIS el {date}.",
-      "sourceLink": "Fuente"
+      "sourceLink": "Fuente",
+      "limitLabel": "{limit} meses (80 % de los casos)"
     },
     "keyDates": {
       "title": "Fechas clave",
@@ -339,14 +347,44 @@
         "appointment": "Cita"
       },
       "download": "Agregar {title} a tu calendario",
-      "delete": "Eliminar {title}"
+      "delete": "Eliminar {title}",
+      "form": {
+        "title": "Agregar fecha clave",
+        "description": "Copia la fecha de tu aviso de USCIS. Kinstamp hace la cuenta regresiva y puede agregarla a tu calendario.",
+        "kind": "Tipo",
+        "kinds": {
+          "due_date": "Plazo",
+          "appointment": "Cita"
+        },
+        "date": "Fecha",
+        "time": "Hora (opcional)",
+        "timeHint": "Hora del Este, como aparece en el aviso.",
+        "titleField": "Título",
+        "titlePlaceholder": "p. ej. Vence la respuesta al RFE",
+        "notes": "Notas (opcional)",
+        "notesPlaceholder": "Qué llevar, adónde enviarlo…",
+        "submit": "Agregar fecha clave",
+        "pending": "Agregando…",
+        "cancel": "Cancelar"
+      },
+      "errors": {
+        "keyDateKindRequired": "Elige plazo o cita.",
+        "keyDateDateRequired": "Ingresa una fecha.",
+        "keyDateTimeInvalid": "Ingresa una hora como 09:30.",
+        "keyDateTitleRequired": "Ponle un título a la fecha clave.",
+        "keyDateTitleTooLong": "Usa como máximo 120 caracteres.",
+        "keyDateNotesTooLong": "Usa como máximo 1000 caracteres.",
+        "somethingWentWrong": "No pudimos guardar la fecha clave. Inténtalo de nuevo."
+      }
     },
     "shares": {
       "title": "Compartido con",
       "empty": "No está compartido con nadie. Tu abogado puede seguir este caso si lo compartes con su correo.",
       "activeSince": "Activo desde {date}",
       "pending": "Pendiente · todavía no tiene cuenta",
-      "revoke": "Revocar"
+      "revoke": "Revocar",
+      "revokeFor": "Revocar el acceso de {email}",
+      "revoking": "Revocando…"
     },
     "insight": {
       "title": "Casos como este",
@@ -372,11 +410,16 @@
       "errors": {
         "unavailable": "USCIS está fuera de línea (lun–vie, 7 a. m.–8 p. m. ET).",
         "timeout": "USCIS tardó demasiado en responder.",
-        "rate_limited": "Actualizaste demasiadas veces. Inténtalo en unos minutos.",
+        "rate_limited": "USCIS está limitando las consultas ahora. Inténtalo en un minuto.",
         "quota_exhausted": "Kinstamp alcanzó su límite diario de consultas a USCIS. Las consultas programadas siguen mañana.",
         "not_found": "USCIS ya no encuentra este número de recibo.",
-        "unknown": "No se pudo contactar a USCIS."
-      }
+        "unknown": "No se pudo contactar a USCIS.",
+        "outsideHours": "USCIS está fuera de línea (lun–vie, 7 a. m.–8 p. m. ET).",
+        "rate_limited_person": "Actualizaste demasiadas veces esta hora. Inténtalo más tarde.",
+        "invalid_receipt": "USCIS no acepta este número de recibo.",
+        "auth_failed": "Kinstamp no pudo iniciar sesión en USCIS."
+      },
+      "unchangedNoDate": "Sin cambios."
     },
     "share": {
       "trigger": "Compartir con abogado",
@@ -399,12 +442,13 @@
       "revoke": "Revocar",
       "close": "Listo",
       "errors": {
-        "ownEmail": "No puedes compartir un caso contigo mismo.",
-        "clientEmail": "Ese correo pertenece a una cuenta de cliente, no de abogado.",
         "alreadyShared": "Este caso ya está compartido con ese correo.",
         "invalidEmail": "Ingresa un correo electrónico válido.",
-        "unknown": "No pudimos compartir el caso. Inténtalo de nuevo."
-      }
+        "cannotShareWithYourself": "No puedes compartir un caso contigo mismo.",
+        "notAnAttorney": "Ese correo pertenece a una cuenta de cliente, no de abogado.",
+        "somethingWentWrong": "No pudimos compartir el caso. Inténtalo de nuevo."
+      },
+      "shared": "Compartido. Verá el caso en cuanto inicie sesión."
     },
     "offline": {
       "title": "USCIS está fuera de línea (lun–vie, 7 a. m.–8 p. m. ET).",
@@ -414,6 +458,27 @@
     "timeline": {
       "title": "Línea de tiempo",
       "description": "Cada evento de estado, del más reciente al más antiguo, con su origen."
+    },
+    "menu": {
+      "open": "Más acciones",
+      "rename": "Cambiar nombre",
+      "untrack": "Dejar de seguir",
+      "renameDialog": {
+        "title": "Cambiar el nombre de este caso",
+        "description": "Solo tú ves este nombre.",
+        "label": "Nombre",
+        "placeholder": "p. ej. Green card de mamá",
+        "submit": "Guardar",
+        "pending": "Guardando…",
+        "cancel": "Cancelar"
+      },
+      "untrackDialog": {
+        "title": "¿Dejar de seguir {label}?",
+        "description": "Sale de tu lista y tu abogado pierde el acceso. Las fechas clave que agregaste se eliminan. Los datos de USCIS no se ven afectados y puedes agregar el caso de nuevo más adelante.",
+        "confirm": "Dejar de seguir",
+        "pending": "Quitando…",
+        "cancel": "Cancelar"
+      }
     }
   },
   "attorney": {
@@ -456,7 +521,9 @@
     "description": "Calculado solo con datos anónimos de personas que dieron su consentimiento. Los grupos con menos de 5 casos se ocultan.",
     "empty": {
       "title": "Todavía no hay datos suficientes",
-      "description": "Las tendencias aparecen cuando al menos 5 casos con consentimiento de un mismo formulario pasaron de recibido a aprobado."
+      "description": "Las tendencias aparecen cuando al menos 5 casos con consentimiento de un mismo formulario pasaron de recibido a aprobado.",
+      "descriptionNoConsent": "Las tendencias aparecen cuando al menos 5 casos con consentimiento de un mismo formulario pasaron de recibido a aprobado. También puedes dar tu consentimiento para aportar tus casos de forma anónima.",
+      "consentLink": "Revisar tu consentimiento"
     },
     "view": {
       "formTypes": "Tipos de formulario",

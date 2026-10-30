@@ -73,7 +73,7 @@ export function AddCaseDialog({ action, state, trigger, open, onOpenChange }: Ad
         <form action={action} className="flex flex-col gap-5" noValidate>
           {state?.error && (
             <p role="alert" className="rounded-lg border border-destructive/30 bg-status-denied-tint px-3.5 py-2.5 text-sm text-destructive">
-              {errorsT.has(state.error) ? errorsT(state.error) : errorsT("unknown")}
+              {errorsT.has(state.error) ? errorsT(state.error) : errorsT("somethingWentWrong")}
             </p>
           )}
 
@@ -99,7 +99,7 @@ export function AddCaseDialog({ action, state, trigger, open, onOpenChange }: Ad
               className="font-mono tracking-[0.06em] uppercase"
             />
             <p id={`${receiptId}-hint`} role={receiptError ? "alert" : undefined} className={cn("text-sm", receiptError ? "text-destructive" : "text-ink-muted")}>
-              {receiptError ? (errorsT.has(receiptError) ? errorsT(receiptError) : errorsT("unknown")) : t("receipt.hint")}
+              {receiptError ? (errorsT.has(receiptError) ? errorsT(receiptError) : errorsT("somethingWentWrong")) : t("receipt.hint")}
             </p>
           </div>
 
@@ -107,8 +107,21 @@ export function AddCaseDialog({ action, state, trigger, open, onOpenChange }: Ad
             <Label htmlFor={nicknameId} className="text-sm font-medium">
               {t("nickname.label")}
             </Label>
-            <Input id={nicknameId} name="nickname" defaultValue={state?.values?.nickname} placeholder={t("nickname.placeholder")} maxLength={80} />
-            <p className="text-sm text-ink-muted">{t("nickname.hint")}</p>
+            <Input
+              id={nicknameId}
+              name="nickname"
+              defaultValue={state?.values?.nickname}
+              placeholder={t("nickname.placeholder")}
+              maxLength={80}
+              aria-invalid={state?.fieldErrors?.nickname ? true : undefined}
+            />
+            {state?.fieldErrors?.nickname ? (
+              <p role="alert" className="text-sm text-destructive">
+                {errorsT.has(state.fieldErrors.nickname) ? errorsT(state.fieldErrors.nickname) : errorsT("somethingWentWrong")}
+              </p>
+            ) : (
+              <p className="text-sm text-ink-muted">{t("nickname.hint")}</p>
+            )}
           </div>
 
           <details className="group rounded-xl border border-line bg-canvas/60 open:bg-canvas">

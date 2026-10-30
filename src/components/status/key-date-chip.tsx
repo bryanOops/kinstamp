@@ -1,4 +1,4 @@
-import { CalendarClockIcon, CalendarIcon } from "lucide-react";
+import { CalendarClockIcon, CalendarDaysIcon, CalendarIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { daysUntil, urgencyFor, type Urgency } from "@/lib/format/days";
 import { cn } from "@/lib/utils";
@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 export type KeyDateKind = "due_date" | "appointment";
 
 type KeyDateChipProps = {
-  kind: KeyDateKind;
+  /** Omitted when the screen only knows the date (e.g. the attorney table). */
+  kind?: KeyDateKind;
   /** `YYYY-MM-DD` */
   date: string;
   title?: string;
@@ -22,14 +23,16 @@ const urgencyStyles: Record<Urgency, string> = {
   later: "border-line bg-surface text-ink",
 };
 
-/** Countdown chip: "Due in 12 days", "Appointment today", "Due 3 days ago". */
+const icons = { due_date: CalendarClockIcon, appointment: CalendarIcon, generic: CalendarDaysIcon } as const;
+
+/** Countdown chip: "Due in 12 days", "Appointment today", "In 3 days". */
 export function KeyDateChip({ kind, date, title, now, className }: KeyDateChipProps) {
   const t = useTranslations("keyDates");
   const format = useFormatter();
   const days = daysUntil(date, now);
   const urgency = urgencyFor(days);
-  const Icon = kind === "appointment" ? CalendarIcon : CalendarClockIcon;
-  const label = t(`countdown.${kind}.${urgency}`, { days: Math.abs(days) });
+  const Icon = icons[kind ?? "generic"];
+  const label = t(`countdown.${kind ?? "generic"}.${urgency}`, { days: Math.abs(days) });
   const dateLabel = format.dateTime(new Date(`${date}T00:00:00Z`), { month: "short", day: "numeric", timeZone: "UTC" });
 
   return (

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Bilingual, CaseDetail } from "./types";
 
 type CurrentStatusCardProps = {
-  detail: Pick<CaseDetail, "status" | "description" | "statusCategory" | "checkState" | "lastChangeAt" | "lastSuccessfulCheckAt">;
+  detail: Pick<CaseDetail, "status" | "description" | "statusCategory" | "checkState" | "lastChangeOn" | "lastSuccessfulCheckAt">;
   now: Date;
 };
 
@@ -60,10 +60,10 @@ export function CurrentStatusCard({ detail, now }: CurrentStatusCardProps) {
           {detail.lastSuccessfulCheckAt && (
             <span>{t("checked", { time: format.relativeTime(new Date(detail.lastSuccessfulCheckAt), now) })}</span>
           )}
-          {detail.lastChangeAt && (
+          {detail.lastChangeOn && (
             <>
               <span aria-hidden="true">·</span>
-              <span>{t("lastChange", { date: format.dateTime(new Date(detail.lastChangeAt), { month: "short", day: "numeric", year: "numeric" }) })}</span>
+              <span>{t("lastChange", { date: format.dateTime(new Date(`${detail.lastChangeOn}T00:00:00Z`), { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) })}</span>
             </>
           )}
         </p>

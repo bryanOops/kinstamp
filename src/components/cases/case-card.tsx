@@ -12,6 +12,11 @@ export function localizedText(text: Bilingual | null, locale: string): string | 
   return locale === "es" && text.es ? text.es : text.en;
 }
 
+/** Formats a `YYYY-MM-DD` calendar date without time-zone drift. */
+export function calendarDate(date: string): Date {
+  return new Date(`${date}T00:00:00Z`);
+}
+
 type CaseCardProps = {
   tracked: TrackedCaseSummary;
   now: Date;
@@ -24,7 +29,7 @@ export function CaseCard({ tracked, now, className }: CaseCardProps) {
   const locale = useLocale();
   const format = useFormatter();
   const status = localizedText(tracked.status, locale);
-  const awaiting = tracked.checkState === "awaiting_first_check";
+  const awaiting = tracked.checkState === "awaiting_first_check" || !status;
 
   return (
     <Link
@@ -53,24 +58,20 @@ export function CaseCard({ tracked, now, className }: CaseCardProps) {
       </div>
 
       <div className="min-w-0">
-        {awaiting || !status ? (
+        {awaiting ? (
           <StatusIndicator label={t("awaitingFirstCheck")} category={null} />
         ) : (
           <StatusIndicator label={status} category={tracked.statusCategory} />
         )}
         <p className="mt-1 text-sm text-ink-muted">
-          {tracked.lastChangeAt
-            ? t("lastChange", { date: format.dateTime(new Date(tracked.lastChangeAt), { month: "short", day: "numeric", year: "numeric" }) })
-            : t("noChangesYet")}
+          {tracked.lastChangeOn
+            ? t("lastChange", { date: format.dateTime(calendarDate(tracked.lastChangeOn), { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) })
+            : awaiting
+              ? t("awaitingHint")
+              : t("noChangesYet")}
         </p>
         {tracked.nextKeyDate && (
-          <KeyDateChip
-            kind={tracked.nextKeyDate.kind}
-            date={tracked.nextKeyDate.date}
-            title={tracked.nextKeyDate.title}
-            now={now}
-            className="mt-2"
-          />
+          <KeyDateChip kind={tracked.nextKeyDate.kind} date={tracked.nextKeyDate.date} title={tracked.nextKeyDate.title} now={now} className="mt-2" />
         )}
       </div>
 

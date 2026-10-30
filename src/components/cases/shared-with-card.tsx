@@ -1,19 +1,19 @@
 import { useFormatter, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { StatusDot } from "@/components/status/status-indicator";
-import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Share } from "./types";
 
 type SharedWithCardProps = {
   shares: Share[];
-  /** Trigger of the share dialog, provided by the data layer. */
+  /** Trigger of the share dialog. */
   shareAction?: ReactNode;
-  onRevoke?: (share: Share) => void;
+  /** Per-row control (the revoke button). */
+  rowActions?: (share: Share) => ReactNode;
 };
 
 /** Attorneys this case is shared with. Revoked shares are hidden here (the dialog shows them). */
-export function SharedWithCard({ shares, shareAction, onRevoke }: SharedWithCardProps) {
+export function SharedWithCard({ shares, shareAction, rowActions }: SharedWithCardProps) {
   const t = useTranslations("caseDetail.shares");
   const format = useFormatter();
   const visible = shares.filter((s) => s.status !== "revoked");
@@ -40,11 +40,7 @@ export function SharedWithCard({ shares, shareAction, onRevoke }: SharedWithCard
                       : t("pending")}
                   </p>
                 </div>
-                {onRevoke && (
-                  <Button variant="destructive" size="xs" onClick={() => onRevoke(share)}>
-                    {t("revoke")}
-                  </Button>
-                )}
+                {rowActions?.(share)}
               </li>
             ))}
           </ul>

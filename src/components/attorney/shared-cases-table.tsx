@@ -4,7 +4,8 @@ import { BriefcaseIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useId, useMemo, useState } from "react";
-import { localizedText } from "@/components/cases/case-card";
+import { calendarDate, localizedText } from "@/components/cases/case-card";
+import { daysUntil } from "@/lib/format/days";
 import { EmptyState } from "@/components/status/empty-state";
 import { KeyDateChip } from "@/components/status/key-date-chip";
 import { ReceiptNumber } from "@/components/status/receipt-number";
@@ -29,7 +30,6 @@ type SharedCasesTableProps = {
 type ToneFilter = "all" | StatusTone;
 type Sort = "urgency" | "recent";
 
-const WEEK_MS = 7 * 86_400_000;
 
 /** Filterable table of shared cases, sorted by urgency (next key date) or by last change. */
 export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableProps) {
@@ -51,7 +51,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
       .filter((row) => {
         if (q && !row.clientName.toLowerCase().includes(q) && !(row.nickname ?? "").toLowerCase().includes(q) && !row.receiptNumber.includes(qReceipt)) return false;
         if (tone !== "all" && toneFor(row.statusCategory) !== tone) return false;
-        if (changedOnly && !(row.lastChangeAt && now.getTime() - new Date(row.lastChangeAt).getTime() < WEEK_MS)) return false;
+        if (changedOnly && !isRecent(row.lastChangeOn, now)) return false;
         return true;
       })
       .sort((a, b) => {
@@ -60,7 +60,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
           const db = b.nextKeyDate?.date ?? "9999-12-31";
           if (da !== db) return da.localeCompare(db);
         }
-        return (b.lastChangeAt ?? "").localeCompare(a.lastChangeAt ?? "");
+        return (b.lastChangeOn ?? "").localeCompare(a.lastChangeOn ?? "");
       });
   }, [rows, query, tone, changedOnly, sort, now]);
 
@@ -88,7 +88,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
   };
   const sortItems: Record<Sort, string> = { urgency: t("sortUrgency"), recent: t("sortRecent") };
   const clients = new Set(rows.map((r) => r.clientName)).size;
-  const changedThisWeek = rows.filter((r) => r.lastChangeAt && now.getTime() - new Date(r.lastChangeAt).getTime() < WEEK_MS).length;
+  const changedThisWeek = rows.filter((r) => isRecent(r.lastChangeOn, now)).length;
 
   return (
     <div className="flex flex-col gap-4">
@@ -155,7 +155,7 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
                     <TableCell className="font-medium text-ink">{row.clientName}</TableCell>
                     <TableCell>
                       <Link
-                        href={`/attorney/cases/${row.shareId}`}
+                        href={`/attorney/cases/${row.trackedCaseId}`}
                         className="block rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                       >
                         <span className="block font-medium text-ink underline-offset-4 group-hover:underline">{row.nickname ?? row.receiptNumber}</span>
@@ -168,8 +168,8 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
                     <TableCell className="whitespace-normal">
                       <StatusIndicator size="sm" label={awaiting ? t("awaiting") : status} category={awaiting ? null : row.statusCategory} className="max-w-[26ch]" />
                     </TableCell>
-                    <TableCell className={cn("tabular text-sm", row.lastChangeAt && now.getTime() - new Date(row.lastChangeAt).getTime() < WEEK_MS ? "font-medium text-ink" : "text-ink-muted")}>
-                      {row.lastChangeAt ? format.dateTime(new Date(row.lastChangeAt), { month: "short", day: "numeric", year: "numeric" }) : "—"}
+                    <TableCell className={cn("tabular text-sm", isRecent(row.lastChangeOn, now) ? "font-medium text-ink" : "text-ink-muted")}>
+                      {row.lastChangeOn ? format.dateTime(calendarDate(row.lastChangeOn), { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) : "—"}
                     </TableCell>
                     <TableCell>
                       {row.nextKeyDate ? <KeyDateChip kind={row.nextKeyDate.kind} date={row.nextKeyDate.date} title={row.nextKeyDate.title} now={now} /> : <span className="text-sm text-ink-muted">—</span>}
@@ -183,4 +183,9 @@ export function SharedCasesTable({ rows, now, attorneyEmail }: SharedCasesTableP
       )}
     </div>
   );
+}
+
+/** Changed within the last 7 calendar days. */
+function isRecent(lastChangeOn: string | null, now: Date): boolean {
+  return Boolean(lastChangeOn) && daysUntil(lastChangeOn!, now) >= -7;
 }

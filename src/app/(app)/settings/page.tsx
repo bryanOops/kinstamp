@@ -4,7 +4,9 @@ import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/layout/page-header";
 import { LanguageSwitch } from "@/components/layout/language-switch";
 import { SettingsSection, SettingsRow } from "@/components/settings/settings-section";
+import { SettingsControls } from "@/components/settings/wired/settings-controls";
 import { requireProfile } from "@/server/auth";
+import { getConsentGrantedAt, getNotifyOnChange } from "@/server/cases/queries";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("settings");
@@ -15,6 +17,7 @@ export default async function SettingsPage() {
   // Session reads depend on the request; keep them out of any static shell.
   await io();
   const [profile, t] = await Promise.all([requireProfile(), getTranslations("settings")]);
+  const [consentGrantedAt, notifyOnChange] = await Promise.all([getConsentGrantedAt(profile.id), getNotifyOnChange(profile.id)]);
 
   return (
     <div className="flex flex-1 flex-col gap-8 fade-up">
@@ -39,7 +42,7 @@ export default async function SettingsPage() {
           </SettingsRow>
         </SettingsSection>
 
-        {/* Data layer pending: consent, notifications and account deletion sections (see /design for the components). */}
+        <SettingsControls email={profile.email} consentGrantedAt={consentGrantedAt} notifyOnChange={notifyOnChange} now={new Date()} />
       </div>
     </div>
   );

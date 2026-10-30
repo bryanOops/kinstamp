@@ -4,41 +4,49 @@ import { RefreshCwIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { RefreshState } from "./types";
+import type { RefreshState } from "@/server/actions/cases";
 
 type RefreshButtonProps = {
   state: RefreshState;
+  pending?: boolean;
   now: Date;
+  /** `YYYY-MM-DD` of the newest status event, for "No changes since …". */
+  lastChangeOn?: string | null;
+  /** Shown after an error so the person knows how old the status on screen is. */
+  lastSuccessfulCheckAt?: string | null;
   onRefresh?: () => void;
   className?: string;
 };
 
 /**
- * Refresh action plus its outcome line: idle / pending / "Checked 20 seconds ago" /
+ * Refresh action plus its outcome line: idle / checking / "Checked 20 seconds ago" /
  * "No changes since …" / "Status changed" / error. The line is a live region.
  */
-export function RefreshButton({ state, now, onRefresh, className }: RefreshButtonProps) {
+export function RefreshButton({ state, pending = false, now, lastChangeOn, lastSuccessfulCheckAt, onRefresh, className }: RefreshButtonProps) {
   const t = useTranslations("caseDetail.refresh");
   const errorsT = useTranslations("caseDetail.refresh.errors");
   const format = useFormatter();
-  const pending = state.kind === "pending";
 
   const message = (() => {
-    switch (state.kind) {
+    if (pending) return t("pending");
+    switch (state.status) {
       case "idle":
         return null;
-      case "pending":
-        return t("pending");
-      case "recent":
+      case "reused":
         return t("recent", { time: format.relativeTime(new Date(state.checkedAt), now) });
       case "unchanged":
-        return t("unchanged", { date: format.dateTime(new Date(state.since), { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) });
+        return lastChangeOn
+          ? t("unchanged", { date: format.dateTime(new Date(`${lastChangeOn}T00:00:00Z`), { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) })
+          : t("unchangedNoDate");
       case "changed":
         return t("changed");
       case "error":
-        return errorsT.has(state.code) ? errorsT(state.code) : errorsT("unknown");
+        if (state.outsideHours) return errorsT("outsideHours");
+        return errorsT.has(state.errorCode) ? errorsT(state.errorCode) : errorsT("unknown");
     }
   })();
+
+  const tone = pending || state.status === "idle" || state.status === "reused" || state.status === "unchanged" ? "muted" : state.status;
 
   return (
     <div className={cn("flex flex-col items-start gap-2 sm:items-end", className)}>
@@ -50,16 +58,16 @@ export function RefreshButton({ state, now, onRefresh, className }: RefreshButto
         role="status"
         aria-live="polite"
         className={cn(
-          "min-h-5 text-sm",
-          state.kind === "changed" && "font-semibold text-stamp-ink",
-          state.kind === "error" && "text-destructive",
-          (state.kind === "idle" || state.kind === "pending" || state.kind === "recent" || state.kind === "unchanged") && "text-ink-muted",
+          "min-h-5 text-sm sm:text-right",
+          tone === "muted" && "text-ink-muted",
+          tone === "changed" && "font-semibold text-stamp-ink",
+          tone === "error" && "text-destructive",
         )}
       >
         {message}
-        {state.kind === "error" && state.lastSavedAt && (
-          <span className="block text-ink-muted">
-            {t("showingSaved", { date: format.dateTime(new Date(state.lastSavedAt), { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) })}
+        {state.status === "error" && lastSuccessfulCheckAt && (
+          <span className="block font-normal text-ink-muted">
+            {t("showingSaved", { date: format.dateTime(new Date(lastSuccessfulCheckAt), { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) })}
           </span>
         )}
       </p>

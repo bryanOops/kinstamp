@@ -15,32 +15,36 @@ type SlowCardProps = {
 };
 
 const USCIS_E_REQUEST = "https://egov.uscis.gov/e-request/";
+const DAYS_PER_MONTH = 30.44;
 
-/** "Is my case slow?": case age vs. the official processing time, with its source and date. */
+/**
+ * "Is my case slow?": case age vs. the time USCIS publishes for the form type (80% of cases),
+ * with its source and date. Renders nothing when no official figure is on file.
+ */
 export function SlowCard({ receivedOn, officialTime, now, eRequestUrl = USCIS_E_REQUEST }: SlowCardProps) {
   const t = useTranslations("caseDetail.slow");
   const format = useFormatter();
 
-  if (!receivedOn || !officialTime) {
+  if (!officialTime) return null;
+
+  if (!receivedOn) {
     return (
       <Card>
         <CardHeader>
           <CardTitle>{t("title")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-md text-ink-muted">{!receivedOn ? t("noReceivedDate") : t("noOfficialTime")}</p>
+          <p className="text-md text-ink-muted">{t("noReceivedDate")}</p>
         </CardContent>
       </Card>
     );
   }
 
-  const ageDays = -daysUntil(receivedOn, now);
-  const ageMonths = ageDays / 30.44;
-  const maxDays = Math.round(officialTime.maxMonths * 30.44);
-  const minDays = Math.round(officialTime.minMonths * 30.44);
-  const verdict = ageMonths > officialTime.maxMonths ? "outside" : ageMonths >= officialTime.minMonths ? "within" : "early";
-  const progress = Math.min(100, Math.round((ageDays / maxDays) * 100));
-  const minMark = Math.round((minDays / maxDays) * 100);
+  const ageDays = Math.max(0, -daysUntil(receivedOn, now));
+  const ageMonths = Math.round((ageDays / DAYS_PER_MONTH) * 10) / 10;
+  const limitDays = Math.round(officialTime.months * DAYS_PER_MONTH);
+  const outside = ageDays > limitDays;
+  const progress = Math.min(100, Math.round((ageDays / limitDays) * 100));
 
   return (
     <Card>
@@ -48,23 +52,17 @@ export function SlowCard({ receivedOn, officialTime, now, eRequestUrl = USCIS_E_
         <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <p className="text-md text-ink">
-          {t(`verdict.${verdict}`, { months: Math.round(ageMonths * 10) / 10, min: officialTime.minMonths, max: officialTime.maxMonths })}
-        </p>
+        <p className="text-md text-ink">{t(outside ? "verdict.outside" : "verdict.within", { months: ageMonths, limit: officialTime.months })}</p>
 
         <div aria-hidden="true" className="relative h-2 w-full rounded-full bg-line">
-          <div className="absolute inset-y-0 rounded-full bg-canvas-deep" style={{ left: `${minMark}%`, right: 0 }} />
-          <div
-            className={cn("absolute inset-y-0 left-0 rounded-full", verdict === "outside" ? "bg-status-action" : "bg-ink")}
-            style={{ width: `${progress}%` }}
-          />
+          <div className={cn("absolute inset-y-0 left-0 rounded-full", outside ? "bg-status-action" : "bg-ink")} style={{ width: `${progress}%` }} />
         </div>
         <div className="flex justify-between text-xs tabular text-ink-muted">
           <span>{t("ageLabel", { days: ageDays })}</span>
-          <span>{t("rangeLabel", { min: officialTime.minMonths, max: officialTime.maxMonths })}</span>
+          <span>{t("limitLabel", { limit: officialTime.months })}</span>
         </div>
 
-        {verdict === "outside" && (
+        {outside && (
           <a
             href={eRequestUrl}
             target="_blank"

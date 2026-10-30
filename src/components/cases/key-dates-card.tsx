@@ -1,4 +1,4 @@
-import { CalendarPlusIcon, DownloadIcon, Trash2Icon } from "lucide-react";
+import { CalendarPlusIcon, DownloadIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { KeyDateChip } from "@/components/status/key-date-chip";
@@ -9,14 +9,15 @@ import type { KeyDate } from "./types";
 type KeyDatesCardProps = {
   keyDates: KeyDate[];
   now: Date;
-  /** Trigger of the add-key-date form, provided by the data layer. */
+  /** Trigger of the add-key-date form. */
   addAction?: ReactNode;
   /** Builds the `.ics` download URL for a key date. */
   icsHref?: (keyDate: KeyDate) => string;
-  onDelete?: (keyDate: KeyDate) => void;
+  /** Extra per-row controls (e.g. a delete button) rendered after the download link. */
+  rowActions?: (keyDate: KeyDate) => ReactNode;
 };
 
-export function KeyDatesCard({ keyDates, now, addAction, icsHref, onDelete }: KeyDatesCardProps) {
+export function KeyDatesCard({ keyDates, now, addAction, icsHref, rowActions }: KeyDatesCardProps) {
   const t = useTranslations("caseDetail.keyDates");
   const format = useFormatter();
   const sorted = [...keyDates].sort((a, b) => a.date.localeCompare(b.date));
@@ -37,7 +38,7 @@ export function KeyDatesCard({ keyDates, now, addAction, icsHref, onDelete }: Ke
                 <div className="min-w-0">
                   <p className="text-md font-medium text-ink">{keyDate.title}</p>
                   <p className="mt-0.5 text-sm tabular text-ink-muted">
-                    {format.dateTime(new Date(`${keyDate.date}T${keyDate.time ?? "00:00"}:00`), {
+                    {format.dateTime(new Date(`${keyDate.date}T${keyDate.time?.slice(0, 5) ?? "00:00"}:00`), {
                       weekday: "short",
                       month: "short",
                       day: "numeric",
@@ -56,11 +57,7 @@ export function KeyDatesCard({ keyDates, now, addAction, icsHref, onDelete }: Ke
                       <DownloadIcon aria-hidden="true" />
                     </a>
                   )}
-                  {keyDate.canDelete && onDelete && (
-                    <Button variant="ghost" size="icon-sm" className="text-ink-muted hover:text-destructive" onClick={() => onDelete(keyDate)} aria-label={t("delete", { title: keyDate.title })}>
-                      <Trash2Icon aria-hidden="true" />
-                    </Button>
-                  )}
+                  {rowActions?.(keyDate)}
                 </div>
               </li>
             ))}
@@ -71,7 +68,7 @@ export function KeyDatesCard({ keyDates, now, addAction, icsHref, onDelete }: Ke
   );
 }
 
-/** Default trigger for the add form, exported so the data layer can reuse it. */
+/** Default trigger for the add form. */
 export function AddKeyDateButton(props: React.ComponentProps<typeof Button>) {
   const t = useTranslations("caseDetail.keyDates");
   return (

@@ -2,13 +2,14 @@ import { FolderOpenIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { EmptyState } from "@/components/status/empty-state";
+import { daysUntil } from "@/lib/format/days";
 import { CaseCard } from "./case-card";
 import type { TrackedCaseSummary } from "./types";
 
 type CaseListProps = {
   cases: TrackedCaseSummary[];
   now: Date;
-  /** Rendered in the empty state and, when there are cases, in the summary row. */
+  /** Rendered in the empty state. */
   addCaseAction?: ReactNode;
 };
 
@@ -20,9 +21,7 @@ export function CaseList({ cases, now, addCaseAction }: CaseListProps) {
     return <EmptyState icon={FolderOpenIcon} title={t("empty.title")} description={t("empty.description")} action={addCaseAction} />;
   }
 
-  const changedThisWeek = cases.filter(
-    (c) => c.lastChangeAt && now.getTime() - new Date(c.lastChangeAt).getTime() < 7 * 86_400_000,
-  ).length;
+  const changedThisWeek = cases.filter((c) => c.lastChangeOn && daysUntil(c.lastChangeOn, now) >= -7).length;
   const lastChecked = cases
     .map((c) => c.lastSuccessfulCheckAt)
     .filter((v): v is string => Boolean(v))

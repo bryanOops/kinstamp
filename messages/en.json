@@ -69,6 +69,12 @@
         "today": "Appointment today",
         "soon": "Appointment in {days, plural, one {# day} other {# days}}",
         "later": "Appointment in {days} days"
+      },
+      "generic": {
+        "past": "{days, plural, one {# day} other {# days}} ago",
+        "today": "Today",
+        "soon": "In {days, plural, one {# day} other {# days}}",
+        "later": "In {days} days"
       }
     }
   },
@@ -156,7 +162,8 @@
       "form": "Form {form}",
       "awaitingFirstCheck": "Waiting for the first check",
       "lastChange": "Last change {date}",
-      "noChangesYet": "No status yet"
+      "noChangesYet": "No status yet",
+      "awaitingHint": "We'll check it automatically when USCIS is back."
     },
     "list": {
       "summary": "{count, plural, one {# case} other {# cases}} · {changed, plural, =0 {no changes this week} one {# changed this week} other {# changed this week}}",
@@ -190,12 +197,15 @@
       "cancel": "Cancel",
       "errors": {
         "invalidFormat": "That doesn't look like a receipt number. It should be 3 letters and 10 digits.",
-        "notFound": "USCIS has no case with that receipt number. Check the notice and try again.",
-        "alreadyTracked": "You already track this case.",
-        "unavailable": "USCIS can't be reached right now. We saved the case and will check it when USCIS is back.",
-        "rateLimited": "Too many lookups in a row. Wait a minute and try again.",
-        "unknown": "We couldn't add the case. Please try again."
+        "invalidReceipt": "That doesn't look like a receipt number. It should be 3 letters and 10 digits.",
+        "receiptNotFound": "USCIS has no case with that receipt number. Check the notice and try again.",
+        "nicknameTooLong": "Use at most 80 characters.",
+        "somethingWentWrong": "We couldn't add the case. Please try again."
       }
+    },
+    "errors": {
+      "nicknameTooLong": "Use at most 80 characters.",
+      "somethingWentWrong": "Something went wrong. Please try again."
     }
   },
   "caseDetail": {
@@ -217,8 +227,8 @@
         "es": "Leer en español"
       },
       "awaiting": {
-        "title": "Waiting for the first check",
-        "description": "USCIS could not be reached when this case was added. We'll check it automatically when USCIS is back and keep its history from then on."
+        "title": "Waiting for USCIS",
+        "description": "USCIS could not be reached when this case was added. We'll check it automatically when USCIS is back (Mon–Fri, 7am–8pm ET) and keep its history from then on."
       },
       "checked": "Checked {time}",
       "lastChange": "Last change {date}"
@@ -318,17 +328,15 @@
     "slow": {
       "title": "Is my case slow?",
       "noReceivedDate": "We'll compare this case with the official processing time once USCIS reports the date it was received.",
-      "noOfficialTime": "USCIS does not publish a processing time for this form type, so there is nothing to compare against.",
       "verdict": {
-        "early": "Your case is {months} months old. USCIS currently lists {min}–{max} months for this form, so it is within the normal range.",
-        "within": "Your case is {months} months old, inside the {min}–{max} months USCIS currently lists for this form.",
-        "outside": "Your case is {months} months old, beyond the {min}–{max} months USCIS currently lists for this form. You can ask USCIS about it."
+        "within": "Your case is {months} months old. USCIS currently completes 80% of these cases within {limit} months, so it is inside the normal range.",
+        "outside": "Your case is {months} months old, beyond the {limit} months in which USCIS currently completes 80% of these cases. You can ask USCIS about it."
       },
       "ageLabel": "{days} days so far",
-      "rangeLabel": "{min}–{max} months",
       "eRequest": "Ask USCIS about a case outside normal processing time",
       "source": "Official processing time read from USCIS on {date}.",
-      "sourceLink": "Source"
+      "sourceLink": "Source",
+      "limitLabel": "{limit} months (80% of cases)"
     },
     "keyDates": {
       "title": "Key dates",
@@ -339,14 +347,44 @@
         "appointment": "Appointment"
       },
       "download": "Add {title} to your calendar",
-      "delete": "Delete {title}"
+      "delete": "Delete {title}",
+      "form": {
+        "title": "Add a key date",
+        "description": "Copy the date from your USCIS notice. Kinstamp counts down to it and can add it to your calendar.",
+        "kind": "Kind",
+        "kinds": {
+          "due_date": "Due date",
+          "appointment": "Appointment"
+        },
+        "date": "Date",
+        "time": "Time (optional)",
+        "timeHint": "Eastern time, as printed on the notice.",
+        "titleField": "Title",
+        "titlePlaceholder": "e.g. RFE response due",
+        "notes": "Notes (optional)",
+        "notesPlaceholder": "What to bring, where to send it…",
+        "submit": "Add key date",
+        "pending": "Adding…",
+        "cancel": "Cancel"
+      },
+      "errors": {
+        "keyDateKindRequired": "Choose due date or appointment.",
+        "keyDateDateRequired": "Enter a date.",
+        "keyDateTimeInvalid": "Enter a time like 09:30.",
+        "keyDateTitleRequired": "Give the key date a title.",
+        "keyDateTitleTooLong": "Use at most 120 characters.",
+        "keyDateNotesTooLong": "Use at most 1000 characters.",
+        "somethingWentWrong": "We couldn't save the key date. Please try again."
+      }
     },
     "shares": {
       "title": "Shared with",
       "empty": "Not shared with anyone. Your attorney can follow this case if you share it with their email.",
       "activeSince": "Active since {date}",
       "pending": "Pending · they don't have an account yet",
-      "revoke": "Revoke"
+      "revoke": "Revoke",
+      "revokeFor": "Revoke access for {email}",
+      "revoking": "Revoking…"
     },
     "insight": {
       "title": "Cases like this",
@@ -372,11 +410,16 @@
       "errors": {
         "unavailable": "USCIS is offline (Mon–Fri, 7am–8pm ET).",
         "timeout": "USCIS took too long to answer.",
-        "rate_limited": "You refreshed too many times. Try again in a few minutes.",
+        "rate_limited": "USCIS is limiting requests right now. Try again in a minute.",
         "quota_exhausted": "Kinstamp reached its daily USCIS limit. Scheduled checks resume tomorrow.",
         "not_found": "USCIS no longer finds this receipt number.",
-        "unknown": "USCIS could not be reached."
-      }
+        "unknown": "USCIS could not be reached.",
+        "outsideHours": "USCIS is offline (Mon–Fri, 7am–8pm ET).",
+        "rate_limited_person": "You refreshed too many times this hour. Try again later.",
+        "invalid_receipt": "USCIS does not accept this receipt number.",
+        "auth_failed": "Kinstamp could not sign in to USCIS."
+      },
+      "unchangedNoDate": "No changes."
     },
     "share": {
       "trigger": "Share with attorney",
@@ -399,12 +442,13 @@
       "revoke": "Revoke",
       "close": "Done",
       "errors": {
-        "ownEmail": "You can't share a case with yourself.",
-        "clientEmail": "That email belongs to a client account, not an attorney.",
         "alreadyShared": "This case is already shared with that email.",
         "invalidEmail": "Enter a valid email address.",
-        "unknown": "We couldn't share the case. Please try again."
-      }
+        "cannotShareWithYourself": "You can't share a case with yourself.",
+        "notAnAttorney": "That email belongs to a client account, not an attorney.",
+        "somethingWentWrong": "We couldn't share the case. Please try again."
+      },
+      "shared": "Shared. They'll see the case as soon as they sign in."
     },
     "offline": {
       "title": "USCIS is offline (Mon–Fri, 7am–8pm ET).",
@@ -414,6 +458,27 @@
     "timeline": {
       "title": "Timeline",
       "description": "Every status event, newest first, with where it came from."
+    },
+    "menu": {
+      "open": "More actions",
+      "rename": "Rename",
+      "untrack": "Stop tracking",
+      "renameDialog": {
+        "title": "Rename this case",
+        "description": "The nickname is only visible to you.",
+        "label": "Nickname",
+        "placeholder": "e.g. Mom's green card",
+        "submit": "Save",
+        "pending": "Saving…",
+        "cancel": "Cancel"
+      },
+      "untrackDialog": {
+        "title": "Stop tracking {label}?",
+        "description": "It leaves your list and your attorney loses access. Key dates you added are deleted. USCIS data is not affected and you can add the case again later.",
+        "confirm": "Stop tracking",
+        "pending": "Removing…",
+        "cancel": "Cancel"
+      }
     }
   },
   "attorney": {
@@ -456,7 +521,9 @@
     "description": "Built only from anonymized data of people who opted in. Groups with fewer than 5 cases are hidden.",
     "empty": {
       "title": "Not enough data yet",
-      "description": "Insights appear once at least 5 consented cases of a form type have been received and approved."
+      "description": "Insights appear once at least 5 consented cases of a form type have been received and approved.",
+      "descriptionNoConsent": "Insights appear once at least 5 consented cases of a form type have been received and approved. You can also opt in to contribute your own cases anonymously.",
+      "consentLink": "Review your consent"
     },
     "view": {
       "formTypes": "Form types",
