@@ -51,6 +51,7 @@ async function CheckEmailCard({ searchParams }: Pick<PageProps<"/check-email">, 
             <p className="font-medium text-ink">{t("nextStepTitle")}</p>
             <p className="mt-1">{t("nextStep")}</p>
             <p className="mt-2">{t("spam")}</p>
+            <p className="mt-2">{t("existing")}</p>
           </div>
         </div>
         <Link href="/sign-in" className={buttonVariants({ variant: "secondary", size: "lg" })}>

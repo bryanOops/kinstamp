@@ -224,6 +224,7 @@
       "nextStepTitle": "Open the link to confirm your account",
       "nextStep": "The link signs you in and takes you to your cases.",
       "spam": "Don't see it? Check your spam folder. The sender is Kinstamp.",
+      "existing": "Already had an account with this email? Then no new email is sent: just sign in.",
       "goToSignIn": "Go to sign in"
     }
   },

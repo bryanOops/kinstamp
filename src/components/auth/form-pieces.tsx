@@ -1,6 +1,6 @@
 "use client";
 
-import { EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
+import { CircleAlertIcon, EyeIcon, EyeOffIcon, InfoIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useState, type ComponentProps } from "react";
 import { useFormStatus } from "react-dom";
@@ -124,6 +124,7 @@ export function FormError({ message }: { message?: string }) {
   if (!message) return null;
   return (
     <Alert variant="destructive" className="border-destructive/30 bg-status-denied-tint">
+      <CircleAlertIcon aria-hidden="true" className="text-destructive" />
       <AlertTitle className="sr-only">Error</AlertTitle>
       <AlertDescription className="text-destructive">{message}</AlertDescription>
     </Alert>
