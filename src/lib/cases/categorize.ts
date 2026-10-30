@@ -27,9 +27,9 @@ const rules: [RegExp, StatusCategory][] = [
   [/withdraw/, "withdrawn"],
   [/denied|rejected|\bdeny\b/, "denied"],
   [/card .*(mailed|delivered)|(mailed|delivered) .*card/, "card_delivered"],
-  [/card .*produced|producing .*card/, "card_produced"],
+  [/card .*(produced|re-?ordered)|producing .*card/, "card_produced"],
   [/transferred/, "transferred"],
-  [/approved/, "approved"],
+  [/approved|approval was affirmed/, "approved"],
   [/received/, "received"],
 ];
 

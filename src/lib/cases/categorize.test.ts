@@ -20,6 +20,11 @@ describe("categorizeStatus", () => {
     ["Case Was Rejected Because It Was Improperly Filed", "denied"],
     ["Withdrawal Acknowledgement Notice Was Sent", "withdrawn"],
     ["Case Is Being Actively Reviewed By USCIS", "other"],
+    // Seen in the USCIS sandbox recordings
+    ["Case Approval Was Affirmed", "approved"],
+    ["Card Has Been Re-Ordered", "card_produced"],
+    ["Card Was Personally Delivered To Me", "card_delivered"],
+    ["Card Was Returned To USCIS", "other"],
     // Sentences from USCIS's own history
     ["We received your Form I-130, Petition for Alien Relative.", "received"],
     ["We approved your Form I-130, Petition for Alien Relative.", "approved"],
