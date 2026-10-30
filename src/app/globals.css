@@ -1,29 +1,291 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-/* Design tokens: see the design system (black leads, one vermilion accent). */
-@theme {
+/*
+  Kinstamp design tokens. Source of truth: docs/design/DESIGN.md.
+  Black leads, light canvas, one vermilion accent. Light mode only.
+*/
+
+@theme inline {
+  /* Fonts: variables are set on <html> by next/font (see src/app/layout.tsx). */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Brand palette */
   --color-ink: #0b0b0f;
   --color-ink-hover: #1a1a22;
   --color-ink-muted: #5c5c66;
+  --color-ink-subtle: #767680;
   --color-ink-disabled: #a0a0a8;
   --color-canvas: #f6f6f8;
+  --color-canvas-deep: #ededf0;
   --color-surface: #ffffff;
   --color-line: #e6e6ea;
+  --color-line-strong: #cfcfd6;
   --color-stamp: #e5532d;
+  --color-stamp-ink: #c43a1b;
+  --color-stamp-tint: #fdeee9;
 
-  --color-status-progress: #2f6fed;
-  --color-status-action: #d98e04;
-  --color-status-approved: #1e9e5a;
+  /* Status: every shade is >= 4.5:1 on white, so dots can double as text. */
+  --color-status-progress: #2563eb;
+  --color-status-action: #b45309;
+  --color-status-approved: #15803d;
   --color-status-denied: #b42318;
-  --color-status-unknown: #8a8a94;
+  --color-status-unknown: #6b6b75;
+  --color-status-progress-tint: #eaf1fe;
+  --color-status-action-tint: #fdf3e6;
+  --color-status-approved-tint: #e8f6ee;
+  --color-status-denied-tint: #fbebe9;
+  --color-status-unknown-tint: #f0f0f3;
 
-  --font-serif: var(--font-serif), Georgia, serif;
-  --font-sans: var(--font-sans), system-ui, sans-serif;
-  --font-mono: var(--font-mono), ui-monospace, monospace;
+  /* shadcn semantic tokens mapped to the brand */
+  --color-background: var(--color-canvas);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-ink);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--color-canvas);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: #f0f0f3;
+  --color-muted-foreground: var(--color-ink-muted);
+  --color-accent: #f0f0f3;
+  --color-accent-foreground: var(--color-ink);
+  --color-destructive: #b42318;
+  --color-destructive-foreground: #ffffff;
+  --color-border: var(--color-line);
+  --color-input: var(--color-line-strong);
+  --color-ring: var(--color-stamp);
+  --color-sidebar: var(--color-surface);
+  --color-sidebar-foreground: var(--color-ink);
+  --color-sidebar-primary: var(--color-ink);
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #f0f0f3;
+  --color-sidebar-accent-foreground: var(--color-ink);
+  --color-sidebar-border: var(--color-line);
+  --color-sidebar-ring: var(--color-stamp);
+  --color-chart-1: var(--color-ink);
+  --color-chart-2: var(--color-stamp);
+  --color-chart-3: var(--color-ink-muted);
+  --color-chart-4: var(--color-line-strong);
+  --color-chart-5: var(--color-line);
+
+  /* Shape */
+  --radius: 0.625rem;
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.25rem;
+  --radius-4xl: 1.5rem;
+
+  /* Type scale: fixed rem steps (ratio ~1.2), Apple-like tracking per size. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-md: 0.9375rem;
+  --text-md--line-height: 1.5rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.625rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.625rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.875rem;
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 2.125rem;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1.08;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1.04;
+
+  --tracking-display: -0.028em;
+  --tracking-title: -0.02em;
+  --tracking-heading: -0.012em;
+  --tracking-body: -0.004em;
+  --tracking-caps: 0.06em;
+
+  /* Shadows: offset + soft blur, never a halo. */
+  --shadow-card: 0 1px 2px rgb(11 11 15 / 0.04), 0 1px 1px rgb(11 11 15 / 0.02);
+  --shadow-raised: 0 4px 12px -2px rgb(11 11 15 / 0.08), 0 2px 4px -1px rgb(11 11 15 / 0.04);
+  --shadow-overlay: 0 16px 40px -12px rgb(11 11 15 / 0.22), 0 4px 10px -4px rgb(11 11 15 / 0.08);
+
+  /* Motion: 300ms max, exponential ease-out. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 280ms;
 }
 
-body {
-  background: var(--color-canvas);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv11", "ss03";
+    color-scheme: light;
+    scrollbar-color: var(--color-line-strong) transparent;
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-size: var(--text-md);
+    line-height: var(--text-md--line-height);
+    letter-spacing: var(--tracking-body);
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-stamp);
+    outline-offset: 2px;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--color-stamp);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-ink-subtle);
+    opacity: 1;
+  }
+
+  a {
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility text-display {
+  font-size: var(--text-5xl);
+  line-height: var(--text-5xl--line-height);
+  letter-spacing: var(--tracking-display);
+  font-weight: 600;
+}
+
+@utility text-title {
+  font-size: var(--text-3xl);
+  line-height: var(--text-3xl--line-height);
+  letter-spacing: var(--tracking-title);
+  font-weight: 600;
+}
+
+@utility text-heading {
+  font-size: var(--text-xl);
+  line-height: var(--text-xl--line-height);
+  letter-spacing: var(--tracking-heading);
+  font-weight: 600;
+}
+
+@utility text-subheading {
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  letter-spacing: var(--tracking-heading);
+  font-weight: 600;
+}
+
+@utility text-caps {
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
+  letter-spacing: var(--tracking-caps);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-xl);
+}
+
+/* Thin black progress line used for loading instead of spinners. */
+@utility progress-line {
+  position: relative;
+  overflow: hidden;
+  height: 2px;
+  background: var(--color-line);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    background: var(--color-ink);
+    animation: progress-line-slide 1.2s var(--ease-standard) infinite;
+  }
+}
+
+@keyframes progress-line-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+/* Entrance used once per screen (page content), never per card. */
+@utility fade-up {
+  animation: fade-up var(--duration-slow) var(--ease-out-expo) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
