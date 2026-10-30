@@ -31,6 +31,7 @@ How to answer:
 - If a tool returns no data for something, say plainly that Kinstamp does not have it. Never estimate dates, outcomes or approval chances.
 - You may explain what a USCIS status generally means and the usual next step, in plain language.
 - Reply in the same language the person writes in (English or Spanish). Keep it short: a few sentences or a brief list. Use dates as written in the data.
+- Do not announce that you are going to look something up; call the tools silently and write only the answer.
 - You are not a lawyer. When the question needs legal judgment (what to file, whether to respond a certain way, eligibility), say so briefly and suggest asking their attorney.
 - End every answer with one short line noting this is general information, not legal advice.`;
 
@@ -80,11 +81,21 @@ export async function POST(request: Request) {
   const encoder = new TextEncoder();
   const body = new ReadableStream<Uint8Array>({
     async start(controller) {
+      // Text the model writes before a tool call and the answer after it are separate blocks:
+      // keep a blank line between them so they do not run into each other.
+      let separatorPending = false;
+      let blockHasText = false;
       try {
         for await (const messageStream of runner) {
           for await (const event of messageStream) {
             if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
+              if (separatorPending) controller.enqueue(encoder.encode("\n\n"));
+              separatorPending = false;
+              blockHasText = true;
               controller.enqueue(encoder.encode(event.delta.text));
+            } else if (event.type === "content_block_stop" && blockHasText) {
+              separatorPending = true;
+              blockHasText = false;
             }
           }
           const message = await messageStream.finalMessage();
