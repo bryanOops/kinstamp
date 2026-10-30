@@ -204,6 +204,7 @@ Module `src/lib/cases/` (pure, test-first):
 - Tools are server functions that query Supabase **as the signed-in user**, so RLS applies: `get_case_overview`, `get_timeline`, `get_key_dates`, `get_official_processing_time`, `get_insights`. General explanations of a status come from the model itself, grounded in the status and description USCIS returned.
 - System prompt: answer only from tool results, say so when data is missing, reply in the language the person writes in (the UI starts in their locale), never give legal advice and add a short note saying so.
 - Limit: 20 messages per person per day (`assistant_usage`). No conversation is stored.
+- Implementation details and architecture: [`assistant.md`](assistant.md).
 
 ## 8. Internationalization
 

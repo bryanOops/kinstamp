@@ -96,6 +96,8 @@ Vercel Cron (weekdays, 10am ET) ──► /api/cron/scheduled-checks
 - **`src/app/`**, **`src/components/`**: routes and UI. Server Components by default; client components only where there is interaction.
 - **`supabase/migrations/`**: the schema, RLS policies and SQL functions; **`supabase/tests/`**: pgTAP tests.
 
+The case assistant (agent loop, tools, guardrails and what was deliberately left out) is documented in [`docs/assistant.md`](docs/assistant.md).
+
 The coding standards that every change (human or AI) follows are in [`CLAUDE.md`](CLAUDE.md); the domain language is in [`GLOSSARY.md`](GLOSSARY.md); the product and technical spec is [`docs/spec.md`](docs/spec.md).
 
 ### Data model
