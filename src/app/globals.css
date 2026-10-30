@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Design tokens: see the design system (black leads, one vermilion accent). */
+@theme {
+  --color-ink: #0b0b0f;
+  --color-ink-hover: #1a1a22;
+  --color-ink-muted: #5c5c66;
+  --color-ink-disabled: #a0a0a8;
+  --color-canvas: #f6f6f8;
+  --color-surface: #ffffff;
+  --color-line: #e6e6ea;
+  --color-stamp: #e5532d;
+
+  --color-status-progress: #2f6fed;
+  --color-status-action: #d98e04;
+  --color-status-approved: #1e9e5a;
+  --color-status-denied: #b42318;
+  --color-status-unknown: #8a8a94;
+
+  --font-serif: var(--font-serif), Georgia, serif;
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}

@@ -1,0 +1,36 @@
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+/build
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# env files: only the example is committed
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# supabase local
+supabase/.branches
+supabase/.temp
+
+# Private working notes (Spanish), PDF and screenshots: not part of the deliverable
+.workspace/
+
+# Third-party agent skills: installed locally, documented in the README
+.claude/skills/
