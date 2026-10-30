@@ -6,6 +6,7 @@ import { StatusIndicator } from "@/components/status/status-indicator";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { isStatusCategory } from "@/lib/status-tone/status-tone";
 import type { Bilingual, CaseDetail } from "./types";
+import { NoticeText } from "@/components/status/notice-text";
 
 type StatusHeroProps = {
   detail: Pick<CaseDetail, "status" | "description" | "statusCategory" | "checkState" | "lastChangeOn" | "lastSuccessfulCheckAt">;
@@ -71,7 +72,7 @@ export function StatusHero({ detail, now, primaryAction, secondaryActions }: Sta
             {description && (
               <div lang={lang} className="mt-5 border-l border-line pl-4">
                 <p className="text-caps text-ink-muted">{t("official")}</p>
-                <p className="mt-1.5 max-w-[68ch] text-sm leading-relaxed text-ink-muted [overflow-wrap:anywhere]">{description}</p>
+                <NoticeText text={description} className="mt-1.5 max-w-[68ch] text-sm leading-relaxed text-ink-muted [overflow-wrap:anywhere]" />
               </div>
             )}
             <p className="mt-4 text-xs text-ink-subtle">{plainT("disclaimer")}</p>

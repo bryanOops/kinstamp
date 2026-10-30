@@ -1,5 +1,6 @@
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { NoticeText } from "@/components/status/notice-text";
 
 export type TimelineEvent = {
   id: string;
@@ -68,7 +69,7 @@ export function Timeline({ events, highlightedEventId, className }: TimelineProp
                 <span className="text-xs text-ink-muted">{event.origin === "reported" ? t("reportedByUscis") : t("observedByKinstamp")}</span>
                 {isNew && <span className="rounded-md bg-stamp-tint px-1.5 py-0.5 text-xs font-semibold text-stamp-ink">{t("new")}</span>}
               </div>
-              {description && <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-ink-muted [overflow-wrap:anywhere]">{description}</p>}
+              {description && <NoticeText text={description} className="mt-1 max-w-[65ch] text-sm leading-relaxed text-ink-muted [overflow-wrap:anywhere]" />}
             </div>
           </li>
         );

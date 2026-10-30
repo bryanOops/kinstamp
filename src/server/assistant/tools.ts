@@ -3,6 +3,9 @@ import { betaZodTool } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { z } from "zod";
 import { officialProcessingTimeFor } from "@/lib/processing-times/official";
 import { getTrackedCaseDetail, listInsights, type TrackedCaseDetail } from "@/server/cases/queries";
+import { noticePlainText } from "@/lib/uscis/notice-text";
+
+const plain = (text: string | null) => (text ? noticePlainText(text) : text);
 
 /**
  * Read-only tools for one tracked case. Every query runs as the signed-in person
@@ -27,7 +30,7 @@ export function caseAssistantTools(trackedCaseId: string) {
           receiptNumber: c.case.receiptNumber,
           formType: c.case.formType,
           status: { en: c.case.statusEn, es: c.case.statusEs },
-          description: { en: c.case.descriptionEn, es: c.case.descriptionEs },
+          description: { en: plain(c.case.descriptionEn), es: plain(c.case.descriptionEs) },
           statusCategory: c.case.category,
           submittedAt: c.case.submittedAt,
           lastSuccessfulCheckAt: c.case.lastSuccessfulCheckAt,

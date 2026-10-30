@@ -4,6 +4,7 @@ import { isLocale } from "@/i18n/config";
 import { renderStatusChangeEmail } from "@/lib/emails/status-change";
 import { siteUrl } from "@/lib/env";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { noticePlainText } from "@/lib/uscis/notice-text";
 
 /**
  * Emails every client tracking the case (with notifications on) about its latest observed
@@ -44,7 +45,7 @@ export async function notifyStatusChange(caseId: string): Promise<void> {
     const receiptNumber = tracker.cases?.receipt_number ?? "";
     const caseName = tracker.nickname || receiptNumber || t("fallbackCaseName");
     const status = (locale === "es" && event.text_es) || event.text_en;
-    const description = (locale === "es" && event.description_es) || event.description_en || "";
+    const description = noticePlainText((locale === "es" && event.description_es) || event.description_en || "");
 
     const { html, text } = renderStatusChangeEmail({
       lang: locale,
