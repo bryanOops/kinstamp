@@ -256,3 +256,58 @@ export async function listInsights(): Promise<FormTypeInsight[]> {
     p75Days: Number(row.p75_days),
   }));
 }
+
+/** One key date the signed-in person may read (tracker or shared attorney, via RLS). */
+export async function getKeyDate(keyDateId: string): Promise<(KeyDateView & { trackedCaseId: string }) | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("key_dates")
+    .select("id, tracked_case_id, kind, date, time, title, notes, created_by")
+    .eq("id", keyDateId)
+    .maybeSingle();
+  if (!data) return null;
+  return {
+    id: data.id,
+    trackedCaseId: data.tracked_case_id,
+    kind: data.kind === "appointment" ? "appointment" : "due_date",
+    date: data.date,
+    time: data.time,
+    title: data.title,
+    notes: data.notes,
+    createdBy: data.created_by,
+  };
+}
+
+/** Whether the person wants an email when a status event is observed. */
+export async function getNotifyOnChange(personId: string): Promise<boolean> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("profiles").select("notify_on_change").eq("id", personId).maybeSingle();
+  return data?.notify_on_change ?? true;
+}
+
+/**
+ * Which of the given emails belong to an attorney account, so a share can be shown as
+ * active instead of pending. Uses the service role because profiles are not readable
+ * across accounts; it returns emails only, never other profile fields.
+ */
+export async function attorneyAccountEmails(emails: string[]): Promise<Set<string>> {
+  if (emails.length === 0) return new Set();
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const { data } = await createAdminClient().from("profiles").select("email").in("email", emails).eq("role", "attorney");
+  return new Set((data ?? []).map((row) => row.email));
+}
+
+/** When the person's current insights consent was granted, or null without consent. */
+export async function getConsentGrantedAt(personId: string): Promise<string | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("consents")
+    .select("granted_at")
+    .eq("user_id", personId)
+    .eq("kind", "insights")
+    .is("revoked_at", null)
+    .order("granted_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return data?.granted_at ?? null;
+}
