@@ -26,8 +26,9 @@ const rules: [RegExp, StatusCategory][] = [
   [/interview/, "interview"],
   [/withdraw/, "withdrawn"],
   [/denied|rejected|\bdeny\b/, "denied"],
-  [/card .*(mailed|delivered)|(mailed|delivered) .*card/, "card_delivered"],
-  [/card .*(produced|re-?ordered)|producing .*card/, "card_produced"],
+  [/card .*delivered|delivered .*card/, "card_delivered"],
+  // Mailed or picked up by USPS: the card exists and is on its way, not yet in hand.
+  [/card .*(produced|re-?ordered|mailed|picked up)|producing .*card/, "card_produced"],
   [/transferred/, "transferred"],
   [/approved|approval was affirmed/, "approved"],
   [/received/, "received"],

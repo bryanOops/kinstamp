@@ -287,7 +287,7 @@
         }
       },
       "card_produced": {
-        "meaning": "Tu tarjeta fue impresa y está por enviarse.",
+        "meaning": "USCIS produjo tu tarjeta y ya va en camino por correo.",
         "next": {
           "1": "Espera la tarjeta por correo en un par de semanas.",
           "2": "Puede aparecer un número de rastreo en la página de estado de USCIS."

@@ -287,7 +287,7 @@
         }
       },
       "card_produced": {
-        "meaning": "Your card was printed and is about to be mailed.",
+        "meaning": "USCIS produced your card and it is on its way by mail.",
         "next": {
           "1": "Expect the card by mail within a couple of weeks.",
           "2": "A tracking number may appear on the USCIS case status page."
