@@ -21,22 +21,22 @@ describe("parsePage", () => {
 
 describe("paginate", () => {
   it("slices the requested page", () => {
-    expect(paginate(items, 1, 8)).toEqual({ page: 1, pageCount: 2, items: ["a", "b", "c", "d", "e", "f", "g", "h"] });
-    expect(paginate(items, 2, 8)).toEqual({ page: 2, pageCount: 2, items: ["i"] });
+    expect(paginate(items, 1, 5)).toEqual({ page: 1, pageCount: 2, items: ["a", "b", "c", "d", "e"] });
+    expect(paginate(items, 2, 5)).toEqual({ page: 2, pageCount: 2, items: ["f", "g", "h", "i"] });
   });
 
   it("is a single page when everything fits", () => {
-    expect(paginate(["a", "b"], 1, 8)).toEqual({ page: 1, pageCount: 1, items: ["a", "b"] });
-    expect(paginate([], 1, 8)).toEqual({ page: 1, pageCount: 1, items: [] });
+    expect(paginate(["a", "b"], 1, 5)).toEqual({ page: 1, pageCount: 1, items: ["a", "b"] });
+    expect(paginate([], 1, 5)).toEqual({ page: 1, pageCount: 1, items: [] });
   });
 
   it("clamps out-of-range pages to the last valid page", () => {
-    expect(paginate(items, 7, 8)).toEqual({ page: 2, pageCount: 2, items: ["i"] });
-    expect(paginate(items, 0, 8).page).toBe(1);
+    expect(paginate(items, 7, 5)).toEqual({ page: 2, pageCount: 2, items: ["f", "g", "h", "i"] });
+    expect(paginate(items, 0, 5).page).toBe(1);
   });
 
   it("falls back to the last page when the current one empties out", () => {
-    // Page 2 existed with 9 cases; after removing one, 8 cases fit on page 1.
-    expect(paginate(items.slice(0, 8), 2, 8)).toEqual({ page: 1, pageCount: 1, items: items.slice(0, 8) });
+    // Page 2 existed with 6 cases; after removing one, 5 cases fit on page 1.
+    expect(paginate(items.slice(0, 5), 2, 5)).toEqual({ page: 1, pageCount: 1, items: items.slice(0, 5) });
   });
 });

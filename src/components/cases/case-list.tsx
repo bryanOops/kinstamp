@@ -45,7 +45,17 @@ export function CaseList({ cases, now, addCaseAction }: CaseListProps) {
   return (
     <PagedCaseList
       summary={summary}
-      cases={cases.map((tracked) => ({ id: tracked.trackedCaseId, card: <CaseCard tracked={tracked} now={now} /> }))}
+      cases={cases.map((tracked) => ({
+        id: tracked.trackedCaseId,
+        card: <CaseCard tracked={tracked} now={now} />,
+        searchable: {
+          nickname: tracked.nickname,
+          receiptNumber: tracked.receiptNumber,
+          statusEn: tracked.status?.en ?? null,
+          statusEs: tracked.status?.es ?? null,
+          formType: tracked.formType,
+        },
+      }))}
     />
   );
 }

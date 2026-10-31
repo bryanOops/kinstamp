@@ -351,9 +351,10 @@
 /*
   Case list paging (src/components/cases/paged-case-list.tsx). On a page change the leaving
   cards fade out toward the direction of travel while the new ones stagger in from the other
-  side; both lists share one grid cell. Without data-direction (first paint) nothing animates:
-  the page entrance is the one entrance per screen. Reduced motion keeps the global 0.01ms
-  durations and drops the stagger, so the swap is instant.
+  side; both lists share one grid cell. When the search changes the result set ("none") the
+  same swap runs with no travel, as a fade. Without data-direction (first paint) nothing
+  animates: the page entrance is the one entrance per screen. Reduced motion keeps the global
+  0.01ms durations and drops the stagger, so the swap is instant.
 */
 .case-page[data-direction="forward"] {
   --page-travel: 10px;
@@ -363,7 +364,11 @@
   --page-travel: -10px;
 }
 
-.case-page[data-direction] > li {
+.case-page[data-direction="none"] {
+  --page-travel: 0px;
+}
+
+.case-page[data-direction] > * {
   animation: case-page-in var(--duration-base) var(--ease-out-expo) both;
   animation-delay: calc(var(--index, 0) * 30ms);
 }
@@ -372,7 +377,7 @@
   animation: case-page-out var(--duration-fast) var(--ease-standard) both;
 }
 
-.case-page[data-leaving] > li {
+.case-page[data-leaving] > * {
   animation: none;
 }
 
@@ -399,7 +404,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .case-page[data-direction] > li {
+  .case-page[data-direction] > * {
     animation-delay: 0ms !important;
   }
 }
