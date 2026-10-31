@@ -272,9 +272,24 @@
         "hint": "Only you see it. It helps tell cases apart."
       },
       "sandbox": {
-        "title": "Try a sandbox receipt",
-        "description": "The USCIS sandbox only answers for these test receipts.",
-        "use": "Use receipt {receipt}"
+        "title": "Try a demo receipt",
+        "description": "This demo runs on the USCIS sandbox, which only answers for test receipts. Pick one you are not tracking yet.",
+        "allTracked": "You already track every demo receipt in this list.",
+        "use": "Use receipt {receipt}",
+        "samples": {
+          "approvedWithHistory": "Approved, with full history",
+          "received": "Just received",
+          "intentToRevoke": "Intent to revoke notice",
+          "cardMailed": "Card mailed",
+          "cardDelivered": "Card delivered",
+          "cardReordered": "Card re-ordered",
+          "readyForOath": "Ready for oath scheduling",
+          "premiumClockStopped": "Premium processing clock stopped",
+          "travelDocumentMailed": "Travel document mailed",
+          "sentToStateDepartment": "Sent to the Department of State",
+          "revocationSent": "Revocation notice sent",
+          "noInformation": "USCIS gives no information"
+        }
       },
       "submit": "Find case",
       "pending": "Looking it up…",
@@ -310,7 +325,7 @@
       "official": "What USCIS says",
       "readIn": {
         "en": "Read in English",
-        "es": "Leer en español"
+        "es": "Read in Spanish"
       },
       "awaiting": {
         "title": "Waiting for USCIS",

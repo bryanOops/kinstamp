@@ -16,3 +16,22 @@ export const sandboxReceiptsWithoutHistory = [
 ] as const;
 
 export const sandboxReceiptNumbers: readonly string[] = [...sandboxReceiptsWithHistory, ...sandboxReceiptsWithoutHistory];
+
+/**
+ * A varied subset offered in the "Add a case" dialog, one per interesting status.
+ * `label` is an i18n key under `cases.add.sandbox.samples`; statuses come from the recordings.
+ */
+export const sandboxShowcase = [
+  { receipt: "LIN9999106498", label: "approvedWithHistory" },
+  { receipt: "LIN9999106501", label: "received" },
+  { receipt: "EAC9999103424", label: "intentToRevoke" },
+  { receipt: "EAC9999103408", label: "cardMailed" },
+  { receipt: "EAC9999103409", label: "cardDelivered" },
+  { receipt: "EAC9999103414", label: "cardReordered" },
+  { receipt: "EAC9999103406", label: "readyForOath" },
+  { receipt: "SRC9999132694", label: "premiumClockStopped" },
+  { receipt: "EAC9999103429", label: "travelDocumentMailed" },
+  { receipt: "EAC9999103413", label: "sentToStateDepartment" },
+  { receipt: "EAC9999103420", label: "revocationSent" },
+  { receipt: "EAC9999103412", label: "noInformation" },
+] as const;

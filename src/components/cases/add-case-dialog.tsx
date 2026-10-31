@@ -10,10 +10,8 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isReceiptNumber, normalizeReceiptNumber } from "@/lib/format/receipt";
+import { sandboxShowcase } from "@/lib/uscis/sandbox-receipts";
 import { cn } from "@/lib/utils";
-
-// Sandbox receipts with varied statuses that the demo account does not track yet.
-const sandboxReceipts = ["LIN9999106498", "EAC9999103406", "SRC9999132694", "EAC9999103429"] as const;
 
 export type AddCaseFormState = {
   /** i18n key under `cases.add.errors` */
@@ -33,10 +31,13 @@ type AddCaseDialogProps = {
   /** Controlled open state, used by the gallery to show the dialog inline. */
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Receipts the person already tracks: hidden from the demo list. */
+  trackedReceipts?: readonly string[];
 };
 
-export function AddCaseDialog({ action, state, trigger, open, onOpenChange }: AddCaseDialogProps) {
+export function AddCaseDialog({ action, state, trigger, open, onOpenChange, trackedReceipts = [] }: AddCaseDialogProps) {
   const t = useTranslations("cases.add");
+  const samples = sandboxShowcase.filter((sample) => !trackedReceipts.includes(sample.receipt));
   const errorsT = useTranslations("cases.add.errors");
   const receiptId = useId();
   const nicknameId = useId();
@@ -134,23 +135,28 @@ export function AddCaseDialog({ action, state, trigger, open, onOpenChange }: Ad
             </summary>
             <div className="border-t border-line px-4 py-3">
               <p className="text-sm text-ink-muted">{t("sandbox.description")}</p>
-              <ul className="mt-2 flex flex-wrap gap-2">
-                {sandboxReceipts.map((sample) => (
-                  <li key={sample}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setReceipt(sample);
-                        setTouched(true);
-                      }}
-                      className="inline-flex min-h-11 items-center rounded-md border border-line bg-surface px-2.5 py-1.5 transition-colors sm:min-h-0 duration-(--duration-fast) hover:border-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-                      aria-label={t("sandbox.use", { receipt: sample })}
-                    >
-                      <ReceiptNumber value={sample} size="sm" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              {samples.length === 0 ? (
+                <p className="mt-2 text-sm text-ink-muted">{t("sandbox.allTracked")}</p>
+              ) : (
+                <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+                  {samples.map((sample) => (
+                    <li key={sample.receipt}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setReceipt(sample.receipt);
+                          setTouched(true);
+                        }}
+                        className="flex min-h-11 w-full flex-col items-start gap-0.5 rounded-md border border-line bg-surface px-2.5 py-1.5 text-left transition-colors duration-(--duration-fast) hover:border-ink focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+                        aria-label={t("sandbox.use", { receipt: sample.receipt })}
+                      >
+                        <ReceiptNumber value={sample.receipt} size="sm" />
+                        <span className="text-xs text-ink-muted">{t(`sandbox.samples.${sample.label}`)}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </details>
 

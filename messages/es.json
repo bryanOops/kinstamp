@@ -272,9 +272,24 @@
         "hint": "Solo tú lo ves. Ayuda a distinguir los casos."
       },
       "sandbox": {
-        "title": "Probar con un recibo de prueba",
-        "description": "El sandbox de USCIS solo responde con estos recibos de prueba.",
-        "use": "Usar el recibo {receipt}"
+        "title": "Probar con un recibo de demo",
+        "description": "Esta demo usa el sandbox de USCIS, que solo responde con recibos de prueba. Elige uno que todavía no sigas.",
+        "allTracked": "Ya sigues todos los recibos de demo de esta lista.",
+        "use": "Usar el recibo {receipt}",
+        "samples": {
+          "approvedWithHistory": "Aprobado, con historial completo",
+          "received": "Recién recibido",
+          "intentToRevoke": "Aviso de intención de revocar",
+          "cardMailed": "Tarjeta enviada por correo",
+          "cardDelivered": "Tarjeta entregada",
+          "cardReordered": "Tarjeta reordenada",
+          "readyForOath": "Listo para programar juramento",
+          "premiumClockStopped": "Reloj de procesamiento premium detenido",
+          "travelDocumentMailed": "Documento de viaje enviado",
+          "sentToStateDepartment": "Enviado al Departamento de Estado",
+          "revocationSent": "Aviso de revocación enviado",
+          "noInformation": "USCIS no da información"
+        }
       },
       "submit": "Buscar caso",
       "pending": "Buscando…",
@@ -309,7 +324,7 @@
       "title": "Estado actual",
       "official": "Lo que dice USCIS",
       "readIn": {
-        "en": "Read in English",
+        "en": "Leer en inglés",
         "es": "Leer en español"
       },
       "awaiting": {

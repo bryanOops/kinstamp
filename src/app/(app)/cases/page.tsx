@@ -20,6 +20,7 @@ export default async function CasesPage() {
   const [profile, t] = await Promise.all([requireProfile("client"), getTranslations("cases")]);
   const tracked = await listTrackedCases(profile.id);
   const cases = tracked.map(toTrackedCaseSummary);
+  const trackedReceipts = cases.map((c) => c.receiptNumber);
   const now = new Date();
 
   return (
@@ -27,9 +28,9 @@ export default async function CasesPage() {
       <PageHeader
         title={t("title")}
         description={t("greeting", { name: profile.fullName.split(" ")[0] })}
-        actions={cases.length > 0 ? <AddCaseControl /> : undefined}
+        actions={cases.length > 0 ? <AddCaseControl trackedReceipts={trackedReceipts} /> : undefined}
       />
-      <CaseList cases={cases} now={now} addCaseAction={<AddCaseControl />} />
+      <CaseList cases={cases} now={now} addCaseAction={<AddCaseControl trackedReceipts={trackedReceipts} />} />
       <TourLauncher tour="cases" completed={profile.toursCompleted.includes("cases")} />
     </div>
   );
