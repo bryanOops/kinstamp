@@ -31,6 +31,10 @@ type CaseDetailViewProps = {
   shareActions?: (share: Share) => ReactNode;
   /** Id of the event observed since the last visit, highlighted on the timeline. */
   highlightedEventId?: string | null;
+  /** Shown right above the status hero (attorneys: who shared the case). */
+  aboveStatus?: ReactNode;
+  /** Private notes card (attorneys only), placed right after key dates. */
+  notes?: ReactNode;
 };
 
 /**
@@ -54,6 +58,8 @@ export function CaseDetailView({
   keyDateActions,
   shareActions,
   highlightedEventId,
+  aboveStatus,
+  notes,
 }: CaseDetailViewProps) {
   const t = useTranslations("caseDetail");
   const format = useFormatter();
@@ -84,6 +90,8 @@ export function CaseDetailView({
           }
         />
       )}
+
+      {aboveStatus}
 
       <StatusHero
         detail={detail}
@@ -134,6 +142,8 @@ export function CaseDetailView({
               rowActions={keyDateActions}
             />
           </Slot>
+          {/* Same order as key dates: right after them on phones too. */}
+          {notes && <Slot order="order-1">{notes}</Slot>}
           {showShares && (
             <Slot order="order-4">
               <SharedWithCard shares={detail.shares} shareAction={shareTrigger} rowActions={shareActions} />

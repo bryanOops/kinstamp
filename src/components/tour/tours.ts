@@ -24,13 +24,16 @@ export const tours: Record<TourId, readonly TourStepDefinition[]> = {
   attorney: [
     { id: "welcome" },
     { id: "table", target: "shared-cases" },
+    { id: "review", target: "needs-review" },
     { id: "filters", target: "case-filters" },
     { id: "row", target: "shared-case-row" },
   ],
   case_detail: [
+    { id: "client", target: "client-contact" },
     { id: "status", target: "status-hero" },
     { id: "timeline", target: "timeline" },
     { id: "keyDates", target: "key-dates" },
+    { id: "notes", target: "attorney-notes" },
     { id: "share", target: "share" },
     { id: "assistant", target: "assistant" },
   ],

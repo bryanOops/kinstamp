@@ -76,16 +76,24 @@
         "title": "Los casos de tus clientes",
         "body": "Los casos más urgentes van primero. La columna de último cambio muestra qué se movió esta semana."
       },
+      "review": {
+        "title": "Por revisar",
+        "body": "Un caso lleva la marca “Novedad” cuando su estado cambia después de tu última revisión. Márcalo como revisado cuando lo hayas visto; abrir el caso no lo hace por ti."
+      },
       "filters": {
         "title": "Buscar y filtrar",
         "body": "Busca un cliente o un número de recibo, filtra por estado o muestra solo los casos que cambiaron en los últimos 7 días."
       },
       "row": {
         "title": "Abrir un caso",
-        "body": "Abre un caso para ver su línea de tiempo, actualizarlo, agregar fechas clave y preguntarle al asistente."
+        "body": "Abre un caso para ver su línea de tiempo y quién lo compartió, actualizarlo, agregar fechas clave, tomar notas privadas y preguntarle al asistente."
       }
     },
     "case_detail": {
+      "client": {
+        "title": "Tu cliente",
+        "body": "Quién te compartió este caso y desde cuándo. “Escribir al cliente” abre un correo sobre este caso."
+      },
       "status": {
         "title": "El estado, en lenguaje sencillo",
         "body": "El estado oficial de USCIS con lo que suele significar. Actualizar consulta USCIS en este momento."
@@ -97,6 +105,10 @@
       "keyDates": {
         "title": "Fechas clave",
         "body": "Plazos y citas de las cartas de USCIS, que la API no nos da. Cuenta regresiva, exportar al calendario y visibles para el abogado."
+      },
+      "notes": {
+        "title": "Tus notas privadas",
+        "body": "Notas que solo ves tú, nunca tu cliente. Quedan ocultas si el cliente deja de compartir el caso."
       },
       "share": {
         "title": "Compartir con tu abogado",
@@ -454,8 +466,8 @@
       "title": "¿Mi caso va lento?",
       "noReceivedDate": "Compararemos este caso con el tiempo de proceso oficial cuando USCIS reporte la fecha en que fue recibido.",
       "verdict": {
-        "within": "Tu caso tiene {months} meses. USCIS completa actualmente el 80 % de estos casos en {limit} meses, así que está dentro del rango normal.",
-        "outside": "Tu caso tiene {months} meses, más allá de los {limit} meses en que USCIS completa actualmente el 80 % de estos casos. Puedes preguntarle a USCIS."
+        "within": "Tu caso tiene {months, plural, one {# mes} other {# meses}}. USCIS completa actualmente el 80 % de estos casos en {limit} meses, así que está dentro del rango normal.",
+        "outside": "Tu caso tiene {months, plural, one {# mes} other {# meses}}, más allá de los {limit} meses en que USCIS completa actualmente el 80 % de estos casos. Puedes preguntarle a USCIS."
       },
       "ageLabel": "{days} días hasta ahora",
       "eRequest": "Preguntar a USCIS por un caso fuera del tiempo normal",
@@ -668,7 +680,18 @@
         "case": "Caso",
         "status": "Estado",
         "lastChange": "Último cambio",
-        "nextKeyDate": "Próxima fecha clave"
+        "nextKeyDate": "Próxima fecha clave",
+        "actions": "Acciones"
+      },
+      "views": {
+        "label": "Mostrar",
+        "all": "Todos ({count})",
+        "needsReview": "Por revisar ({count})"
+      },
+      "markReviewedFor": "Marcar como revisado: {case}",
+      "allReviewed": {
+        "title": "Estás al día",
+        "description": "Ningún caso compartido tiene un estado nuevo desde tu última revisión."
       },
       "awaiting": "Esperando la primera consulta",
       "empty": {
@@ -678,6 +701,46 @@
       "noMatches": {
         "title": "Ningún caso coincide",
         "description": "Prueba con otro nombre o número de recibo, o quita los filtros."
+      }
+    },
+    "review": {
+      "newUpdate": "Novedad",
+      "markReviewed": "Marcar como revisado",
+      "reviewed": "Revisado"
+    },
+    "client": {
+      "label": "Cliente",
+      "sharedSince": "Compartido contigo desde el {date}",
+      "write": "Escribir al cliente",
+      "emailSubject": "Sobre {case}"
+    },
+    "notes": {
+      "title": "Mis notas",
+      "privacy": "Solo tú puedes ver estas notas. Tu cliente no.",
+      "label": "Nota nueva",
+      "editLabel": "Editar nota",
+      "placeholder": "Escribe una nota para ti…",
+      "empty": "Todavía no hay notas. Anota lo que tienes pendiente con tu cliente, por ejemplo “Pedir el acta de matrimonio”.",
+      "shortcut": "Ctrl+Enter (⌘+Enter en Mac) para guardar",
+      "remaining": "{count, plural, one {Queda # carácter} other {Quedan # caracteres}}",
+      "save": "Guardar nota",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "edit": "Editar nota",
+      "edited": "editada",
+      "delete": "Eliminar nota",
+      "confirmDelete": {
+        "title": "¿Eliminar esta nota?",
+        "description": "Se borrará para siempre. Tu cliente nunca la vio.",
+        "cancel": "Conservarla",
+        "confirm": "Eliminar",
+        "pending": "Eliminando…"
+      },
+      "errors": {
+        "noteRequired": "Escribe algo antes de guardar.",
+        "noteTooLong": "Las notas pueden tener hasta 2000 caracteres.",
+        "shareEnded": "Este caso ya no está compartido contigo, así que la nota no se guardó.",
+        "somethingWentWrong": "Algo salió mal. Inténtalo de nuevo."
       }
     }
   },

@@ -14,6 +14,7 @@ export const sampleSharedCases: SharedCaseRow[] = [
     lastChangeOn: "2026-10-28",
     lastSuccessfulCheckAt: "2026-10-30T17:50:00Z",
     nextKeyDate: { kind: "due_date", date: "2026-11-02", title: "RFE response due" },
+    needsReview: true,
   },
   {
     shareId: "sh_2",
@@ -28,6 +29,7 @@ export const sampleSharedCases: SharedCaseRow[] = [
     lastChangeOn: "2026-10-27",
     lastSuccessfulCheckAt: "2026-10-30T17:50:00Z",
     nextKeyDate: null,
+    needsReview: false,
   },
   {
     shareId: "sh_3",
@@ -42,6 +44,7 @@ export const sampleSharedCases: SharedCaseRow[] = [
     lastChangeOn: "2026-08-14",
     lastSuccessfulCheckAt: "2026-10-29T15:05:00Z",
     nextKeyDate: { kind: "appointment", date: "2026-11-12", title: "Biometrics appointment" },
+    needsReview: false,
   },
   {
     shareId: "sh_4",
@@ -56,6 +59,7 @@ export const sampleSharedCases: SharedCaseRow[] = [
     lastChangeOn: null,
     lastSuccessfulCheckAt: null,
     nextKeyDate: null,
+    needsReview: false,
   },
   {
     shareId: "sh_5",
@@ -70,6 +74,7 @@ export const sampleSharedCases: SharedCaseRow[] = [
     lastChangeOn: "2026-10-20",
     lastSuccessfulCheckAt: "2026-10-30T17:50:00Z",
     nextKeyDate: { kind: "appointment", date: "2026-12-01", title: "Naturalization interview" },
+    needsReview: false,
   },
   {
     shareId: "sh_6",
@@ -84,5 +89,6 @@ export const sampleSharedCases: SharedCaseRow[] = [
     lastChangeOn: "2026-09-30",
     lastSuccessfulCheckAt: "2026-10-30T17:50:00Z",
     nextKeyDate: null,
+    needsReview: false,
   },
 ];

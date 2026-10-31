@@ -2,12 +2,18 @@ import type { Metadata } from "next";
 import { io } from "next/cache";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { ClientContactCard } from "@/components/attorney/client-contact-card";
+import { NotesCard } from "@/components/attorney/notes-card";
+import { AttorneyNotes } from "@/components/attorney/wired/attorney-notes";
+import { ReviewControl } from "@/components/attorney/wired/review-control";
 import { AssistantControl } from "@/components/assistant/wired/assistant-control";
 import { CaseDetailView } from "@/components/cases/case-detail-view";
 import { toCaseDetail } from "@/components/cases/from-dto";
 import { AddKeyDateControl, DeleteKeyDateButton } from "@/components/cases/wired/key-date-controls";
 import { RefreshControl } from "@/components/cases/wired/refresh-control";
 import { TourLauncher } from "@/components/tour/tour-launcher";
+import { needsReview } from "@/lib/attorney/review";
+import { getReviewedAt, getSharedCaseClient, listAttorneyNotes } from "@/server/attorney/queries";
 import { requireProfile } from "@/server/auth";
 import { getTrackedCaseDetail, listInsights } from "@/server/cases/queries";
 
@@ -18,7 +24,10 @@ export async function generateMetadata({ params }: PageProps<"/attorney/cases/[t
   return { title: detail?.nickname ?? detail?.case.receiptNumber ?? t("title") };
 }
 
-/** Shared view for attorneys: read, refresh and key dates; no share, rename or untrack. */
+/**
+ * Shared view for attorneys: read, refresh and key dates, plus their own tools (who shared it,
+ * private notes, mark as reviewed); no share, rename or untrack. Opening it does not mark it as reviewed.
+ */
 export default async function AttorneyCasePage({ params }: PageProps<"/attorney/cases/[trackedCaseId]">) {
   await io();
   const [{ trackedCaseId }, profile] = await Promise.all([params, requireProfile("attorney")]);
@@ -26,8 +35,15 @@ export default async function AttorneyCasePage({ params }: PageProps<"/attorney/
   const dto = await getTrackedCaseDetail(trackedCaseId);
   if (!dto) notFound();
 
-  const insights = await listInsights();
+  const [insights, client, notes, reviewedAt] = await Promise.all([
+    listInsights(),
+    getSharedCaseClient(trackedCaseId),
+    listAttorneyNotes(trackedCaseId),
+    getReviewedAt(trackedCaseId),
+  ]);
   const detail = toCaseDetail(dto, { viewerId: profile.id, attorneyAccounts: new Set(), insights });
+  const caseLabel = detail.nickname ?? detail.receiptNumber;
+  const review = client && needsReview({ lastEventAt: dto.lastEventAt, reviewedAt, sharedAt: client.sharedAt });
   const now = new Date();
 
   return (
@@ -36,7 +52,21 @@ export default async function AttorneyCasePage({ params }: PageProps<"/attorney/
         detail={detail}
         now={now}
         viewer="attorney"
-        assistantTrigger={<AssistantControl trackedCaseId={trackedCaseId} caseLabel={detail.nickname ?? detail.receiptNumber} />}
+        menu={client && <ReviewControl trackedCaseId={trackedCaseId} needsReview={Boolean(review)} placement="header" />}
+        aboveStatus={
+          client && (
+            <div className="flex flex-col gap-3">
+              <ReviewControl trackedCaseId={trackedCaseId} needsReview={Boolean(review)} placement="bar" />
+              <ClientContactCard clientName={client.clientName} clientEmail={client.clientEmail} sharedAt={client.sharedAt} caseLabel={caseLabel} />
+            </div>
+          )
+        }
+        notes={
+          <NotesCard>
+            <AttorneyNotes trackedCaseId={trackedCaseId} notes={notes} now={now} />
+          </NotesCard>
+        }
+        assistantTrigger={<AssistantControl trackedCaseId={trackedCaseId} caseLabel={caseLabel} />}
         refresh={
           <RefreshControl
             trackedCaseId={trackedCaseId}

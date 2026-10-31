@@ -43,6 +43,58 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"attorney_notes": {
+                  Row: {
+                    "author_id": string,"body": string,"created_at": string,"id": string,"tracked_case_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "author_id": string,"body": string,"created_at"?: string,"id"?: string,"tracked_case_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "author_id"?: string,"body"?: string,"created_at"?: string,"id"?: string,"tracked_case_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "attorney_notes_author_id_fkey"
+      columns: ["author_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "attorney_notes_tracked_case_id_fkey"
+      columns: ["tracked_case_id"]
+isOneToOne: false
+      referencedRelation: "tracked_cases"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"attorney_reviews": {
+                  Row: {
+                    "attorney_id": string,"reviewed_at": string,"tracked_case_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attorney_id": string,"reviewed_at"?: string,"tracked_case_id": string
+                  }
+                  Update: {
+                    "attorney_id"?: string,"reviewed_at"?: string,"tracked_case_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "attorney_reviews_attorney_id_fkey"
+      columns: ["attorney_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "attorney_reviews_tracked_case_id_fkey"
+      columns: ["tracked_case_id"]
+isOneToOne: false
+      referencedRelation: "tracked_cases"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"case_checks": {
                   Row: {
                     "case_id": string | null,"created_at": string,"duration_ms": number,"error_code": string | null,"http_status": number | null,"id": string,"requested_by": string | null,"result": string,"trigger": string
@@ -243,7 +295,7 @@ isOneToOne: false
           Functions: {
             "attorney_shared_cases":
 { Args: Record<PropertyKey, never>; Returns: {
-              "case_id": string,"check_state": string,"client_name": string,"form_type": string,"last_change_on": string,"last_successful_check_at": string,"next_key_date": string,"nickname": string,"receipt_number": string,"share_id": string,"shared_at": string,"status_category": string,"status_en": string,"status_es": string,"tracked_case_id": string
+              "case_id": string,"check_state": string,"client_name": string,"form_type": string,"last_change_on": string,"last_event_at": string,"last_successful_check_at": string,"next_key_date": string,"nickname": string,"receipt_number": string,"reviewed_at": string,"share_id": string,"shared_at": string,"status_category": string,"status_en": string,"status_es": string,"tracked_case_id": string
             }[]
                            },
 "can_access_tracked_case":
@@ -266,8 +318,16 @@ isOneToOne: false
 "is_shared_attorney":
 { Args: { "target_tracked_case_id": string }; Returns: boolean
                            },
+"mark_case_reviewed":
+{ Args: { "target_tracked_case_id": string }; Returns: string
+                           },
 "owns_tracked_case":
 { Args: { "target_tracked_case_id": string }; Returns: boolean
+                           },
+"shared_case_client":
+{ Args: { "target_tracked_case_id": string }; Returns: {
+              "client_email": string,"client_name": string,"shared_at": string
+            }[]
                            }
           }
           Enums: {

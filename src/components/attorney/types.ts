@@ -15,4 +15,6 @@ export type SharedCaseRow = {
   lastChangeOn: string | null;
   lastSuccessfulCheckAt: string | null;
   nextKeyDate: NextKeyDate | null;
+  /** A status event was recorded after the attorney last marked the case as reviewed (src/lib/attorney/review.ts). */
+  needsReview: boolean;
 };

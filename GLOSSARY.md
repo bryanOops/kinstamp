@@ -61,8 +61,16 @@ A person who represents clients before USCIS and sees only the cases shared with
 _Avoid_: Lawyer, representative, preparer
 
 **Share**:
-Access to a tracked case, granted by a client to an attorney's email address. The attorney can view and refresh the case and add key dates, nothing else. It stays pending until that email belongs to an attorney account, and it can be revoked.
+Access to a tracked case, granted by a client to an attorney's email address. The attorney can view and refresh the case, add key dates, see who shared it (name and email), and keep their own attorney notes and reviews on it, nothing else. It stays pending until that email belongs to an attorney account, and it can be revoked.
 _Avoid_: Invite, permission, access grant
+
+**Attorney note**:
+A private note an attorney writes on a case shared with them. Only its author sees it, and only while the share is active; the client never does.
+_Avoid_: Comment, memo, annotation
+
+**Review**:
+An attorney marking a shared case as looked at. A case _needs review_ when a status event was recorded after the attorney's last review (or after the share, if never reviewed). Opening the case is not a review.
+_Avoid_: Seen, read, acknowledged
 
 ## Data and insights
 

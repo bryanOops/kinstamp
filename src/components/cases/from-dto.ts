@@ -1,5 +1,6 @@
 import type { SharedCaseRow } from "@/components/attorney/types";
 import type { FormTypeInsight, SharedCaseRow as SharedCaseDto, TrackedCaseDetail, TrackedCaseSummary as TrackedCaseSummaryDto } from "@/server/cases/queries";
+import { needsReview } from "@/lib/attorney/review";
 import { officialProcessingTimeFor } from "@/lib/processing-times/official";
 import type { Bilingual, CaseDetail, InsightSummary, TrackedCaseSummary } from "./types";
 
@@ -102,5 +103,6 @@ export function toSharedCaseRow(dto: SharedCaseDto): SharedCaseRow {
     lastChangeOn: dto.lastChangeOn,
     lastSuccessfulCheckAt: dto.lastSuccessfulCheckAt,
     nextKeyDate: dto.nextKeyDate ? { date: dto.nextKeyDate } : null,
+    needsReview: needsReview({ lastEventAt: dto.lastEventAt, reviewedAt: dto.reviewedAt, sharedAt: dto.sharedAt }),
   };
 }

@@ -52,8 +52,8 @@ Extras, in build order (cut from the bottom if time runs out):
 | `/auth/confirm` | Public | Email confirmation callback. |
 | `/cases` | Client | Tracked cases with status, last change and a "changed since your last visit" marker; "Add a case" dialog with sandbox sample receipts. |
 | `/cases/[trackedCaseId]` | Client | Case detail: header (nickname, receipt, form), current status (EN/ES), refresh, plain-English card, "Is my case slow?", key dates, shares, mini insight, timeline, assistant. |
-| `/attorney` | Attorney | Shared cases table, filters, urgency order. |
-| `/attorney/cases/[trackedCaseId]` | Attorney | Same case detail without edit, share or delete actions; can refresh and add key dates. RLS returns the tracked case only while a share to the attorney is active. |
+| `/attorney` | Attorney | Shared cases table, filters, urgency order. "All (N) / Needs review (N)" view: a case needs review when a status event was recorded after the attorney last marked it as reviewed (4.8); those rows carry a vermilion dot plus "New update", come first in the default order and have a "Mark as reviewed" action. |
+| `/attorney/cases/[trackedCaseId]` | Attorney | Same case detail without edit, share or delete actions; can refresh and add key dates. Above the status: the client's name and email, "Shared with you since {date}" and "Write to client" (`mailto:` with the subject "About {nickname or receipt}"). Header: "Mark as reviewed" while the case needs review, "Reviewed" otherwise. Aside, after key dates: "My notes", the attorney's private notes (4.8). RLS returns the tracked case only while a share to the attorney is active. |
 | `/insights` | Client | Insights by form type, highlighting the client's own case if they have one. |
 | `/settings` | Both | Profile, language, consent, email notifications, delete account. |
 | `/api/cron/scheduled-checks` | Vercel Cron | Runs scheduled checks. Protected by `CRON_SECRET`. |
@@ -63,7 +63,7 @@ Every route has loading, empty and error states. A banner appears on case screen
 
 The language switch (EN/ES) is always in the top bar, next to a Help button that replays the page's guided tour.
 
-**Guided tours.** The first time an account opens `/cases` (clients), `/attorney` (attorneys) or a case detail (both roles), a short spotlight tour (4–6 steps anchored to real elements) explains the screen: the "public board vs. private notebook" analogy, how to add a case, what a card shows, insights and settings; for attorneys, what is shared and the table's urgency order and filters; on a case, the status in plain language, the timeline and its origins, key dates, sharing (clients only) and the assistant. Finishing or skipping records the tour in `profiles.tours_completed`, so it does not start again on another device; Help replays it at any time.
+**Guided tours.** The first time an account opens `/cases` (clients), `/attorney` (attorneys) or a case detail (both roles), a short spotlight tour (4–6 steps anchored to real elements) explains the screen: the "public board vs. private notebook" analogy, how to add a case, what a card shows, insights and settings; for attorneys, what is shared, the "Needs review" view, and the table's urgency order and filters; on a case, who shared it (attorneys only), the status in plain language, the timeline and its origins, key dates, private notes (attorneys only), sharing (clients only) and the assistant. Finishing or skipping records the tour in `profiles.tours_completed`, so it does not start again on another device; Help replays it at any time.
 
 **Session timeout.** After 30 minutes without activity a "Still there?" dialog counts down 60 seconds; staying resets the clock, otherwise the person is signed out and lands on `/sign-in?reason=idle` with a notice. The countdown starts when the inactivity is noticed, so a device that slept through the limit shows the dialog on wake instead of signing out silently. A request to a private page with a session cookie that no longer validates is redirected by the proxy to `/sign-in?reason=expired&next=<path>` ("Your session ended. Sign in to continue where you left off."); `requireProfile` does the same as a fallback.
 
@@ -115,7 +115,12 @@ Email confirmation is a security requirement, not just polish: shares are matche
 3. For each observed status event, every tracking client with notifications on receives one email in their language. `notifications_sent` prevents duplicates.
 
 ### 4.7 Delete account
-Deleting an account removes the profile, tracked cases, shares they created or received, key dates they created and consent rows. A case nobody tracks anymore is deleted with its status events and checks.
+Deleting an account removes the profile, tracked cases, shares they created or received, key dates they created, attorney notes and reviews they wrote, and consent rows. A case nobody tracks anymore is deleted with its status events and checks.
+
+### 4.8 Attorney tools on a shared case
+1. **Private notes.** On the shared case detail the attorney writes notes for themselves (1–2,000 characters; Ctrl/⌘+Enter saves). The list is newest first with relative time; each note can be edited inline or deleted after confirmation. Only the author sees them, and only while the share is active: the client never does, and revoking hides them (they reappear if the client shares the case with the same attorney again). Deleting the tracked case deletes them.
+2. **Mark as reviewed.** A shared case *needs review* when its newest status event (any origin, by the time Kinstamp recorded it, `status_events.created_at`) is later than the attorney's `reviewed_at`, or, if they never reviewed it, later than the share's `created_at`. The rule is pure and tested in `src/lib/attorney/review.ts`. "Mark as reviewed" (dashboard row or case header) stores `reviewed_at = now()` by the database clock through `mark_case_reviewed()`. Opening a case never marks it. Reviews are per attorney and survive a revoke and re-share; a re-share starts from the new share's `created_at` only when the attorney never reviewed the case.
+3. **Client contact.** The attorney sees the name and email of the client who shared the case with them, through `shared_case_client(tracked_case_id)`. The client chose to share the case with that attorney, so this is expected; it never widens `profiles` RLS.
 
 ## 5. Data model
 
@@ -152,6 +157,12 @@ Unique active share: `(tracked_case_id, attorney_email) where revoked_at is null
 **`key_dates`**
 `id uuid pk`, `tracked_case_id uuid → tracked_cases on delete cascade`, `kind text check in ('due_date','appointment')`, `date date`, `time time null`, `title text`, `notes text null`, `created_by uuid → profiles on delete cascade`, `created_at timestamptz`.
 
+**`attorney_notes`**: an attorney's private notes on a tracked case shared with them.
+`id uuid pk`, `tracked_case_id uuid → tracked_cases on delete cascade`, `author_id uuid → profiles on delete cascade`, `body text check (char_length between 1 and 2000)`, `created_at timestamptz`, `updated_at timestamptz` (set by a trigger on update). Only `body` is updatable.
+
+**`attorney_reviews`**: when an attorney last marked a shared case as reviewed.
+`attorney_id uuid → profiles on delete cascade`, `tracked_case_id uuid → tracked_cases on delete cascade`, `reviewed_at timestamptz default now()`. Primary key `(attorney_id, tracked_case_id)`. Written through `mark_case_reviewed(tracked_case_id)` (`security invoker`, so the policies apply).
+
 **`notifications_sent`**
 `id uuid pk`, `status_event_id uuid → status_events on delete cascade`, `user_id uuid → profiles on delete cascade`, `sent_at timestamptz`. Unique `(status_event_id, user_id)`.
 
@@ -175,9 +186,11 @@ Helper functions (`security definer`, `stable`):
 | `tracked_cases` | own rows; shared attorney | own rows (client role) | own nickname / last viewed | own rows |
 | `shares` | client who owns the tracked case; attorney whose email matches | client who owns the tracked case | owner sets `revoked_at` | — |
 | `key_dates` | tracker of the tracked case; shared attorney | same as select | — | creator, or the client who owns the tracked case |
+| `attorney_notes` | author, while `is_shared_attorney` | author, while `is_shared_attorney` | author, while `is_shared_attorney` (`body` only) | author |
+| `attorney_reviews` | own rows | own rows, while `is_shared_attorney` | own rows, while `is_shared_attorney` (`reviewed_at` only) | — |
 | `notifications_sent`, `assistant_usage` | own rows | server | — | — |
 
-The attorney view shows the client's name: attorneys can read `full_name` of profiles that shared a case with them, through a narrow view rather than the whole profile.
+The attorney view shows the client's name, and on the case detail their email, without any access to `profiles`: two `security definer` functions return them only for active shares addressed to the caller's confirmed email. `attorney_shared_cases()` feeds the dashboard (client name, case, next key date, `last_event_at`, `reviewed_at`); `shared_case_client(tracked_case_id)` returns `client_name`, `client_email` and `shared_at` for one case. Both are covered by pgTAP tests in `supabase/tests/`, including another attorney and the client getting nothing.
 
 ### Insights
 
@@ -245,7 +258,8 @@ Seeded by a script from recorded fixtures, so they work at any hour: one client 
 
 ## 10. Testing
 
-- Vitest on `src/lib/`: receipt validation and normalization, response parsing (every fixture), error mapping (every shape), change detection, history merge, categorization, case age vs official time, `.ics` generation.
+- Vitest on `src/lib/`: receipt validation and normalization, response parsing (every fixture), error mapping (every shape), change detection, history merge, categorization, case age vs official time, `.ics` generation, the "needs review" rule, attorney note validation and the `mailto:` link.
+- pgTAP on the database (`npm run test:db`): RLS isolation (`rls.test.sql`), insights thresholds, and attorney notes, reviews and client contact (`attorney_tools.test.sql`).
 - CI on GitHub Actions: lint, typecheck, tests on every push.
 - Manual checklist before delivery: R1–R7 with two accounts, RLS isolation, out-of-hours behavior, mobile layout.
 

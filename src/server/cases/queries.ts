@@ -61,6 +61,8 @@ export type KeyDateView = {
 export type TrackedCaseDetail = TrackedCaseSummary & {
   caseId: string;
   clientId: string;
+  /** When Kinstamp recorded the newest status event (any origin), for "needs review". */
+  lastEventAt: string | null;
   timeline: StatusEventView[];
   shares: ShareView[];
   keyDates: KeyDateView[];
@@ -166,6 +168,7 @@ export async function getTrackedCaseDetail(trackedCaseId: string): Promise<Track
     case: toCaseView(caseRow),
     lastChangeOn: timeline.at(-1)?.occurredOn ?? null,
     changedSinceLastVisit: Boolean(row.last_viewed_at && lastEventCreated && lastEventCreated > row.last_viewed_at),
+    lastEventAt: lastEventCreated,
     timeline,
     shares: (row.shares ?? [])
       .map((s) => ({ id: s.id, attorneyEmail: s.attorney_email, createdAt: s.created_at, revokedAt: s.revoked_at }))
@@ -199,6 +202,10 @@ export type SharedCaseRow = {
   lastChangeOn: string | null;
   nextKeyDate: string | null;
   sharedAt: string;
+  /** When Kinstamp recorded the newest status event (any origin). */
+  lastEventAt: string | null;
+  /** When the signed-in attorney last marked the case as reviewed. */
+  reviewedAt: string | null;
 };
 
 /** Cases shared with the signed-in attorney, most urgent key date first. */
@@ -221,6 +228,8 @@ export async function listSharedCases(): Promise<SharedCaseRow[]> {
       lastChangeOn: r.last_change_on,
       nextKeyDate: r.next_key_date,
       sharedAt: r.shared_at,
+      lastEventAt: r.last_event_at,
+      reviewedAt: r.reviewed_at,
     }))
     .sort((a, b) => (a.nextKeyDate ?? "9999").localeCompare(b.nextKeyDate ?? "9999"));
 }

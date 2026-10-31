@@ -76,16 +76,24 @@
         "title": "Your clients' cases",
         "body": "The most urgent cases come first. The last-change column shows what moved this week."
       },
+      "review": {
+        "title": "Needs review",
+        "body": "A case gets a “New update” mark when its status changes after you last reviewed it. Mark it as reviewed once you've looked; opening a case does not do it for you."
+      },
       "filters": {
         "title": "Search and filter",
         "body": "Find a client or receipt number, filter by status, or show only the cases that changed in the last 7 days."
       },
       "row": {
         "title": "Open a case",
-        "body": "Open a case to see its timeline, refresh it, add key dates and ask the assistant about it."
+        "body": "Open a case to see its timeline and who shared it, refresh it, add key dates, keep private notes and ask the assistant about it."
       }
     },
     "case_detail": {
+      "client": {
+        "title": "Your client",
+        "body": "Who shared this case with you and since when. “Write to client” opens an email about this case."
+      },
       "status": {
         "title": "The status, in plain language",
         "body": "The official USCIS status with what it usually means. Refresh checks USCIS right now."
@@ -97,6 +105,10 @@
       "keyDates": {
         "title": "Key dates",
         "body": "Deadlines and appointments from USCIS letters, which the API does not give us. Countdown, calendar export, and visible to the attorney."
+      },
+      "notes": {
+        "title": "Your private notes",
+        "body": "Notes only you can see, never your client. They stay hidden if the client stops sharing the case."
       },
       "share": {
         "title": "Share with your attorney",
@@ -454,8 +466,8 @@
       "title": "Is my case slow?",
       "noReceivedDate": "We'll compare this case with the official processing time once USCIS reports the date it was received.",
       "verdict": {
-        "within": "Your case is {months} months old. USCIS currently completes 80% of these cases within {limit} months, so it is inside the normal range.",
-        "outside": "Your case is {months} months old, beyond the {limit} months in which USCIS currently completes 80% of these cases. You can ask USCIS about it."
+        "within": "Your case is {months, plural, one {# month} other {# months}} old. USCIS currently completes 80% of these cases within {limit} months, so it is inside the normal range.",
+        "outside": "Your case is {months, plural, one {# month} other {# months}} old, beyond the {limit} months in which USCIS currently completes 80% of these cases. You can ask USCIS about it."
       },
       "ageLabel": "{days} days so far",
       "eRequest": "Ask USCIS about a case outside normal processing time",
@@ -668,7 +680,18 @@
         "case": "Case",
         "status": "Status",
         "lastChange": "Last change",
-        "nextKeyDate": "Next key date"
+        "nextKeyDate": "Next key date",
+        "actions": "Actions"
+      },
+      "views": {
+        "label": "Show",
+        "all": "All ({count})",
+        "needsReview": "Needs review ({count})"
+      },
+      "markReviewedFor": "Mark as reviewed: {case}",
+      "allReviewed": {
+        "title": "You're up to date",
+        "description": "No shared case has a new status since you last reviewed it."
       },
       "awaiting": "Waiting for the first check",
       "empty": {
@@ -678,6 +701,46 @@
       "noMatches": {
         "title": "No matching cases",
         "description": "Try another name or receipt number, or clear the filters."
+      }
+    },
+    "review": {
+      "newUpdate": "New update",
+      "markReviewed": "Mark as reviewed",
+      "reviewed": "Reviewed"
+    },
+    "client": {
+      "label": "Client",
+      "sharedSince": "Shared with you since {date}",
+      "write": "Write to client",
+      "emailSubject": "About {case}"
+    },
+    "notes": {
+      "title": "My notes",
+      "privacy": "Only you can see these notes. Your client can't.",
+      "label": "New note",
+      "editLabel": "Edit note",
+      "placeholder": "Write a note for yourself…",
+      "empty": "No notes yet. Keep track of what to follow up on, e.g. “Ask for the marriage certificate”.",
+      "shortcut": "Ctrl+Enter (⌘+Enter on Mac) to save",
+      "remaining": "{count, plural, one {# character left} other {# characters left}}",
+      "save": "Save note",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "edit": "Edit note",
+      "edited": "edited",
+      "delete": "Delete note",
+      "confirmDelete": {
+        "title": "Delete this note?",
+        "description": "It will be gone for good. Your client never saw it.",
+        "cancel": "Keep it",
+        "confirm": "Delete",
+        "pending": "Deleting…"
+      },
+      "errors": {
+        "noteRequired": "Write something before saving.",
+        "noteTooLong": "Notes can be up to 2,000 characters.",
+        "shareEnded": "This case is no longer shared with you, so the note was not saved.",
+        "somethingWentWrong": "Something went wrong. Try again."
       }
     }
   },
