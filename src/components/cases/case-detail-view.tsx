@@ -125,7 +125,14 @@ export function CaseDetailView({
         {/* Aside column. */}
         <div className="contents lg:flex lg:flex-col lg:gap-6">
           <Slot order="order-1">
-            <KeyDatesCard keyDates={detail.keyDates} now={now} addAction={addKeyDate} icsHref={icsHref} rowActions={keyDateActions} />
+            <KeyDatesCard
+              keyDates={detail.keyDates}
+              now={now}
+              caseLabel={detail.nickname ?? detail.receiptNumber}
+              addAction={addKeyDate}
+              icsHref={icsHref}
+              rowActions={keyDateActions}
+            />
           </Slot>
           {showShares && (
             <Slot order="order-4">

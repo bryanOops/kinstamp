@@ -1,7 +1,7 @@
 import { daysUntil } from "@/lib/format/days";
 
-/** Upcoming rows shown before the "Show all" toggle. Four keeps the card about one screen tall on a phone. */
-export const UPCOMING_PREVIEW = 4;
+/** Upcoming rows the card previews; the rest live in the calendar view. Three keeps the card short on a phone. */
+export const UPCOMING_PREVIEW = 3;
 
 type Dated = { date: string; time: string | null };
 

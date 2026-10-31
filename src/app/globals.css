@@ -410,6 +410,38 @@
 }
 
 /*
+  Key dates calendar (src/components/cases/key-dates-calendar.tsx). Flipping the month re-keys
+  the grid and the agenda, which slide 12px in from the direction of travel while fading in.
+  Without data-direction (first paint) nothing moves; reduced motion keeps the global 0.01ms.
+*/
+.month-swap[data-direction="forward"] {
+  --month-travel: 12px;
+}
+
+.month-swap[data-direction="backward"] {
+  --month-travel: -12px;
+}
+
+.month-swap[data-direction="none"] {
+  --month-travel: 0px;
+}
+
+.month-swap[data-direction] {
+  animation: month-swap-in var(--duration-base) var(--ease-out-expo) both;
+}
+
+@keyframes month-swap-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--month-travel));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
   Auth backdrop (src/components/layout/auth-backdrop.tsx). The traveller follows the
   SVG path with CSS motion paths; browsers without offset-path just show it at rest.
   Both animations are slow and low contrast on purpose: the form stays the focus.

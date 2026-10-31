@@ -2,16 +2,19 @@ import { CalendarPlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { groupKeyDates } from "@/lib/cases/key-dates";
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { groupKeyDates, UPCOMING_PREVIEW } from "@/lib/cases/key-dates";
+import { previewSummary } from "@/lib/cases/key-dates-calendar";
 import { cn } from "@/lib/utils";
+import { KeyDatesCalendarTrigger, type KeyDateEntry } from "./key-dates-calendar";
 import { KeyDateRow } from "./key-date-row";
-import { KeyDatesList } from "./key-dates-list";
 import type { KeyDate } from "./types";
 
 type KeyDatesCardProps = {
   keyDates: KeyDate[];
   now: Date;
+  /** Case nickname or receipt, shown in the calendar view's header. */
+  caseLabel?: string;
   /** Trigger of the add-key-date form. */
   addAction?: ReactNode;
   /** Builds the `.ics` download URL for a key date. */
@@ -21,38 +24,46 @@ type KeyDatesCardProps = {
 };
 
 /**
- * Key dates of a case: upcoming first (the soonest highlighted), past ones collapsed at the
- * bottom. Rows are rendered here, on the server, and handed to the client list that owns the
- * "Show all" and "Past" toggles.
+ * Key dates of a case as a preview: a one-line summary, the three nearest upcoming rows (the
+ * soonest highlighted) and a footer that opens the calendar view with every date, past ones
+ * included. Rows are rendered here, on the server, and handed to the client calendar.
  */
-export function KeyDatesCard({ keyDates, now, addAction, icsHref, rowActions }: KeyDatesCardProps) {
+export function KeyDatesCard({ keyDates, now, caseLabel, addAction, icsHref, rowActions }: KeyDatesCardProps) {
   const t = useTranslations("caseDetail.keyDates");
   const { upcoming, past } = groupKeyDates(keyDates, now);
-  const row = (keyDate: KeyDate, options: { highlighted?: boolean; past?: boolean }) => (
-    <KeyDateRow key={keyDate.id} keyDate={keyDate} now={now} icsHref={icsHref?.(keyDate)} actions={rowActions?.(keyDate)} {...options} />
-  );
+  const summary = previewSummary(keyDates, now);
+  const entry = (keyDate: KeyDate, options: { highlighted?: boolean; past?: boolean }): KeyDateEntry => ({
+    keyDate,
+    row: <KeyDateRow key={keyDate.id} keyDate={keyDate} now={now} icsHref={icsHref?.(keyDate)} actions={rowActions?.(keyDate)} {...options} />,
+  });
+  const entries = [...upcoming.map((keyDate, index) => entry(keyDate, { highlighted: index === 0 })), ...past.map((keyDate) => entry(keyDate, { past: true }))];
+  const preview = entries.slice(0, Math.min(UPCOMING_PREVIEW, upcoming.length));
+  const summaryText =
+    summary.nextInDays === null ? t("summary.none") : `${t("summary.thisMonth", { count: summary.thisMonth })} · ${t("summary.next", { days: summary.nextInDays })}`;
 
   return (
     <Card data-tour="key-dates">
       <CardHeader>
-        <CardTitle>
-          {t("title")}
-          {keyDates.length > 0 && (
-            <span className="ml-1.5 font-normal tabular text-ink-muted">
-              <span aria-hidden="true">({keyDates.length})</span>
-              <span className="sr-only">, {t("count", { count: keyDates.length })}</span>
-            </span>
-          )}
-        </CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
+        {keyDates.length > 0 && <CardDescription>{summaryText}</CardDescription>}
         {addAction && <CardAction>{addAction}</CardAction>}
       </CardHeader>
-      <CardContent>
-        {keyDates.length === 0 ? (
+      {keyDates.length === 0 ? (
+        <CardContent>
           <p className="text-md text-ink-muted">{t("empty")}</p>
-        ) : (
-          <KeyDatesList upcoming={upcoming.map((keyDate, index) => row(keyDate, { highlighted: index === 0 }))} past={past.map((keyDate) => row(keyDate, { past: true }))} />
-        )}
-      </CardContent>
+        </CardContent>
+      ) : (
+        <>
+          {preview.length > 0 && (
+            <CardContent className="-mt-2">
+              <ul className="divide-y divide-line">{preview.map((item) => item.row)}</ul>
+            </CardContent>
+          )}
+          <CardFooter className="p-0">
+            <KeyDatesCalendarTrigger caseLabel={caseLabel} entries={entries} now={now} count={keyDates.length} />
+          </CardFooter>
+        </>
+      )}
     </Card>
   );
 }

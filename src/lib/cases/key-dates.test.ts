@@ -39,7 +39,7 @@ describe("groupKeyDates", () => {
 });
 
 describe("UPCOMING_PREVIEW", () => {
-  it("shows four upcoming rows before the list asks to expand", () => {
-    expect(UPCOMING_PREVIEW).toBe(4);
+  it("previews three upcoming rows before sending to the calendar view", () => {
+    expect(UPCOMING_PREVIEW).toBe(3);
   });
 });

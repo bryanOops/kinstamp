@@ -480,13 +480,31 @@
         "apple": "Apple Calendar u otro (.ics)"
       },
       "delete": "Eliminar {title}",
-      "count": "{count, plural, one {# fecha clave} other {# fechas clave}}",
       "next": "La siguiente",
       "time": "{time} hora del Este",
-      "noUpcoming": "No hay nada próximo. Las fechas anteriores están en Pasadas.",
-      "showAll": "Ver todas ({count})",
-      "showFewer": "Ver menos",
-      "past": "Pasadas ({count})",
+      "summary": {
+        "thisMonth": "{count, plural, =0 {Ninguna este mes} one {# este mes} other {# este mes}}",
+        "next": "{days, plural, =0 {la próxima es hoy} =1 {la próxima es mañana} other {la próxima en # días}}",
+        "none": "No hay nada próximo"
+      },
+      "seeAll": "Ver todas las fechas clave ({count})",
+      "calendarView": {
+        "title": "Fechas clave",
+        "previousMonth": "Mes anterior",
+        "nextMonth": "Mes siguiente",
+        "today": "Hoy",
+        "grid": "Calendario, {month}",
+        "monthSummary": "{count, plural, =0 {Sin fechas clave en {month}} one {# fecha clave en {month}} other {# fechas clave en {month}}}",
+        "dueDates": "{count, plural, one {# plazo} other {# plazos}}",
+        "appointments": "{count, plural, one {# cita} other {# citas}}",
+        "dayLabel": "{date}, {summary}",
+        "todayLabel": "{date}, hoy",
+        "selectedDay": "{count, plural, one {# fecha clave} other {# fechas clave}} el {date}",
+        "showMonth": "Ver todo el mes",
+        "emptyMonth": "Nada previsto en {month}",
+        "emptyDay": "Nada previsto el {date}",
+        "jumpTo": "Ir a {month}"
+      },
       "notesMore": "Más",
       "notesLess": "Menos",
       "confirmDelete": {

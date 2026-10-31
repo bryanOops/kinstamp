@@ -480,13 +480,31 @@
         "apple": "Apple Calendar or other (.ics)"
       },
       "delete": "Delete {title}",
-      "count": "{count, plural, one {# key date} other {# key dates}}",
       "next": "Next up",
       "time": "{time} ET",
-      "noUpcoming": "Nothing coming up. Earlier dates are under Past.",
-      "showAll": "Show all {count}",
-      "showFewer": "Show fewer",
-      "past": "Past ({count})",
+      "summary": {
+        "thisMonth": "{count, plural, =0 {None this month} one {# this month} other {# this month}}",
+        "next": "{days, plural, =0 {next today} =1 {next tomorrow} other {next in # days}}",
+        "none": "Nothing coming up"
+      },
+      "seeAll": "See all key dates ({count})",
+      "calendarView": {
+        "title": "Key dates",
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month",
+        "today": "Today",
+        "grid": "Calendar, {month}",
+        "monthSummary": "{count, plural, =0 {No key dates in {month}} one {# key date in {month}} other {# key dates in {month}}}",
+        "dueDates": "{count, plural, one {# due date} other {# due dates}}",
+        "appointments": "{count, plural, one {# appointment} other {# appointments}}",
+        "dayLabel": "{date}, {summary}",
+        "todayLabel": "{date}, today",
+        "selectedDay": "{count, plural, one {# key date} other {# key dates}} on {date}",
+        "showMonth": "Show the whole month",
+        "emptyMonth": "Nothing planned in {month}",
+        "emptyDay": "Nothing planned on {date}",
+        "jumpTo": "Jump to {month}"
+      },
       "notesMore": "More",
       "notesLess": "Less",
       "confirmDelete": {
