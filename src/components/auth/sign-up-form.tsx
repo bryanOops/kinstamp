@@ -4,9 +4,10 @@ import { CheckIcon, ScaleIcon, UsersRoundIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
-import { FormError, PasswordField, SubmitButton, TextField, useAuthError } from "@/components/auth/form-pieces";
+import { FormError, FormNotice, PasswordField, SubmitButton, TextField, useAuthError } from "@/components/auth/form-pieces";
 import { Checkbox } from "@/components/ui/checkbox";
 import { signUp, type AuthFormState } from "@/server/actions/auth";
+import type { ShareInvitation } from "@/server/cases/queries";
 import { cn } from "@/lib/utils";
 
 const roles = [
@@ -14,7 +15,7 @@ const roles = [
   { value: "attorney", icon: ScaleIcon },
 ] as const;
 
-export function SignUpForm() {
+export function SignUpForm({ invitation }: { invitation?: ShareInvitation | null }) {
   const t = useTranslations("auth");
   const translateError = useAuthError();
   const [state, action] = useActionState<AuthFormState, FormData>(signUp, {});
@@ -22,6 +23,15 @@ export function SignUpForm() {
 
   return (
     <form action={action} className="flex flex-col gap-5" noValidate>
+      {invitation && (
+        <FormNotice
+          message={
+            invitation.clientName
+              ? t("signUp.invitation.notice", { client: invitation.clientName, email: invitation.email })
+              : t("signUp.invitation.noticeAnonymous", { email: invitation.email })
+          }
+        />
+      )}
       <FormError message={translateError(state.error)} />
 
       <TextField
@@ -39,7 +49,7 @@ export function SignUpForm() {
         autoComplete="email"
         inputMode="email"
         required
-        defaultValue={state.values?.email}
+        defaultValue={state.values?.email ?? invitation?.email}
         error={translateError(errors.email)}
       />
       <PasswordField
@@ -67,7 +77,7 @@ export function SignUpForm() {
                 type="radio"
                 name="role"
                 value={value}
-                defaultChecked={state.values?.role === value}
+                defaultChecked={(state.values?.role ?? (invitation ? "attorney" : undefined)) === value}
                 className="peer sr-only"
                 required
               />

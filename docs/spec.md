@@ -99,6 +99,7 @@ Email confirmation is a security requirement, not just polish: shares are matche
 1. The client enters the attorney's email on a tracked case. It is normalized to lowercase.
 2. A share row is created. The client sees it as *pending* until an attorney account with that confirmed email exists, then *active*.
 3. The attorney sees the case as soon as they sign in with that email; no linking step is needed.
+   - Kinstamp emails the attorney right after sharing. Without a confirmed attorney account, the email is an invitation: its link opens sign-up with the email and the attorney role prefilled (`/sign-up?invite=<share id>`; the link carries no personal data). With an account, it links to *Clients' cases*. The client sees the same result in both cases.
 4. Revoking sets `revoked_at`; RLS stops returning the case immediately.
 5. Sharing with your own email or with a client account is rejected with a clear message.
 

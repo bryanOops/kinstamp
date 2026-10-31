@@ -205,7 +205,13 @@
       "submit": "Create account",
       "pending": "Creating your account…",
       "haveAccount": "Already have an account?",
-      "signInLink": "Sign in"
+      "signInLink": "Sign in",
+      "invitation": {
+        "title": "A case is waiting for you",
+        "description": "Create your attorney account to see what your client shared.",
+        "notice": "{client} shared a USCIS case with {email}. Create your attorney account with that email and you'll see it right after confirming.",
+        "noticeAnonymous": "A USCIS case was shared with {email}. Create your attorney account with that email and you'll see it right after confirming."
+      }
     },
     "signIn": {
       "metaTitle": "Sign in",
@@ -262,6 +268,18 @@
       "pageOf": "Page {page} of {total}",
       "previous": "Previous page",
       "next": "Next page"
+    },
+    "search": {
+      "label": "Search cases",
+      "placeholder": "Search by nickname, receipt or status",
+      "clear": "Clear search",
+      "shortcut": "Press / to search",
+      "matches": "{total, plural, one {{count} of # case matches} other {{count, plural, one {# of {total} cases matches} other {# of {total} cases match}}}}",
+      "noMatches": {
+        "title": "No cases match “{query}”",
+        "description": "Try another nickname, receipt number or status.",
+        "clear": "Clear search"
+      }
     },
     "add": {
       "trigger": "Add a case",
@@ -455,6 +473,22 @@
       },
       "download": "Add {title} to your calendar",
       "delete": "Delete {title}",
+      "count": "{count, plural, one {# key date} other {# key dates}}",
+      "next": "Next up",
+      "time": "{time} ET",
+      "noUpcoming": "Nothing coming up. Earlier dates are under Past.",
+      "showAll": "Show all {count}",
+      "showFewer": "Show fewer",
+      "past": "Past ({count})",
+      "notesMore": "More",
+      "notesLess": "Less",
+      "confirmDelete": {
+        "title": "Delete this key date?",
+        "description": "“{title}” will disappear for everyone who sees this case. This cannot be undone.",
+        "cancel": "Keep it",
+        "confirm": "Delete",
+        "pending": "Deleting…"
+      },
       "form": {
         "title": "Add a key date",
         "description": "Copy the date from your USCIS notice. Kinstamp counts down to it and can add it to your calendar.",
@@ -876,6 +910,24 @@
       "manageNotifications": "Turn these emails off in Settings",
       "notAffiliated": "Kinstamp is not affiliated with USCIS or the U.S. government.",
       "fallbackCaseName": "your case"
+    },
+    "share": {
+      "subject": "{client} shared a USCIS case with you on Kinstamp",
+      "heading": "A case was shared with you",
+      "title": "{client} shared “{caseName}”",
+      "intro": "{client} follows this USCIS case on Kinstamp and wants you, as their attorney, to see it: its current status, its full history and its key dates.",
+      "sharedBy": "Shared by",
+      "receiptLabel": "Receipt number",
+      "invite": {
+        "body": "Create a free attorney account with this email address ({email}) and the case will be waiting for you. You keep access until {client} revokes it.",
+        "cta": "Create your attorney account"
+      },
+      "existing": {
+        "body": "Sign in with this email address and you'll find it in Clients' cases.",
+        "cta": "Open Clients' cases"
+      },
+      "footer": "You get this email because {client} shared a case with this address on Kinstamp. If you don't know them, ignore it: nothing is visible without an attorney account with this email.",
+      "fallbackCaseName": "a case"
     }
   }
 }

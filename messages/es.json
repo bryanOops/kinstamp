@@ -205,7 +205,13 @@
       "submit": "Crear cuenta",
       "pending": "Creando tu cuenta…",
       "haveAccount": "¿Ya tienes una cuenta?",
-      "signInLink": "Inicia sesión"
+      "signInLink": "Inicia sesión",
+      "invitation": {
+        "title": "Un caso te está esperando",
+        "description": "Crea tu cuenta de abogado para ver lo que tu cliente compartió.",
+        "notice": "{client} compartió un caso de USCIS con {email}. Crea tu cuenta de abogado con ese correo y lo verás apenas lo confirmes.",
+        "noticeAnonymous": "Se compartió un caso de USCIS con {email}. Crea tu cuenta de abogado con ese correo y lo verás apenas lo confirmes."
+      }
     },
     "signIn": {
       "metaTitle": "Iniciar sesión",
@@ -262,6 +268,18 @@
       "pageOf": "Página {page} de {total}",
       "previous": "Página anterior",
       "next": "Página siguiente"
+    },
+    "search": {
+      "label": "Buscar casos",
+      "placeholder": "Buscar por nombre, recibo o estado",
+      "clear": "Borrar búsqueda",
+      "shortcut": "Pulsa / para buscar",
+      "matches": "{total, plural, one {{count} de # caso coincide} other {{count, plural, one {# de {total} casos coincide} other {# de {total} casos coinciden}}}}",
+      "noMatches": {
+        "title": "Ningún caso coincide con “{query}”",
+        "description": "Prueba con otro nombre, número de recibo o estado.",
+        "clear": "Borrar búsqueda"
+      }
     },
     "add": {
       "trigger": "Agregar un caso",
@@ -455,6 +473,22 @@
       },
       "download": "Agregar {title} a tu calendario",
       "delete": "Eliminar {title}",
+      "count": "{count, plural, one {# fecha clave} other {# fechas clave}}",
+      "next": "La siguiente",
+      "time": "{time} hora del Este",
+      "noUpcoming": "No hay nada próximo. Las fechas anteriores están en Pasadas.",
+      "showAll": "Ver todas ({count})",
+      "showFewer": "Ver menos",
+      "past": "Pasadas ({count})",
+      "notesMore": "Más",
+      "notesLess": "Menos",
+      "confirmDelete": {
+        "title": "¿Eliminar esta fecha clave?",
+        "description": "“{title}” desaparecerá para todos los que ven este caso. No se puede deshacer.",
+        "cancel": "Conservar",
+        "confirm": "Eliminar",
+        "pending": "Eliminando…"
+      },
       "form": {
         "title": "Agregar fecha clave",
         "description": "Copia la fecha de tu aviso de USCIS. Kinstamp hace la cuenta regresiva y puede agregarla a tu calendario.",
@@ -876,6 +910,24 @@
       "manageNotifications": "Desactiva estos correos en Configuración",
       "notAffiliated": "Kinstamp no tiene afiliación con USCIS ni con el gobierno de EE. UU.",
       "fallbackCaseName": "tu caso"
+    },
+    "share": {
+      "subject": "{client} compartió contigo un caso de USCIS en Kinstamp",
+      "heading": "Compartieron un caso contigo",
+      "title": "{client} compartió “{caseName}”",
+      "intro": "{client} sigue este caso de USCIS en Kinstamp y quiere que tú, como su abogado o abogada, lo veas: su estado actual, su historial completo y sus fechas clave.",
+      "sharedBy": "Compartido por",
+      "receiptLabel": "Número de recibo",
+      "invite": {
+        "body": "Crea una cuenta gratuita de abogado con este correo ({email}) y el caso te estará esperando. Tendrás acceso hasta que {client} lo revoque.",
+        "cta": "Crear mi cuenta de abogado"
+      },
+      "existing": {
+        "body": "Inicia sesión con este correo y lo encontrarás en Casos de clientes.",
+        "cta": "Abrir Casos de clientes"
+      },
+      "footer": "Recibes este correo porque {client} compartió un caso con esta dirección en Kinstamp. Si no conoces a esa persona, ignóralo: no se ve nada sin una cuenta de abogado con este correo.",
+      "fallbackCaseName": "un caso"
     }
   }
 }

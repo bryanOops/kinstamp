@@ -1,6 +1,7 @@
 import "server-only";
 import { getTranslations } from "next-intl/server";
 import { isLocale } from "@/i18n/config";
+import { renderShareEmail } from "@/lib/emails/share";
 import { renderStatusChangeEmail } from "@/lib/emails/status-change";
 import { siteUrl } from "@/lib/env";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -70,6 +71,55 @@ export async function notifyStatusChange(caseId: string): Promise<void> {
     const sent = await sendEmail({ to: person.email, subject: t("subject", { caseName }), html, text });
     if (!sent) await admin.from("notifications_sent").delete().eq("id", claim.id);
   }
+}
+
+type ShareNotice = {
+  shareId: string;
+  attorneyEmail: string;
+  clientName: string;
+  clientLocale: "en" | "es";
+  caseName: string | null;
+  receiptNumber: string;
+};
+
+/**
+ * Tells the attorney a case was shared with their email. Someone without a confirmed attorney
+ * account gets an invitation to create one (the sign-up link carries only the share id); an
+ * existing attorney gets a link to their dashboard. The client sees the same result either way.
+ */
+export async function notifyShare(notice: ShareNotice): Promise<void> {
+  const admin = createAdminClient();
+  const { data: confirmed } = await admin.rpc("confirmed_attorney_emails", { candidate_emails: [notice.attorneyEmail] });
+  const hasAccount = ((confirmed ?? []) as string[]).includes(notice.attorneyEmail);
+
+  let locale = notice.clientLocale;
+  if (hasAccount) {
+    const { data: attorney } = await admin.from("profiles").select("locale").eq("email", notice.attorneyEmail).maybeSingle();
+    if (isLocale(attorney?.locale)) locale = attorney.locale;
+  }
+
+  const t = await getTranslations({ locale, namespace: "emails.share" });
+  const notAffiliated = (await getTranslations({ locale, namespace: "emails.statusChange" }))("notAffiliated");
+  const client = notice.clientName;
+  const caseName = notice.caseName || t("fallbackCaseName");
+  const variant = hasAccount ? "existing" : "invite";
+
+  const { html, text } = renderShareEmail({
+    lang: locale,
+    heading: t("heading"),
+    title: t("title", { client, caseName }),
+    body: [t("intro", { client }), t(`${variant}.body`, { client, email: notice.attorneyEmail })],
+    details: [
+      { label: t("sharedBy"), value: client },
+      ...(notice.receiptNumber ? [{ label: t("receiptLabel"), value: notice.receiptNumber, receipt: true }] : []),
+    ],
+    cta: t(`${variant}.cta`),
+    url: hasAccount ? `${siteUrl()}/attorney` : `${siteUrl()}/sign-up?invite=${notice.shareId}`,
+    footer: t("footer", { client }),
+    notAffiliated,
+  });
+
+  await sendEmail({ to: notice.attorneyEmail, subject: t("subject", { client }), html, text });
 }
 
 /** Sends through Resend; returns false when it could not be sent (skipped or failed). */

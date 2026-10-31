@@ -1,12 +1,14 @@
 "use server";
 
 import { refresh, revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { parseReceiptNumber, type UscisErrorCode } from "@/lib/uscis";
 import { requireProfile } from "@/server/auth";
+import { notifyShare } from "@/server/notifications";
 import { CHECKS_PER_PERSON_PER_HOUR, checksRequestedInLastHour, FRESH_CHECK_MS, runCheck } from "@/server/cases/run-check";
 
 // Error values are i18n keys under `cases.errors`.
@@ -191,11 +193,27 @@ export async function shareCase(trackedCaseId: string, _prev: SimpleState, formD
   if (!email.success) return { error: "invalidEmail" };
   if (email.data === profile.email) return { error: "cannotShareWithYourself" };
 
-  // No lookup of the email here, so sharing cannot reveal who has an account. A share
-  // only ever opens to a confirmed attorney account with that email (RLS); otherwise it stays pending.
+  // A share only ever opens to a confirmed attorney account with that email (RLS); otherwise it
+  // stays pending. The attorney is emailed after the response: an invitation to sign up, or a
+  // heads-up if they already have an account. The client sees the same result either way.
   const supabase = await createClient();
-  const { error } = await supabase.from("shares").insert({ tracked_case_id: trackedCaseId, attorney_email: email.data });
-  if (error) return { error: error.code === "23505" ? "alreadyShared" : "somethingWentWrong" };
+  const { data: share, error } = await supabase
+    .from("shares")
+    .insert({ tracked_case_id: trackedCaseId, attorney_email: email.data })
+    .select("id, tracked_cases(nickname, cases(receipt_number))")
+    .single();
+  if (error || !share) return { error: error?.code === "23505" ? "alreadyShared" : "somethingWentWrong" };
+
+  after(() =>
+    notifyShare({
+      shareId: share.id,
+      attorneyEmail: email.data,
+      clientName: profile.fullName,
+      clientLocale: profile.locale,
+      caseName: share.tracked_cases?.nickname ?? null,
+      receiptNumber: share.tracked_cases?.cases?.receipt_number ?? "",
+    }),
+  );
   refresh();
   return { ok: true };
 }

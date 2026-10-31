@@ -311,3 +311,20 @@ export async function getConsentGrantedAt(personId: string): Promise<string | nu
     .maybeSingle();
   return data?.granted_at ?? null;
 }
+
+export type ShareInvitation = { email: string; clientName: string };
+
+/**
+ * The attorney email and client name behind an active share, for the sign-up page an invitation
+ * links to. Uses the service role (the visitor has no account yet); knowing the share id, which
+ * only travels in the invitation email, is what grants this.
+ */
+export async function getShareInvitation(shareId: string): Promise<ShareInvitation | null> {
+  const { data } = await createAdminClient()
+    .from("shares")
+    .select("attorney_email, revoked_at, tracked_cases(profiles(full_name))")
+    .eq("id", shareId)
+    .maybeSingle();
+  if (!data || data.revoked_at) return null;
+  return { email: data.attorney_email, clientName: data.tracked_cases?.profiles?.full_name ?? "" };
+}
