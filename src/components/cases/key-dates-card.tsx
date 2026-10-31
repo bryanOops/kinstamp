@@ -1,9 +1,12 @@
-import { CalendarPlusIcon, DownloadIcon } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { CalendarPlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
-import { KeyDateChip } from "@/components/status/key-date-chip";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { groupKeyDates } from "@/lib/cases/key-dates";
+import { cn } from "@/lib/utils";
+import { KeyDateRow } from "./key-date-row";
+import { KeyDatesList } from "./key-dates-list";
 import type { KeyDate } from "./types";
 
 type KeyDatesCardProps = {
@@ -17,64 +20,50 @@ type KeyDatesCardProps = {
   rowActions?: (keyDate: KeyDate) => ReactNode;
 };
 
+/**
+ * Key dates of a case: upcoming first (the soonest highlighted), past ones collapsed at the
+ * bottom. Rows are rendered here, on the server, and handed to the client list that owns the
+ * "Show all" and "Past" toggles.
+ */
 export function KeyDatesCard({ keyDates, now, addAction, icsHref, rowActions }: KeyDatesCardProps) {
   const t = useTranslations("caseDetail.keyDates");
-  const format = useFormatter();
-  const sorted = [...keyDates].sort((a, b) => a.date.localeCompare(b.date));
+  const { upcoming, past } = groupKeyDates(keyDates, now);
+  const row = (keyDate: KeyDate, options: { highlighted?: boolean; past?: boolean }) => (
+    <KeyDateRow key={keyDate.id} keyDate={keyDate} now={now} icsHref={icsHref?.(keyDate)} actions={rowActions?.(keyDate)} {...options} />
+  );
 
   return (
     <Card data-tour="key-dates">
       <CardHeader>
-        <CardTitle>{t("title")}</CardTitle>
+        <CardTitle>
+          {t("title")}
+          {keyDates.length > 0 && (
+            <span className="ml-1.5 font-normal tabular text-ink-muted">
+              <span aria-hidden="true">({keyDates.length})</span>
+              <span className="sr-only">, {t("count", { count: keyDates.length })}</span>
+            </span>
+          )}
+        </CardTitle>
         {addAction && <CardAction>{addAction}</CardAction>}
       </CardHeader>
       <CardContent>
-        {sorted.length === 0 ? (
+        {keyDates.length === 0 ? (
           <p className="text-md text-ink-muted">{t("empty")}</p>
         ) : (
-          <ul className="-my-1 divide-y divide-line">
-            {sorted.map((keyDate) => (
-              <li key={keyDate.id} className="flex flex-wrap items-start justify-between gap-3 py-3 first:pt-1 last:pb-1">
-                <div className="min-w-0">
-                  <p className="text-md font-medium text-ink">{keyDate.title}</p>
-                  <p className="mt-0.5 text-sm tabular text-ink-muted">
-                    {format.dateTime(new Date(`${keyDate.date}T${keyDate.time?.slice(0, 5) ?? "00:00"}:00`), {
-                      weekday: "short",
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      ...(keyDate.time ? { hour: "numeric", minute: "2-digit" } : {}),
-                    })}
-                    {" · "}
-                    {t(`kind.${keyDate.kind}`)}
-                  </p>
-                  {keyDate.notes && <p className="mt-1 max-w-[52ch] text-sm text-ink-muted">{keyDate.notes}</p>}
-                  <KeyDateChip kind={keyDate.kind} date={keyDate.date} now={now} className="mt-2" />
-                </div>
-                <div className="flex items-center gap-1">
-                  {icsHref && (
-                    <a href={icsHref(keyDate)} download className={buttonVariants({ variant: "ghost", size: "icon-sm" })} aria-label={t("download", { title: keyDate.title })}>
-                      <DownloadIcon aria-hidden="true" />
-                    </a>
-                  )}
-                  {rowActions?.(keyDate)}
-                </div>
-              </li>
-            ))}
-          </ul>
+          <KeyDatesList upcoming={upcoming.map((keyDate, index) => row(keyDate, { highlighted: index === 0 }))} past={past.map((keyDate) => row(keyDate, { past: true }))} />
         )}
       </CardContent>
     </Card>
   );
 }
 
-/** Default trigger for the add form. */
-export function AddKeyDateButton(props: React.ComponentProps<typeof Button>) {
+/** Default trigger for the add form: full label from `sm`, icon-only (44px, labelled) on phones. */
+export function AddKeyDateButton({ className, ...props }: React.ComponentProps<typeof Button>) {
   const t = useTranslations("caseDetail.keyDates");
   return (
-    <Button variant="outline" size="sm" {...props}>
+    <Button variant="outline" size="sm" aria-label={t("add")} className={cn("max-sm:w-11 max-sm:px-0", className)} {...props}>
       <CalendarPlusIcon aria-hidden="true" />
-      {t("add")}
+      <span className="max-sm:sr-only">{t("add")}</span>
     </Button>
   );
 }

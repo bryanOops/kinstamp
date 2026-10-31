@@ -6,6 +6,16 @@ import { useActionState, useId, useState, useTransition } from "react";
 import { useFormStatus } from "react-dom";
 import { AddKeyDateButton } from "@/components/cases/key-dates-card";
 import type { KeyDate } from "@/components/cases/types";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -90,22 +100,31 @@ export function AddKeyDateControl({ trackedCaseId }: { trackedCaseId: string }) 
   );
 }
 
-/** Delete button for one key date, wired to `deleteKeyDate`. */
+/** Delete button for one key date: asks for confirmation, then calls `deleteKeyDate`. The row unmounts once the server has refreshed. */
 export function DeleteKeyDateButton({ keyDate }: { keyDate: KeyDate }) {
   const t = useTranslations("caseDetail.keyDates");
+  const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   return (
-    <Button
-      variant="ghost"
-      size="icon-sm"
-      className="text-ink-muted hover:text-destructive"
-      disabled={pending}
-      aria-busy={pending}
-      onClick={() => startTransition(() => deleteKeyDate(keyDate.id))}
-      aria-label={t("delete", { title: keyDate.title })}
-    >
-      <Trash2Icon aria-hidden="true" />
-    </Button>
+    <>
+      <Button variant="ghost" size="icon-sm" className="text-ink-muted hover:text-destructive" onClick={() => setOpen(true)} aria-label={t("delete", { title: keyDate.title })}>
+        <Trash2Icon aria-hidden="true" />
+      </Button>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent className="rounded-2xl p-6 shadow-overlay sm:max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-heading">{t("confirmDelete.title")}</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-ink-muted">{t("confirmDelete.description", { title: keyDate.title })}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel variant="ghost">{t("confirmDelete.cancel")}</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" disabled={pending} aria-busy={pending} onClick={() => startTransition(() => deleteKeyDate(keyDate.id))}>
+              {pending ? t("confirmDelete.pending") : t("confirmDelete.confirm")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
 
