@@ -380,7 +380,7 @@ export function DesignGallery() {
 
       <Section id="settings" title="Settings sections">
         <div className="flex flex-col gap-10">
-          <PrivacySection consentGrantedAt={consent} onConsentChange={(granted) => setConsent(granted ? now.toISOString() : null)} onDownloadData={() => undefined} />
+          <PrivacySection consentGrantedAt={consent} onConsentChange={(granted) => setConsent(granted ? now.toISOString() : null)} downloadHref="#" />
           <NotificationsSection notifyOnChange={notify} onChange={setNotify} />
           <DangerSection deleteTrigger={<DeleteAccountDialog email="elena@example.com" />} />
         </div>

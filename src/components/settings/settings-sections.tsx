@@ -3,7 +3,7 @@
 import { DownloadIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useId } from "react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { SettingsRow, SettingsSection } from "./settings-section";
 
@@ -11,11 +11,12 @@ type PrivacySectionProps = {
   /** When consent is active, the date it was granted. */
   consentGrantedAt: string | null;
   onConsentChange?: (granted: boolean) => void;
-  onDownloadData?: () => void;
+  /** Route that returns the person's data as a JSON download. */
+  downloadHref?: string;
   pending?: boolean;
 };
 
-export function PrivacySection({ consentGrantedAt, onConsentChange, onDownloadData, pending }: PrivacySectionProps) {
+export function PrivacySection({ consentGrantedAt, onConsentChange, downloadHref = "/settings/export", pending }: PrivacySectionProps) {
   const t = useTranslations("settings.privacy");
   const format = useFormatter();
   const id = useId();
@@ -35,10 +36,10 @@ export function PrivacySection({ consentGrantedAt, onConsentChange, onDownloadDa
         <Switch id={id} checked={granted} onCheckedChange={onConsentChange} disabled={pending} />
       </SettingsRow>
       <SettingsRow label={t("download.label")} hint={t("download.hint")}>
-        <Button variant="outline" size="sm" onClick={onDownloadData} disabled={pending}>
+        <a href={downloadHref} download className={buttonVariants({ variant: "outline", size: "sm" })}>
           <DownloadIcon aria-hidden="true" />
           {t("download.button")}
-        </Button>
+        </a>
       </SettingsRow>
     </SettingsSection>
   );
