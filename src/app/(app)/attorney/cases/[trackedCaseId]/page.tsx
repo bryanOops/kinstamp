@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { io } from "next/cache";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { ClientContactCard } from "@/components/attorney/client-contact-card";
-import { NotesCard } from "@/components/attorney/notes-card";
+import { ClientIdentity } from "@/components/attorney/client-identity";
 import { AttorneyNotes } from "@/components/attorney/wired/attorney-notes";
 import { ReviewControl } from "@/components/attorney/wired/review-control";
 import { AssistantControl } from "@/components/assistant/wired/assistant-control";
@@ -52,20 +51,9 @@ export default async function AttorneyCasePage({ params }: PageProps<"/attorney/
         detail={detail}
         now={now}
         viewer="attorney"
-        menu={client && <ReviewControl trackedCaseId={trackedCaseId} needsReview={Boolean(review)} placement="header" />}
-        aboveStatus={
-          client && (
-            <div className="flex flex-col gap-3">
-              <ReviewControl trackedCaseId={trackedCaseId} needsReview={Boolean(review)} placement="bar" />
-              <ClientContactCard clientName={client.clientName} clientEmail={client.clientEmail} sharedAt={client.sharedAt} caseLabel={caseLabel} />
-            </div>
-          )
-        }
-        notes={
-          <NotesCard>
-            <AttorneyNotes trackedCaseId={trackedCaseId} notes={notes} now={now} />
-          </NotesCard>
-        }
+        menu={client && <ReviewControl trackedCaseId={trackedCaseId} needsReview={Boolean(review)} />}
+        headerExtra={client && <ClientIdentity clientName={client.clientName} clientEmail={client.clientEmail} sharedAt={client.sharedAt} caseLabel={caseLabel} />}
+        notes={<AttorneyNotes trackedCaseId={trackedCaseId} caseLabel={caseLabel} notes={notes} now={now} />}
         assistantTrigger={<AssistantControl trackedCaseId={trackedCaseId} caseLabel={caseLabel} />}
         refresh={
           <RefreshControl

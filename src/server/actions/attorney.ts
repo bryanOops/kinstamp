@@ -12,19 +12,27 @@ import { requireProfile } from "@/server/auth";
 /** Ids arrive from the browser: validate them before they reach a query. */
 const idSchema = z.uuid();
 
-export type NoteState = { error?: string; ok?: boolean };
+export type NoteState = { error?: string; ok?: boolean; /** Id of the note just added. */ id?: string };
 
-/** Adds a private note to a case shared with the signed-in attorney. */
+/**
+ * Adds a private note to a case shared with the signed-in attorney. The form may carry the note's
+ * `id` (a UUID minted in the browser) so an optimistic row and the saved note share one identity.
+ */
 export async function addAttorneyNote(trackedCaseId: string, _prev: NoteState, formData: FormData): Promise<NoteState> {
   idSchema.parse(trackedCaseId);
   const profile = await requireProfile("attorney");
   const body = parseNoteBody(formData.get("body"));
   if (!body.ok) return { error: body.error };
+  const requestedId = idSchema.safeParse(formData.get("id"));
   const supabase = await createClient();
-  const { error } = await supabase.from("attorney_notes").insert({ tracked_case_id: trackedCaseId, author_id: profile.id, body: body.body });
+  const { data, error } = await supabase
+    .from("attorney_notes")
+    .insert({ ...(requestedId.success ? { id: requestedId.data } : {}), tracked_case_id: trackedCaseId, author_id: profile.id, body: body.body })
+    .select("id")
+    .single();
   if (error) return { error: error.code === "42501" ? "shareEnded" : "somethingWentWrong" };
   refresh();
-  return { ok: true };
+  return { ok: true, id: data.id };
 }
 
 /** Replaces the text of one of the signed-in attorney's notes. */

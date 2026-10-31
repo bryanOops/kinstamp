@@ -442,6 +442,92 @@
 }
 
 /*
+  Attorney notes (src/components/attorney/wired/). On the case page a saved note folds in at the
+  top of the preview while the row it pushes out folds away, so the card never grows past three
+  rows. The composer's Save row fades in once there is text. In the notes view on phones the list
+  and the note are two pages: the one being shown slides in from the direction of travel.
+  Reduced motion keeps the global 0.01ms durations, so every step is instant.
+*/
+.note-row {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.note-row > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.note-row[data-inserted] {
+  animation: note-fold-in var(--duration-slow) var(--ease-out-expo) both;
+}
+
+.note-row[data-leaving] {
+  animation: note-fold-out var(--duration-slow) var(--ease-standard) both;
+  pointer-events: none;
+}
+
+@keyframes note-fold-in {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+@keyframes note-fold-out {
+  from {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+.note-reveal {
+  animation: note-reveal var(--duration-base) var(--ease-out-expo) both;
+}
+
+@keyframes note-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (width < 40rem) {
+  .notes-pane[data-direction="forward"] {
+    animation: notes-pane-in var(--duration-base) var(--ease-out-expo) both;
+    --pane-travel: 16px;
+  }
+
+  .notes-pane[data-direction="backward"] {
+    animation: notes-pane-in var(--duration-base) var(--ease-out-expo) both;
+    --pane-travel: -16px;
+  }
+}
+
+@keyframes notes-pane-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--pane-travel, 0px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
   Auth backdrop (src/components/layout/auth-backdrop.tsx). The traveller follows the
   SVG path with CSS motion paths; browsers without offset-path just show it at rest.
   Both animations are slow and low contrast on purpose: the form stays the focus.

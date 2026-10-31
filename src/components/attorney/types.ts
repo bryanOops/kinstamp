@@ -1,5 +1,15 @@
 import type { Bilingual, CheckState, NextKeyDate } from "@/components/cases/types";
 
+/** One private attorney note on a shared case, as the notes card and the notes view render it. */
+export type AttorneyNote = {
+  id: string;
+  body: string;
+  createdAt: string;
+  updatedAt: string;
+  /** Shown before the server confirms it (optimistic add). */
+  pending?: boolean;
+};
+
 /** One row of the attorney dashboard: a share plus its tracked case and case. */
 export type SharedCaseRow = {
   shareId: string;

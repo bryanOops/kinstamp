@@ -23,7 +23,7 @@ type CaseDetailViewProps = {
   refresh?: ReactNode;
   shareTrigger?: ReactNode;
   assistantTrigger?: ReactNode;
-  /** Extra header actions (rename, stop tracking…). */
+  /** Header actions on the right of the title (review state, rename, stop tracking…). */
   menu?: ReactNode;
   addKeyDate?: ReactNode;
   icsHref?: (keyDate: KeyDate) => string;
@@ -31,19 +31,20 @@ type CaseDetailViewProps = {
   shareActions?: (share: Share) => ReactNode;
   /** Id of the event observed since the last visit, highlighted on the timeline. */
   highlightedEventId?: string | null;
-  /** Shown right above the status hero (attorneys: who shared the case). */
-  aboveStatus?: ReactNode;
-  /** Private notes card (attorneys only), placed right after key dates. */
+  /** Second row of the header band, under the title (attorneys: the client who shared the case). */
+  headerExtra?: ReactNode;
+  /** Private notes card (attorneys only), first in the aside. */
   notes?: ReactNode;
 };
 
 /**
  * The full case detail layout. Every slot is optional so the data layer wires what exists.
  *
- * Hierarchy: header → status hero (status, meaning, actions) → two columns from `lg`
- * (main: next steps, timeline; aside: key dates, sharing, slow check, insight). On
- * phones the cards form one column ordered by urgency: key dates right after the hero,
- * then next steps and the timeline, then the rest.
+ * Hierarchy: header band (title, receipt, form, actions, optional second row) → status hero
+ * (status, meaning, actions) → two columns from `lg`. Main: next steps, timeline. Aside: notes,
+ * key dates, sharing, slow check, insight. On phones the cards form one column ordered by what
+ * the reader needs first: notes and key dates right after the hero; clients then read what comes
+ * next before the timeline, attorneys the timeline before the general next steps.
  */
 export function CaseDetailView({
   detail,
@@ -58,7 +59,7 @@ export function CaseDetailView({
   keyDateActions,
   shareActions,
   highlightedEventId,
-  aboveStatus,
+  headerExtra,
   notes,
 }: CaseDetailViewProps) {
   const t = useTranslations("caseDetail");
@@ -69,15 +70,19 @@ export function CaseDetailView({
   const plainKey = isStatusCategory(detail.statusCategory) ? detail.statusCategory : "other";
   const hasNextSteps = !awaiting && t.has(`plain.${plainKey}.next.1`);
   const showShares = viewer === "client";
+  const attorney = viewer === "attorney";
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8">
-      <CaseHeader
-        detail={detail}
-        backHref={viewer === "attorney" ? "/attorney" : "/cases"}
-        backLabel={viewer === "attorney" ? t("breadcrumbClientsCases") : t("breadcrumbCases")}
-        actions={menu}
-      />
+      <div className="flex flex-col gap-5 border-b border-line pb-5 sm:gap-6 sm:pb-6">
+        <CaseHeader
+          detail={detail}
+          backHref={attorney ? "/attorney" : "/cases"}
+          backLabel={attorney ? t("breadcrumbClientsCases") : t("breadcrumbCases")}
+          actions={menu}
+        />
+        {headerExtra}
+      </div>
 
       {offline && (
         <Banner
@@ -90,8 +95,6 @@ export function CaseDetailView({
           }
         />
       )}
-
-      {aboveStatus}
 
       <StatusHero
         detail={detail}
@@ -113,11 +116,11 @@ export function CaseDetailView({
         {/* Main column. `contents` on phones lets the cards interleave with the aside by `order`. */}
         <div className="contents lg:flex lg:flex-col lg:gap-6">
           {hasNextSteps && (
-            <Slot order="order-2">
+            <Slot order={attorney ? "order-4" : "order-3"}>
               <NextStepsCard category={detail.statusCategory} />
             </Slot>
           )}
-          <Slot order="order-3">
+          <Slot order={attorney ? "order-3" : "order-4"}>
             <Card data-tour="timeline">
               <CardHeader>
                 <CardTitle>{t("timeline.title")}</CardTitle>
@@ -130,9 +133,10 @@ export function CaseDetailView({
           </Slot>
         </div>
 
-        {/* Aside column. */}
+        {/* Aside column: the reader's own tools first. */}
         <div className="contents lg:flex lg:flex-col lg:gap-6">
-          <Slot order="order-1">
+          {notes && <Slot order="order-1">{notes}</Slot>}
+          <Slot order="order-2">
             <KeyDatesCard
               keyDates={detail.keyDates}
               now={now}
@@ -142,20 +146,18 @@ export function CaseDetailView({
               rowActions={keyDateActions}
             />
           </Slot>
-          {/* Same order as key dates: right after them on phones too. */}
-          {notes && <Slot order="order-1">{notes}</Slot>}
           {showShares && (
-            <Slot order="order-4">
+            <Slot order="order-5">
               <SharedWithCard shares={detail.shares} shareAction={shareTrigger} rowActions={shareActions} />
             </Slot>
           )}
           {detail.officialProcessingTime && (
-            <Slot order="order-5">
+            <Slot order="order-6">
               <SlowCard receivedOn={detail.receivedOn} officialTime={detail.officialProcessingTime} now={now} />
             </Slot>
           )}
           {detail.insight && (
-            <Slot order="order-6">
+            <Slot order="order-7">
               <InsightMiniCard insight={detail.insight} formType={detail.formType} receivedOn={detail.receivedOn} now={now} showLink={viewer === "client"} />
             </Slot>
           )}

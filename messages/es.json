@@ -710,25 +710,54 @@
     },
     "client": {
       "label": "Cliente",
-      "sharedSince": "Compartido contigo desde el {date}",
+      "sharedSince": "Compartido desde el {date}",
       "write": "Escribir al cliente",
       "emailSubject": "Sobre {case}"
     },
     "notes": {
       "title": "Mis notas",
-      "privacy": "Solo tú puedes ver estas notas. Tu cliente no.",
+      "privacy": "Solo tú puedes verlas. Tu cliente no.",
+      "count": "{count, plural, one {# nota} other {# notas}}",
       "label": "Nota nueva",
       "editLabel": "Editar nota",
       "placeholder": "Escribe una nota para ti…",
       "empty": "Todavía no hay notas. Anota lo que tienes pendiente con tu cliente, por ejemplo “Pedir el acta de matrimonio”.",
       "shortcut": "Ctrl+Enter (⌘+Enter en Mac) para guardar",
       "remaining": "{count, plural, one {Queda # carácter} other {Quedan # caracteres}}",
-      "save": "Guardar nota",
+      "save": "Guardar",
       "saving": "Guardando…",
       "cancel": "Cancelar",
       "edit": "Editar nota",
       "edited": "editada",
       "delete": "Eliminar nota",
+      "seeAll": "Ver todas las notas ({count})",
+      "noAdditionalText": "Sin más texto",
+      "view": {
+        "new": "Nota nueva",
+        "search": "Buscar notas",
+        "searchPlaceholder": "Buscar",
+        "list": "Notas",
+        "groups": {
+          "today": "Hoy",
+          "previous7Days": "Últimos 7 días",
+          "earlier": "Anteriores"
+        },
+        "untitled": "Nota nueva",
+        "close": "Cerrar",
+        "back": "Todas las notas",
+        "select": "Elige una nota o empieza una nueva.",
+        "editorLabel": "Texto de la nota",
+        "editorPlaceholder": "Empieza a escribir…",
+        "created": "Creada {time}",
+        "edited": "Editada {time}",
+        "saved": "Guardada",
+        "empty": {
+          "title": "Todavía no hay notas",
+          "description": "Escribe tu primera nota sobre este caso. Solo tú la verás."
+        },
+        "noMatches": "Ninguna nota coincide con “{query}”",
+        "clearSearch": "Borrar búsqueda"
+      },
       "confirmDelete": {
         "title": "¿Eliminar esta nota?",
         "description": "Se borrará para siempre. Tu cliente nunca la vio.",

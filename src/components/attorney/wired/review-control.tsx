@@ -5,34 +5,28 @@ import { useTranslations } from "next-intl";
 import { useOptimistic, useTransition } from "react";
 import { NewUpdateMark } from "@/components/attorney/new-update-mark";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { markCaseReviewed } from "@/server/actions/attorney";
 
 type ReviewControlProps = {
   trackedCaseId: string;
   /** From src/lib/attorney/review.ts, computed on the server. */
   needsReview: boolean;
-  /**
-   * `header`: in the page header actions, from `sm` up. `bar`: its own row under the header on
-   * phones, where a long button would squeeze the case title.
-   */
-  placement: "header" | "bar";
 };
 
 /**
  * Case detail header action for attorneys: "New update" + "Mark as reviewed" while the case has a
- * status event the attorney has not reviewed; a quiet "Reviewed" once it is cleared. Opening the
- * case never marks it.
+ * status event the attorney has not reviewed; a quiet "Reviewed" once it is cleared. Rendered once,
+ * in the page header at every width: on phones the button is icon-only so the title keeps its room.
+ * Opening the case never marks it.
  */
-export function ReviewControl({ trackedCaseId, needsReview, placement }: ReviewControlProps) {
+export function ReviewControl({ trackedCaseId, needsReview }: ReviewControlProps) {
   const t = useTranslations("attorney.review");
   const [pending, startTransition] = useTransition();
   const [optimisticNeedsReview, setOptimisticNeedsReview] = useOptimistic(needsReview);
-  const visibility = placement === "header" ? "hidden sm:flex" : "flex sm:hidden";
 
   if (!optimisticNeedsReview) {
     return (
-      <span role="status" className={cn(visibility, "h-11 items-center gap-1.5 text-sm text-ink-muted sm:h-9")}>
+      <span role="status" className="flex h-11 items-center gap-1.5 text-sm text-ink-muted sm:h-9">
         <CheckIcon className="size-4" aria-hidden="true" />
         {t("reviewed")}
       </span>
@@ -40,11 +34,13 @@ export function ReviewControl({ trackedCaseId, needsReview, placement }: ReviewC
   }
 
   return (
-    <div className={cn(visibility, "items-center gap-3", placement === "bar" && "justify-between")}>
+    <div className="flex items-center gap-2.5 sm:gap-3">
       <NewUpdateMark />
       <Button
         variant="outline"
         size="sm"
+        aria-label={t("markReviewed")}
+        className="max-sm:w-11 max-sm:px-0"
         aria-busy={pending || undefined}
         onClick={() =>
           startTransition(async () => {
@@ -54,7 +50,7 @@ export function ReviewControl({ trackedCaseId, needsReview, placement }: ReviewC
         }
       >
         <CheckIcon aria-hidden="true" />
-        {t("markReviewed")}
+        <span className="max-sm:sr-only">{t("markReviewed")}</span>
       </Button>
     </div>
   );

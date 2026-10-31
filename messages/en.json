@@ -710,25 +710,54 @@
     },
     "client": {
       "label": "Client",
-      "sharedSince": "Shared with you since {date}",
+      "sharedSince": "Shared since {date}",
       "write": "Write to client",
       "emailSubject": "About {case}"
     },
     "notes": {
       "title": "My notes",
-      "privacy": "Only you can see these notes. Your client can't.",
+      "privacy": "Only you can see these. Your client can't.",
+      "count": "{count, plural, one {# note} other {# notes}}",
       "label": "New note",
       "editLabel": "Edit note",
       "placeholder": "Write a note for yourself…",
       "empty": "No notes yet. Keep track of what to follow up on, e.g. “Ask for the marriage certificate”.",
       "shortcut": "Ctrl+Enter (⌘+Enter on Mac) to save",
       "remaining": "{count, plural, one {# character left} other {# characters left}}",
-      "save": "Save note",
+      "save": "Save",
       "saving": "Saving…",
       "cancel": "Cancel",
       "edit": "Edit note",
       "edited": "edited",
       "delete": "Delete note",
+      "seeAll": "See all notes ({count})",
+      "noAdditionalText": "No additional text",
+      "view": {
+        "new": "New note",
+        "search": "Search notes",
+        "searchPlaceholder": "Search",
+        "list": "Notes",
+        "groups": {
+          "today": "Today",
+          "previous7Days": "Previous 7 days",
+          "earlier": "Earlier"
+        },
+        "untitled": "New note",
+        "close": "Close",
+        "back": "All notes",
+        "select": "Select a note, or start a new one.",
+        "editorLabel": "Note text",
+        "editorPlaceholder": "Start writing…",
+        "created": "Created {time}",
+        "edited": "Edited {time}",
+        "saved": "Saved",
+        "empty": {
+          "title": "No notes yet",
+          "description": "Write your first note about this case. Only you will see it."
+        },
+        "noMatches": "No notes match “{query}”",
+        "clearSearch": "Clear search"
+      },
       "confirmDelete": {
         "title": "Delete this note?",
         "description": "It will be gone for good. Your client never saw it.",
