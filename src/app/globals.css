@@ -349,6 +349,62 @@
 }
 
 /*
+  Case list paging (src/components/cases/paged-case-list.tsx). On a page change the leaving
+  cards fade out toward the direction of travel while the new ones stagger in from the other
+  side; both lists share one grid cell. Without data-direction (first paint) nothing animates:
+  the page entrance is the one entrance per screen. Reduced motion keeps the global 0.01ms
+  durations and drops the stagger, so the swap is instant.
+*/
+.case-page[data-direction="forward"] {
+  --page-travel: 10px;
+}
+
+.case-page[data-direction="backward"] {
+  --page-travel: -10px;
+}
+
+.case-page[data-direction] > li {
+  animation: case-page-in var(--duration-base) var(--ease-out-expo) both;
+  animation-delay: calc(var(--index, 0) * 30ms);
+}
+
+.case-page[data-leaving] {
+  animation: case-page-out var(--duration-fast) var(--ease-standard) both;
+}
+
+.case-page[data-leaving] > li {
+  animation: none;
+}
+
+@keyframes case-page-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--page-travel));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes case-page-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--page-travel)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-page[data-direction] > li {
+    animation-delay: 0ms !important;
+  }
+}
+
+/*
   Auth backdrop (src/components/layout/auth-backdrop.tsx). The traveller follows the
   SVG path with CSS motion paths; browsers without offset-path just show it at rest.
   Both animations are slow and low contrast on purpose: the form stays the focus.

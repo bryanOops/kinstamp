@@ -257,6 +257,12 @@
         "description": "Add your first case from the receipt number on your USCIS notice."
       }
     },
+    "pager": {
+      "label": "Case pages",
+      "pageOf": "Page {page} of {total}",
+      "previous": "Previous page",
+      "next": "Next page"
+    },
     "add": {
       "trigger": "Add a case",
       "title": "Add a case",

@@ -257,6 +257,12 @@
         "description": "Agrega tu primer caso con el número de recibo de tu aviso de USCIS."
       }
     },
+    "pager": {
+      "label": "Páginas de casos",
+      "pageOf": "Página {page} de {total}",
+      "previous": "Página anterior",
+      "next": "Página siguiente"
+    },
     "add": {
       "trigger": "Agregar un caso",
       "title": "Agregar un caso",

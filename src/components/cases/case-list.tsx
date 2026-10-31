@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { EmptyState } from "@/components/status/empty-state";
 import { daysUntil } from "@/lib/format/days";
 import { CaseCard } from "./case-card";
+import { PagedCaseList } from "./paged-case-list";
 import type { TrackedCaseSummary } from "./types";
 
 type CaseListProps = {
@@ -28,24 +29,23 @@ export function CaseList({ cases, now, addCaseAction }: CaseListProps) {
     .sort()
     .at(-1);
 
+  // The summary counts every case, not just the page on screen.
+  const summary = (
+    <p className="text-sm text-ink-muted">
+      {t("summary", { count: cases.length, changed: changedThisWeek })}
+      {lastChecked && (
+        <>
+          {" · "}
+          {t("lastChecked", { time: format.relativeTime(new Date(lastChecked), now) })}
+        </>
+      )}
+    </p>
+  );
+
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-sm text-ink-muted">
-        {t("summary", { count: cases.length, changed: changedThisWeek })}
-        {lastChecked && (
-          <>
-            {" · "}
-            {t("lastChecked", { time: format.relativeTime(new Date(lastChecked), now) })}
-          </>
-        )}
-      </p>
-      <ul className="flex flex-col gap-3">
-        {cases.map((tracked) => (
-          <li key={tracked.trackedCaseId}>
-            <CaseCard tracked={tracked} now={now} />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <PagedCaseList
+      summary={summary}
+      cases={cases.map((tracked) => ({ id: tracked.trackedCaseId, card: <CaseCard tracked={tracked} now={now} /> }))}
+    />
   );
 }

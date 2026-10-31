@@ -42,16 +42,18 @@ export function CaseCard({ tracked, now, className }: CaseCardProps) {
     >
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <h2 className="text-subheading truncate text-ink">{tracked.nickname ?? tracked.receiptNumber}</h2>
+          <h2 className="text-subheading truncate text-ink">
+            {tracked.nickname ?? <ReceiptNumber value={tracked.receiptNumber} />}
+          </h2>
           {tracked.changedSinceLastVisit && (
             <span className="rounded-md bg-stamp-tint px-1.5 py-0.5 text-xs font-semibold text-stamp-ink">{t("changed")}</span>
           )}
         </div>
         <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink-muted">
-          <ReceiptNumber value={tracked.receiptNumber} size="sm" />
+          {tracked.nickname && <ReceiptNumber value={tracked.receiptNumber} size="sm" />}
           {tracked.formType && (
             <>
-              <span aria-hidden="true">·</span>
+              {tracked.nickname && <span aria-hidden="true">·</span>}
               <span>{t("form", { form: tracked.formType })}</span>
             </>
           )}
