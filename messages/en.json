@@ -472,6 +472,13 @@
         "appointment": "Appointment"
       },
       "download": "Add {title} to your calendar",
+      "calendar": {
+        "open": "Add {title} to your calendar",
+        "title": "Add to calendar",
+        "google": "Google Calendar",
+        "outlook": "Outlook",
+        "apple": "Apple Calendar or other (.ics)"
+      },
       "delete": "Delete {title}",
       "count": "{count, plural, one {# key date} other {# key dates}}",
       "next": "Next up",

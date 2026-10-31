@@ -30,7 +30,8 @@ export async function GET(_request: Request, context: RouteContext<"/cases/[trac
   return new Response(ics, {
     headers: {
       "Content-Type": "text/calendar; charset=utf-8",
-      "Content-Disposition": `attachment; filename="${filename}"`,
+      // Inline: iPhone and Mac open it straight into Calendar instead of saving a file.
+      "Content-Disposition": `inline; filename="${filename}"`,
       "Cache-Control": "private, no-store",
     },
   });

@@ -1,9 +1,8 @@
-import { DownloadIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { KeyDateChip } from "@/components/status/key-date-chip";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { AddToCalendarMenu } from "./add-to-calendar-menu";
 import { KeyDateNotes } from "./key-date-notes";
 import type { KeyDate } from "./types";
 
@@ -65,9 +64,10 @@ export function KeyDateRow({ keyDate, now, highlighted = false, past = false, ic
 
       <div className="-mt-2.5 -mr-2 flex items-center sm:-mt-1.5">
         {icsHref && (
-          <a href={icsHref} download className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-ink-muted hover:text-ink")} aria-label={t("download", { title: keyDate.title })}>
-            <DownloadIcon aria-hidden="true" />
-          </a>
+          <AddToCalendarMenu
+            event={{ title: keyDate.title, notes: keyDate.notes, date: keyDate.date, time: keyDate.time?.slice(0, 5) ?? null }}
+            icsHref={icsHref}
+          />
         )}
         {actions}
       </div>

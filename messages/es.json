@@ -472,6 +472,13 @@
         "appointment": "Cita"
       },
       "download": "Agregar {title} a tu calendario",
+      "calendar": {
+        "open": "Agregar {title} a tu calendario",
+        "title": "Agregar al calendario",
+        "google": "Google Calendar",
+        "outlook": "Outlook",
+        "apple": "Apple Calendar u otro (.ics)"
+      },
       "delete": "Eliminar {title}",
       "count": "{count, plural, one {# fecha clave} other {# fechas clave}}",
       "next": "La siguiente",
