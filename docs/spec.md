@@ -194,7 +194,7 @@ The attorney view shows the client's name, and on the case detail their email, w
 
 ### Insights
 
-A `security definer` SQL function `insights_by_form_type(form_type)` returns `count`, `median_days`, `p25_days`, `p75_days` for "days from the first `received` event to the first `approved` event", computed over cases tracked by at least one client with active consent. It returns no row when `count < 5`. It never returns receipt numbers or identities (ADR 0005).
+A `security definer` SQL function `insights_by_form_type(form_type)` returns `count`, `median_days`, `p25_days`, `p75_days` for "days from the first `received` event (or, when USCIS did not report one, the receipt date `submitted_at` in Eastern time) to the first `approved` event", computed over cases tracked by at least one client with active consent. It returns no row when `count < 5`. It never returns receipt numbers or identities (ADR 0005).
 
 ### Official processing times
 

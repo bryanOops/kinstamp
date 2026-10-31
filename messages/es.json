@@ -786,7 +786,7 @@
       "formTypes": "Tipos de formulario",
       "yours": "{count, plural, one {# tuyo} other {# tuyos}}",
       "chartTitle": "{form}: de recibido a aprobado",
-      "chartSubtitle": "Días entre el primer evento \"recibido\" y el primer evento \"aprobado\".",
+      "chartSubtitle": "Días desde la recepción (el primer evento \"recibido\" o la fecha de recibo que reporta USCIS) hasta el primer evento \"aprobado\".",
       "median": "Mediana",
       "p25": "Percentil 25",
       "p75": "Percentil 75",

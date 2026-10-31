@@ -786,7 +786,7 @@
       "formTypes": "Form types",
       "yours": "{count, plural, one {# yours} other {# yours}}",
       "chartTitle": "{form}: from received to approved",
-      "chartSubtitle": "Days between the first \"received\" event and the first \"approved\" event.",
+      "chartSubtitle": "Days from receipt (the first \"received\" event, or the receipt date USCIS reports) to the first \"approved\" event.",
       "median": "Median",
       "p25": "25th percentile",
       "p75": "75th percentile",
