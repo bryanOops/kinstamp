@@ -30,16 +30,16 @@ export async function generateMetadata({ params }: PageProps<"/attorney/cases/[t
 export default async function AttorneyCasePage({ params }: PageProps<"/attorney/cases/[trackedCaseId]">) {
   await io();
   const [{ trackedCaseId }, profile] = await Promise.all([params, requireProfile("attorney")]);
-  // RLS returns the tracked case only while an active share names this attorney's email.
-  const dto = await getTrackedCaseDetail(trackedCaseId);
-  if (!dto) notFound();
-
-  const [insights, client, notes, reviewedAt] = await Promise.all([
+  // RLS returns the tracked case (and the attorney's notes and review) only while an active share
+  // names this attorney's email, so all of it can be read in parallel.
+  const [dto, insights, client, notes, reviewedAt] = await Promise.all([
+    getTrackedCaseDetail(trackedCaseId),
     listInsights(),
     getSharedCaseClient(trackedCaseId),
     listAttorneyNotes(trackedCaseId),
     getReviewedAt(trackedCaseId),
   ]);
+  if (!dto) notFound();
   const detail = toCaseDetail(dto, { viewerId: profile.id, attorneyAccounts: new Set(), insights });
   const caseLabel = detail.nickname ?? detail.receiptNumber;
   const review = client && needsReview({ lastEventAt: dto.lastEventAt, reviewedAt, sharedAt: client.sharedAt });

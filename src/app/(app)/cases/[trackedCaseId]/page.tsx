@@ -24,11 +24,12 @@ export async function generateMetadata({ params }: PageProps<"/cases/[trackedCas
 export default async function CaseDetailPage({ params }: PageProps<"/cases/[trackedCaseId]">) {
   await io();
   const [{ trackedCaseId }, profile] = await Promise.all([params, requireProfile("client")]);
-  const dto = await getTrackedCaseDetail(trackedCaseId);
+  // Insights do not depend on the case: start them alongside it.
+  const [dto, insights] = await Promise.all([getTrackedCaseDetail(trackedCaseId), listInsights()]);
   if (!dto) notFound();
 
   const activeEmails = dto.shares.filter((s) => !s.revokedAt).map((s) => s.attorneyEmail);
-  const [insights, attorneyAccounts] = await Promise.all([listInsights(), attorneyAccountEmails(activeEmails)]);
+  const attorneyAccounts = await attorneyAccountEmails(activeEmails);
   const detail = toCaseDetail(dto, { viewerId: profile.id, attorneyAccounts, insights });
   const now = new Date();
   // The newest event is called out when it appeared after the last visit.

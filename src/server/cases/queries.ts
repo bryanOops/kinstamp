@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { StatusCategory } from "@/lib/cases/categorize";
@@ -132,8 +133,8 @@ export async function listTrackedCases(clientId: string): Promise<TrackedCaseSum
     .sort((a, b) => (b.lastChangeOn ?? "").localeCompare(a.lastChangeOn ?? ""));
 }
 
-/** One tracked case with its timeline, shares and key dates; null when RLS hides it. */
-export async function getTrackedCaseDetail(trackedCaseId: string): Promise<TrackedCaseDetail | null> {
+/** One tracked case with its timeline, shares and key dates; null when RLS hides it. Deduplicated per request (metadata + page). */
+export const getTrackedCaseDetail = cache(async (trackedCaseId: string): Promise<TrackedCaseDetail | null> => {
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("tracked_cases")
@@ -185,7 +186,7 @@ export async function getTrackedCaseDetail(trackedCaseId: string): Promise<Track
       }))
       .sort((a, b) => a.date.localeCompare(b.date)),
   };
-}
+});
 
 export type SharedCaseRow = {
   shareId: string;
@@ -255,7 +256,7 @@ export type FormTypeInsight = {
 };
 
 /** Anonymized processing durations by form type (ADR 0005); empty until 5+ consented cases exist per form. */
-export async function listInsights(): Promise<FormTypeInsight[]> {
+export const listInsights = cache(async (): Promise<FormTypeInsight[]> => {
   const supabase = await createClient();
   const { data } = await supabase.rpc("insights_by_form_type");
   return (data ?? []).map((row) => ({
@@ -265,7 +266,7 @@ export async function listInsights(): Promise<FormTypeInsight[]> {
     p25Days: Number(row.p25_days),
     p75Days: Number(row.p75_days),
   }));
-}
+});
 
 /** One key date the signed-in person may read (tracker or shared attorney, via RLS). */
 export async function getKeyDate(keyDateId: string): Promise<(KeyDateView & { trackedCaseId: string }) | null> {
