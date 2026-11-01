@@ -61,11 +61,20 @@ npm run setup
 |---|---|
 | App | http://localhost:3000 |
 | Supabase Studio | http://127.0.0.1:54323 |
-| Test inbox (confirmation and notification emails) | http://127.0.0.1:54324 |
+| Test inbox (sign-up confirmation emails) | http://127.0.0.1:54324 |
 
 Then `npm run seed:demo` creates the demo accounts locally.
 
-**Without USCIS credentials** the app answers from real sandbox responses recorded in [`src/lib/uscis/__fixtures__/recorded`](src/lib/uscis/__fixtures__/recorded), so everything works at any hour. To use the live sandbox, create an app on the [USCIS developer portal](https://developer.uscis.gov/) and fill `USCIS_CLIENT_ID` / `USCIS_CLIENT_SECRET` in `.env.local` (see [`.env.example`](.env.example) for every variable).
+**No accounts or keys are needed to run it.** `npm run setup` creates `.env.local` from [`.env.example`](.env.example) and fills the Supabase values. Every other key is optional, and the app works without it:
+
+| Variable | Without it | To enable it |
+|---|---|---|
+| `USCIS_CLIENT_ID`, `USCIS_CLIENT_SECRET` | The app answers from real sandbox responses recorded in [`src/lib/uscis/__fixtures__/recorded`](src/lib/uscis/__fixtures__/recorded), at any hour | Create an app on the [USCIS developer portal](https://developer.uscis.gov/) |
+| `RESEND_API_KEY`, `EMAIL_FROM` | Status-change and share-invitation emails are skipped, with a `[notifications] email skipped` line in the server log. Sign-up confirmation still works: Supabase sends it to the test inbox | A free [Resend](https://resend.com) account; without your own domain, use `EMAIL_FROM=onboarding@resend.dev`, which only delivers to the Resend account's own email |
+| `ANTHROPIC_API_KEY` | The case assistant answers with a translated "not available" notice | An [Anthropic API](https://console.anthropic.com) key |
+| `CRON_SECRET` | Only needed to call the scheduled-checks endpoint | Any random string |
+
+After editing `.env.local`, restart the app (`npm run setup` again, or restart `npm run dev`).
 
 To develop without the app container: `npm run setup -- --no-app`, then `npm run dev`.
 
@@ -77,7 +86,7 @@ Sandbox cases never change, so the change detection, the "New" timeline event an
 2. In Supabase Studio (http://127.0.0.1:54323) → `status_events`, find that case's row with `origin = observed` and change its `text_en` to `Case Was Received`.
 3. Wait a minute (a check younger than 60 seconds is reused) and press **Refresh**.
 
-USCIS still answers "Case Was Approved", so Kinstamp sees a change: the page shows *Status changed*, the timeline gets a new event marked *Observed by Kinstamp*, `case_checks` records `result = changed`, and the email lands in the local inbox (http://127.0.0.1:54324). The daily cron does exactly this for every tracked case.
+USCIS still answers "Case Was Approved", so Kinstamp sees a change: the page shows *Status changed*, the timeline gets a new event marked *Observed by Kinstamp*, `case_checks` records `result = changed`, and the status-change email is sent (with `RESEND_API_KEY` set; otherwise the server log shows it was skipped). The daily cron does exactly this for every tracked case.
 
 ### Useful scripts
 
