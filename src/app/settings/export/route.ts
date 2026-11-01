@@ -10,7 +10,7 @@ export async function GET() {
   if (!profile) return new Response(null, { status: 401 });
 
   const supabase = await createClient();
-  const [profileRow, consents, tracked, shares, keyDates, assistantUsage] = await Promise.all([
+  const [profileRow, consents, tracked, shares, keyDates, assistantUsage, notes, reviews, notifications] = await Promise.all([
     supabase
       .from("profiles")
       .select("full_name, email, role, locale, notify_on_change, tours_completed, created_at")
@@ -25,6 +25,10 @@ export async function GET() {
     supabase.from("shares").select("attorney_email, created_at, revoked_at, tracked_cases(nickname, cases(receipt_number))").order("created_at"),
     supabase.from("key_dates").select("kind, date, time, title, notes, created_at, tracked_cases(nickname, cases(receipt_number))").eq("created_by", profile.id).order("date"),
     supabase.from("assistant_usage").select("id", { count: "exact", head: true }).eq("user_id", profile.id),
+    // Attorneys: private notes and reviews on cases still shared with them (RLS hides the rest).
+    supabase.from("attorney_notes").select("body, created_at, updated_at, tracked_cases(nickname, cases(receipt_number))").eq("author_id", profile.id).order("created_at"),
+    supabase.from("attorney_reviews").select("reviewed_at, tracked_cases(nickname, cases(receipt_number))").eq("attorney_id", profile.id),
+    supabase.from("notifications_sent").select("sent_at").eq("user_id", profile.id).order("sent_at"),
   ]);
 
   const data = {
@@ -36,6 +40,8 @@ export async function GET() {
     shares: shares.data ?? [],
     keyDatesYouAdded: keyDates.data ?? [],
     assistantQuestionsAsked: assistantUsage.count ?? 0,
+    statusChangeEmailsSent: notifications.data?.length ?? 0,
+    ...(profile.role === "attorney" ? { attorneyNotes: notes.data ?? [], casesYouReviewed: reviews.data ?? [] } : {}),
   };
 
   const date = data.exportedAt.slice(0, 10);

@@ -9,7 +9,9 @@
     "cases": "Cases",
     "insights": "Insights",
     "settings": "Settings",
-    "clientsCases": "Clients' cases"
+    "clientsCases": "Clients' cases",
+    "mainLabel": "Main",
+    "breadcrumbLabel": "Breadcrumb"
   },
   "footer": {
     "tagline": "USCIS case tracking for families and their attorneys",
@@ -251,6 +253,15 @@
     "description": "We couldn't load this page. Your data is safe; try again in a moment.",
     "reference": "Reference {id}",
     "retry": "Try again"
+  },
+  "notFound": {
+    "title": "We couldn't find that page",
+    "description": "The link may be old, or the page is only available to another account.",
+    "home": "Go to the home page",
+    "caseTitle": "We couldn't find that case",
+    "caseDescription": "It is not in your account, it was removed, or it is no longer shared with you.",
+    "backToCases": "Back to your cases",
+    "backToClientsCases": "Back to clients' cases"
   },
   "cases": {
     "title": "Your cases",

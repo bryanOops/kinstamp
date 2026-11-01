@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -17,12 +18,13 @@ type PageHeaderProps = {
 };
 
 export function PageHeader({ title, description, breadcrumbs, meta, actions, className }: PageHeaderProps) {
+  const t = useTranslations("nav");
   return (
     // Title and actions share one row at every width: on phones the action sits top-right, next to the title.
     <header className={cn("flex items-start justify-between gap-4 sm:items-end", className)}>
       <div className="min-w-0">
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <nav aria-label="Breadcrumb" className="mb-3">
+          <nav aria-label={t("breadcrumbLabel")} className="mb-3">
             <ol className="flex flex-wrap items-center gap-1 text-sm text-ink-muted">
               {breadcrumbs.map((crumb, index) => {
                 const isLast = index === breadcrumbs.length - 1;

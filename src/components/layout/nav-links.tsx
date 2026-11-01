@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 /** `tour` is the `data-tour` anchor of the guided tour, when a step points at this item. */
@@ -10,9 +11,10 @@ export type NavItem = { href: string; label: string; tour?: string };
 /** Top-bar navigation; the active item gets a white underline, not just a color change. */
 export function NavLinks({ items, className }: { items: NavItem[]; className?: string }) {
   const pathname = usePathname();
+  const t = useTranslations("nav");
 
   return (
-    <nav aria-label="Main" className={className}>
+    <nav aria-label={t("mainLabel")} className={className}>
       <ul className="flex h-full items-stretch gap-1">
         {items.map((item) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);

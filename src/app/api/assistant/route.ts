@@ -59,7 +59,8 @@ export async function POST(request: Request) {
   if ((count ?? 0) >= MESSAGES_PER_DAY) return Response.json({ error: "dailyLimitReached" }, { status: 429 });
   await admin.from("assistant_usage").insert({ user_id: profile.id });
 
-  const client = new Anthropic();
+  // Below the 60 s function limit, with one retry, so a slow API ends in the translated notice.
+  const client = new Anthropic({ timeout: 50_000, maxRetries: 1 });
   const runner = client.beta.messages.toolRunner({
     model: "claude-opus-5-5",
     max_tokens: 8000,

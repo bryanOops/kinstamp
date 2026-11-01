@@ -1,3 +1,4 @@
+import { siteUrl } from "@/lib/env";
 import { buildIcsEvent } from "@/lib/ics";
 import { getCurrentProfile } from "@/server/auth";
 import { getKeyDate } from "@/server/cases/queries";
@@ -23,7 +24,8 @@ export async function GET(_request: Request, context: RouteContext<"/cases/[trac
     time: keyDate.time?.slice(0, 5) ?? null,
     timeZone: "America/New_York",
     stamp: new Date(),
-    url: `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/cases/${trackedCaseId}`,
+    // Attorneys open shared cases under /attorney.
+    url: `${siteUrl()}${profile.role === "attorney" ? "/attorney" : ""}/cases/${trackedCaseId}`,
   });
   const filename = `${keyDate.title.replace(/[^\w.-]+/g, "-").replace(/^-+|-+$/g, "") || "key-date"}.ics`;
 

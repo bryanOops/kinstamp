@@ -9,7 +9,9 @@
     "cases": "Casos",
     "insights": "Tendencias",
     "settings": "Configuración",
-    "clientsCases": "Casos de clientes"
+    "clientsCases": "Casos de clientes",
+    "mainLabel": "Principal",
+    "breadcrumbLabel": "Ruta de navegación"
   },
   "footer": {
     "tagline": "Seguimiento de casos de USCIS para familias y sus abogados",
@@ -251,6 +253,15 @@
     "description": "No pudimos cargar esta página. Tus datos están a salvo; inténtalo de nuevo en un momento.",
     "reference": "Referencia {id}",
     "retry": "Intentar de nuevo"
+  },
+  "notFound": {
+    "title": "No encontramos esa página",
+    "description": "Puede que el enlace sea antiguo o que la página solo esté disponible para otra cuenta.",
+    "home": "Ir a la portada",
+    "caseTitle": "No encontramos ese caso",
+    "caseDescription": "No está en tu cuenta, se eliminó o ya no está compartido contigo.",
+    "backToCases": "Volver a tus casos",
+    "backToClientsCases": "Volver a casos de clientes"
   },
   "cases": {
     "title": "Tus casos",
