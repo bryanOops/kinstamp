@@ -79,7 +79,20 @@ for (const [index, item] of trackedCases.entries()) {
   if (error || !tracked) throw error;
 
   if (item.shareWithAttorney) {
-    await admin.from("shares").insert({ tracked_case_id: tracked.id, attorney_email: demoAccounts.attorney.email });
+    // The first case is shared just before Kinstamp recorded its newest status event, so the
+    // attorney's "Needs review" filter has an example. The status data itself is untouched.
+    let sharedAt: string | undefined;
+    if (index === 0) {
+      const { data: lastEvent } = await admin
+        .from("status_events")
+        .select("created_at")
+        .eq("case_id", caseRow.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (lastEvent) sharedAt = new Date(Date.parse(lastEvent.created_at) - 3_600_000).toISOString();
+    }
+    await admin.from("shares").insert({ tracked_case_id: tracked.id, attorney_email: demoAccounts.attorney.email, created_at: sharedAt });
   }
   if (index === 0) {
     await admin.from("key_dates").insert({
