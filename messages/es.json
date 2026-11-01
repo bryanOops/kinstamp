@@ -876,119 +876,92 @@
   },
   "landing": {
     "hero": {
-      "title": "Sabe en qué va tu caso. Sin entrar a USCIS todos los días.",
-      "subtitle": "Kinstamp guarda el historial completo de cada caso de USCIS que sigue tu familia, explica cada estado en lenguaje sencillo, en inglés o español, y deja que tu abogado lo siga contigo.",
+      "title": "Cada estado por el que pasó tu caso. Y el día en que cambió.",
+      "subtitle": "Kinstamp consulta USCIS por ti, guarda el historial completo de cada caso, explica cada estado en español o inglés sencillo y deja que tu abogado lo siga contigo.",
       "cta": "Crear una cuenta gratis",
       "secondary": "Iniciar sesión",
-      "note": "Gratis para familias. Funciona con cualquier número de recibo de USCIS.",
-      "eyebrow": "Seguimiento de casos de USCIS para familias y sus abogados"
+      "note": "Gratis para familias. Construido sobre el sandbox de USCIS."
     },
     "preview": {
-      "ariaLabel": "Ejemplo del detalle de un caso: estado actual, fechas clave, línea de tiempo y con quién está compartido",
+      "ariaLabel": "Ejemplo del detalle de un caso: el estado actual con el texto oficial de USCIS, una fecha clave con su cuenta regresiva, con quién está compartido y la línea de tiempo",
       "nav": "Casos",
-      "nickname": "Green card de mamá",
+      "nickname": "Permiso de trabajo",
       "form": "Formulario {form}",
       "statusLabel": "Estado actual",
-      "meaning": "USCIS programó una entrevista. El aviso con la fecha, hora y oficina va en camino o ya lo tienes.",
+      "status": "Se envió una solicitud de evidencia adicional",
+      "meaning": "USCIS necesita más documentos antes de decidir. El aviso dice exactamente qué falta y el plazo para responder.",
+      "official": "Lo que dice USCIS",
+      "officialText": "El 2 de octubre de 2026 enviamos una solicitud de evidencia adicional para su Formulario I-765, Solicitud de autorización de empleo, número de recibo LIN9999106510. La solicitud explica lo que necesitamos de usted. No tomaremos ninguna acción sobre su caso hasta recibir la evidencia o hasta que venza el plazo. Siga las instrucciones de la solicitud.",
       "checked": "Consultado hoy · Último cambio {date}",
       "keyDates": "Fechas clave",
-      "timeline": "Línea de tiempo",
+      "keyDateTitle": "Respuesta al RFE",
       "sharedWith": "Compartido con",
       "shareActive": "Activo desde {date}",
-      "caption": "Ejemplo con un recibo de prueba de USCIS."
-    },
-    "audience": {
-      "title": "Hecho para la familia, y para el abogado en quien confía.",
-      "families": {
-        "label": "Para familias",
-        "title": "Cada caso que tu familia espera, en un solo lugar.",
-        "items": {
-          "one": "Una sola lista para cada número de recibo, cada uno con su propio nombre.",
-          "plain": "Qué significa cada estado, en español o inglés sencillo.",
-          "dates": "Fechas límite y citas con cuenta regresiva, exportables a tu calendario.",
-          "email": "Un correo cuando algo cambia, para que dejes de entrar a USCIS."
-        }
+      "timeline": "Línea de tiempo",
+      "events": {
+        "rfe": "Se envió una solicitud de evidencia adicional",
+        "review": "USCIS está revisando el caso activamente",
+        "fee": "Se recibió la tarifa de huellas",
+        "received": "El caso fue recibido"
       },
-      "attorneys": {
-        "label": "Para abogados",
-        "title": "Solo lo que comparten los clientes, ordenado por lo que te necesita primero.",
-        "items": {
-          "shared": "Ves únicamente los casos que un cliente compartió con tu correo.",
-          "urgency": "Un tablero ordenado por urgencia: la fecha clave más cercana y el último cambio arriba.",
-          "same": "La misma línea de tiempo y fechas clave que ve la familia, más actualizar.",
-          "revoke": "Un acceso que el cliente puede revocar al instante, sin preguntas."
+      "caption": "Una ilustración con la redacción de USCIS. Prueba los recibos reales del sandbox al registrarte."
+    },
+    "timeline": {
+      "title": "Nada se sobrescribe.",
+      "body": "USCIS te muestra el estado de hoy. Kinstamp guarda cada estado que USCIS reportó y cada cambio que notó entre consultas, con su fecha y su origen. Los eventos se agregan; nunca se editan ni se borran.",
+      "case": {
+        "nickname": "Green card de mamá",
+        "form": "Formulario {form}",
+        "events": {
+          "approved": {
+            "title": "El caso fue aprobado",
+            "description": "Aprobamos su Formulario I-130, Petición de Familiar Extranjero."
+          },
+          "review": {
+            "title": "USCIS está revisando el caso activamente"
+          },
+          "fee": {
+            "title": "Se recibió la tarifa de huellas"
+          },
+          "received": {
+            "title": "El caso fue recibido",
+            "description": "Recibimos su Formulario I-130, Petición de Familiar Extranjero."
+          }
         }
       }
     },
-    "benefits": {
-      "title": "Todo sobre un caso, en un solo lugar tranquilo.",
-      "history": {
-        "title": "El historial completo, guardado para ti",
-        "body": "Cada estado que reporta USCIS, más cada cambio que Kinstamp observa entre consultas, con su fecha. Nada se edita ni se pierde."
-      },
-      "share": {
-        "title": "Comparte con tu abogado",
-        "body": "Dale acceso con su correo. Ve el caso y su historial, puede actualizarlo y agregar fechas clave, y nada más. Revócalo cuando quieras."
-      },
-      "plain": {
-        "title": "Explicaciones en lenguaje sencillo",
-        "body": "Qué significa un estado y qué suele venir después, en inglés y español. No es asesoría legal, solo claridad."
-      },
-      "slow": {
-        "title": "¿Mi caso va lento?",
-        "body": "Compara la antigüedad de tu caso con el tiempo de proceso que publica USCIS para ese formulario, con su fuente y fecha."
+    "share": {
+      "title": "Compártelo con tu abogado. Quítale el acceso con un toque.",
+      "body": "Escribe su correo. Ve este caso, su historial y sus fechas clave, puede actualizarlo y llevar sus propias notas. Nunca ve tus otros casos, y cuando revocas el acceso queda fuera, sin preguntas."
+    },
+    "keyDates": {
+      "title": "La fecha del aviso, en el calendario que ya revisas.",
+      "body": "Agrega el plazo o la cita que viene en tu aviso de USCIS. Kinstamp lleva la cuenta regresiva y la pone en Google Calendar, Outlook o Apple Calendar con un toque, con el número de recibo en el evento.",
+      "rows": {
+        "summary": "2 próximas · la siguiente en 19 días",
+        "rfe": "Respuesta al RFE",
+        "biometrics": "Cita de huellas"
       }
     },
-    "how": {
-      "title": "Cómo funciona",
-      "subtitle": "Tres pasos, sin papeleo.",
-      "add": {
-        "title": "Agrega un caso",
-        "body": "Ingresa el número de recibo de tu aviso y ponle un nombre al caso.",
-        "mockLabel": "Número de recibo",
-        "mockNickname": "Nombre",
-        "mockValue": "Green card de mamá"
-      },
-      "check": {
-        "title": "Consultamos a USCIS",
-        "body": "Actualiza cuando quieras. Kinstamp también consulta entre semana y te avisa por correo si algo cambia.",
-        "mockBefore": "El caso fue recibido",
-        "mockAfter": "Se programó la cita de datos biométricos",
-        "mockChanged": "Cambió"
-      },
-      "share": {
-        "title": "Comparte si quieres",
-        "body": "Tu abogado ve solo lo que compartes, por el tiempo que tú decidas.",
-        "mockActive": "Activo",
-        "mockRevoke": "Revocar"
+    "slow": {
+      "title": "¿20 meses es lento? Para un I-130, USCIS dice que no.",
+      "body": "Kinstamp compara cuánto lleva esperando tu caso con el tiempo de proceso que USCIS publica para ese formulario, 83.5 meses para un I-130 al 30 de octubre de 2026, y enlaza la página y la fecha en que se leyó. Si un caso pasa de ese tiempo, te lleva al e-Request de USCIS.",
+      "case": {
+        "nickname": "Petición de papá",
+        "form": "Formulario {form}"
       }
     },
     "privacy": {
       "title": "Tus datos siguen siendo tuyos.",
-      "public": "La página de estado de casos de USCIS es pública y no muestra datos personales: cualquiera con un número de recibo lee el mismo estado.",
-      "private": "Kinstamp es el cuaderno privado de tu familia encima de eso: qué casos sigues, sus nombres, fechas clave y con quién los compartes, protegidos con seguridad a nivel de fila en la base de datos. Las tendencias anónimas salen solo de quienes dan su consentimiento, y solo para grupos de 5 casos o más.",
-      "ledger": {
-        "uscis": {
-          "title": "Lo que muestra USCIS",
-          "items": {
-            "1": "El título del estado y su fecha",
-            "2": "La descripción oficial del estado",
-            "3": "El mismo texto para cualquiera con el número de recibo"
-          }
-        },
-        "kinstamp": {
-          "title": "Lo que Kinstamp mantiene privado",
-          "items": {
-            "1": "Qué casos sigues y sus nombres",
-            "2": "Las fechas clave que agregas de tus avisos",
-            "3": "Con quién compartes, y desde cuándo"
-          }
-        }
-      }
+      "publicLead": "La página de estado de USCIS es un tablero público.",
+      "public": "Cualquiera con un número de recibo lee ahí el mismo estado, y no hay datos personales en ella.",
+      "privateLead": "Kinstamp es el cuaderno privado de tu familia encima.",
+      "private": "Qué casos sigues, cómo los llamas, tus fechas clave y con quién los compartes son solo tuyos, protegidos con seguridad a nivel de fila en la base de datos, no con un filtro en la aplicación.",
+      "insights": "Las tendencias anónimas salen solo de quienes dan su consentimiento, y solo para grupos de 5 casos o más."
     },
     "closing": {
       "title": "Empieza con el número de recibo de tu aviso.",
-      "body": "Kinstamp es una demo construida sobre el API de prueba de USCIS: los casos que agregas usan datos de prueba de USCIS, no solicitudes reales.",
+      "body": "Kinstamp es una demo construida sobre el API sandbox de USCIS: los casos que agregas usan datos de prueba de USCIS, no solicitudes reales.",
       "cta": "Crear una cuenta gratis",
       "secondary": "Iniciar sesión"
     }

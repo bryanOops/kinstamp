@@ -876,115 +876,88 @@
   },
   "landing": {
     "hero": {
-      "title": "Know where your case stands. Without refreshing USCIS every day.",
-      "subtitle": "Kinstamp keeps the full history of every USCIS case your family tracks, explains each status in plain English or Spanish, and lets your attorney follow along.",
+      "title": "Every status your case has had. And the day it changed.",
+      "subtitle": "Kinstamp checks USCIS for you, keeps the whole history of each case, explains every status in plain English or Spanish, and lets your attorney follow along.",
       "cta": "Create a free account",
       "secondary": "Sign in",
-      "note": "Free for families. Works with any USCIS receipt number.",
-      "eyebrow": "USCIS case tracking for families and their attorneys"
+      "note": "Free for families. Built on the USCIS sandbox."
     },
     "preview": {
-      "ariaLabel": "Example of a case detail: current status, key dates, timeline and who it is shared with",
+      "ariaLabel": "Example of a case detail: the current status with the official USCIS text, a key date with its countdown, who it is shared with, and the timeline",
       "nav": "Cases",
-      "nickname": "Mom's green card",
+      "nickname": "Work permit",
       "form": "Form {form}",
       "statusLabel": "Current status",
-      "meaning": "USCIS scheduled an interview. The notice with the date, time and office is on its way or already with you.",
+      "status": "Request for Additional Evidence Was Sent",
+      "meaning": "USCIS needs more documents before deciding. The notice lists exactly what is missing and the deadline to respond.",
+      "official": "What USCIS says",
+      "officialText": "On October 2, 2026, we sent a request for additional evidence for your Form I-765, Application for Employment Authorization, Receipt Number LIN9999106510. The request explains what we need from you. We will not take action on your case until we receive the evidence or the deadline to submit it expires. Please follow the instructions in the request.",
       "checked": "Checked today · Last change {date}",
       "keyDates": "Key dates",
-      "timeline": "Timeline",
+      "keyDateTitle": "RFE response due",
       "sharedWith": "Shared with",
       "shareActive": "Active since {date}",
-      "caption": "Example with a USCIS sandbox receipt."
-    },
-    "audience": {
-      "title": "Built for the family, and for the attorney they trust.",
-      "families": {
-        "label": "For families",
-        "title": "Every case your family is waiting on, in one place.",
-        "items": {
-          "one": "One list for every receipt number, each with its own nickname.",
-          "plain": "What each status means, in plain English or Spanish.",
-          "dates": "Due dates and appointments with a countdown, exportable to your calendar.",
-          "email": "An email when something changes, so you stop refreshing USCIS."
-        }
+      "timeline": "Timeline",
+      "events": {
+        "rfe": "Request for Additional Evidence Was Sent",
+        "review": "Case Is Being Actively Reviewed By USCIS",
+        "fee": "Fingerprint Fee Was Received",
+        "received": "Case Was Received"
       },
-      "attorneys": {
-        "label": "For attorneys",
-        "title": "Only what clients share, sorted by what needs you first.",
-        "items": {
-          "shared": "You see only the cases a client has shared with your email.",
-          "urgency": "A dashboard sorted by urgency: nearest key date and latest change on top.",
-          "same": "The same timeline and key dates the family sees, plus refresh.",
-          "revoke": "Access the client can revoke instantly, no questions asked."
+      "caption": "An illustration in USCIS wording. Try the real sandbox receipts after signing up."
+    },
+    "timeline": {
+      "title": "Nothing gets overwritten.",
+      "body": "USCIS shows you today's status. Kinstamp keeps every status USCIS has reported and every change it noticed between checks, each with its date and where it came from. Events are added, never edited or deleted.",
+      "case": {
+        "nickname": "Mom's green card",
+        "form": "Form {form}",
+        "events": {
+          "approved": {
+            "title": "Case Was Approved",
+            "description": "We approved your Form I-130, Petition for Alien Relative."
+          },
+          "review": {
+            "title": "Case Is Being Actively Reviewed By USCIS"
+          },
+          "fee": {
+            "title": "Fingerprint Fee Was Received"
+          },
+          "received": {
+            "title": "Case Was Received",
+            "description": "We received your Form I-130, Petition for Alien Relative."
+          }
         }
       }
     },
-    "benefits": {
-      "title": "Everything about a case, in one calm place.",
-      "history": {
-        "title": "The full history, kept for you",
-        "body": "Every status USCIS reports, plus every change Kinstamp observes between checks, with its date. Nothing is ever edited or lost."
-      },
-      "share": {
-        "title": "Share with your attorney",
-        "body": "Grant access with their email. They see the case and its history, can refresh it and add key dates, and nothing more. Revoke anytime."
-      },
-      "plain": {
-        "title": "Plain-language explanations",
-        "body": "What a status means and what usually comes next, in English and Spanish. Not legal advice, just clarity."
-      },
-      "slow": {
-        "title": "Is my case slow?",
-        "body": "Compare your case's age with the processing time USCIS publishes for that form, with its source and date."
+    "share": {
+      "title": "Share it with your attorney. Take it back in one tap.",
+      "body": "Type their email. They see this case, its history and its key dates, can refresh it and keep their own notes. They never see your other cases, and when you revoke access they are out, no questions asked."
+    },
+    "keyDates": {
+      "title": "The date on the notice, in the calendar you already check.",
+      "body": "Add the due date or the appointment from your USCIS notice. Kinstamp counts down to it and puts it in Google Calendar, Outlook or Apple Calendar in one tap, with the receipt number in the event.",
+      "rows": {
+        "summary": "2 upcoming · next in 19 days",
+        "rfe": "RFE response due",
+        "biometrics": "Biometrics appointment"
       }
     },
-    "how": {
-      "title": "How it works",
-      "subtitle": "Three steps, no paperwork.",
-      "add": {
-        "title": "Add a case",
-        "body": "Enter the receipt number from your notice and give the case a nickname.",
-        "mockLabel": "Receipt number",
-        "mockNickname": "Nickname",
-        "mockValue": "Mom's green card"
-      },
-      "check": {
-        "title": "We check USCIS",
-        "body": "Refresh whenever you want. Kinstamp also checks on weekdays and emails you when something changes.",
-        "mockBefore": "Case Was Received",
-        "mockAfter": "Biometrics Appointment Was Scheduled",
-        "mockChanged": "Changed"
-      },
-      "share": {
-        "title": "Share if you want",
-        "body": "Your attorney sees only what you share, for as long as you want.",
-        "mockActive": "Active",
-        "mockRevoke": "Revoke"
+    "slow": {
+      "title": "Is 20 months slow? For an I-130, USCIS says no.",
+      "body": "Kinstamp compares how long your case has waited with the processing time USCIS publishes for that form, 83.5 months for an I-130 as of October 30, 2026, and links the page and the date it was read. When a case is past that time, it points you to USCIS's e-Request.",
+      "case": {
+        "nickname": "Dad's petition",
+        "form": "Form {form}"
       }
     },
     "privacy": {
       "title": "Your data stays yours.",
-      "public": "USCIS's case status page is public and shows no personal data: anyone with a receipt number reads the same status.",
-      "private": "Kinstamp is your family's private notebook on top of it: which cases you track, their nicknames, key dates and who you share with, protected by row-level security in the database. Anonymous insights come only from people who opt in, and only for groups of 5 or more cases.",
-      "ledger": {
-        "uscis": {
-          "title": "What USCIS shows",
-          "items": {
-            "1": "The status title and its date",
-            "2": "The official status description",
-            "3": "The same text for anyone with the receipt number"
-          }
-        },
-        "kinstamp": {
-          "title": "What Kinstamp keeps private",
-          "items": {
-            "1": "Which cases you track and their nicknames",
-            "2": "Key dates you add from your notices",
-            "3": "Who you share with, and since when"
-          }
-        }
-      }
+      "publicLead": "USCIS's status page is a public board.",
+      "public": "Anyone with a receipt number reads the same status there, and no personal data is on it.",
+      "privateLead": "Kinstamp is your family's private notebook on top.",
+      "private": "Which cases you follow, what you call them, your key dates and who you share with are yours alone, protected by row-level security in the database, not by a filter in the app.",
+      "insights": "Anonymous insights come only from people who opt in, and only for groups of 5 or more cases."
     },
     "closing": {
       "title": "Start with the receipt number on your notice.",

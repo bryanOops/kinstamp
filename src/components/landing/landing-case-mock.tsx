@@ -1,50 +1,46 @@
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { Logo } from "@/components/brand/logo";
 import { KeyDateChip } from "@/components/status/key-date-chip";
+import { NoticeText } from "@/components/status/notice-text";
 import { ReceiptNumber } from "@/components/status/receipt-number";
 import { StatusDot, StatusIndicator } from "@/components/status/status-indicator";
 import { Timeline, type TimelineEvent } from "@/components/status/timeline";
 
 /**
- * A case detail rendered with the app's own primitives and sample data, instead of a
- * screenshot. Status titles are USCIS wording for the sandbox receipt EAC9999103403.
- * `now` is pinned so the key-date countdown is deterministic.
+ * The hero object: a case detail rendered with the app's own primitives, not a screenshot.
+ * The receipt is a USCIS sandbox test receipt and the official text follows USCIS wording for
+ * a request for evidence. `now` is pinned so the countdown and "checked today" are deterministic.
  */
 const sample = {
-  receipt: "EAC9999103403",
-  form: "I-130",
-  now: new Date("2023-08-18T12:00:00Z"),
-  keyDate: "2023-08-23",
-  lastChangeOn: "2023-08-14",
-  shareEmail: "attorney@example.com",
-  shareSince: "2023-02-01",
-  events: {
-    en: [
-      { id: "1", occurredOn: "2023-08-14", title: "Interview Was Scheduled", origin: "reported", category: "interview" },
-      { id: "2", occurredOn: "2023-03-22", title: "Biometrics Appointment Was Scheduled", origin: "reported", category: "biometrics" },
-      { id: "3", occurredOn: "2023-01-12", title: "Case Was Received", origin: "reported", category: "received" },
-    ],
-    es: [
-      { id: "1", occurredOn: "2023-08-14", title: "Se programó la entrevista", origin: "reported", category: "interview" },
-      { id: "2", occurredOn: "2023-03-22", title: "Se programó la cita de datos biométricos", origin: "reported", category: "biometrics" },
-      { id: "3", occurredOn: "2023-01-12", title: "El caso fue recibido", origin: "reported", category: "received" },
-    ],
-  } satisfies Record<"en" | "es", TimelineEvent[]>,
+  // Not one of the sandbox receipts, so the illustration never contradicts what a reviewer can add.
+  receipt: "LIN9999106510",
+  form: "I-765",
+  category: "evidence_requested",
+  now: new Date("2026-10-30T18:00:00Z"),
+  lastChangeOn: "2026-10-02",
+  keyDate: "2026-11-18",
+  shareEmail: "ana@lawfirm.com",
+  shareSince: "2026-10-12",
+  events: [
+    { id: "rfe", occurredOn: "2026-10-02", origin: "observed", category: "evidence_requested" },
+    { id: "review", occurredOn: "2026-06-11", origin: "reported", category: "other" },
+    { id: "fee", occurredOn: "2026-04-22", origin: "reported", category: "biometrics" },
+    { id: "received", occurredOn: "2026-03-30", origin: "reported", category: "received" },
+  ] as const,
 };
 
-const shortDate = { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" } as const;
+const utc = { timeZone: "UTC" } as const;
 
-export function LandingCaseMock() {
+export function LandingCaseMock({ className }: { className?: string }) {
   const t = useTranslations("landing.preview");
   const format = useFormatter();
-  const locale = useLocale() === "es" ? "es" : "en";
-  const events = sample.events[locale];
-  const current = events[0];
+  const events: TimelineEvent[] = sample.events.map((event) => ({ ...event, title: t(`events.${event.id}`) }));
+  const keyDay = new Date(`${sample.keyDate}T00:00:00Z`);
 
   return (
-    <div aria-label={t("ariaLabel")} role="img" className="relative">
+    <figure aria-label={t("ariaLabel")} role="img" className={className}>
       <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-raised">
-        {/* A slice of the signed-in top bar, so the card reads as the product and not as a brochure. */}
+        {/* A slice of the signed-in top bar, so the object reads as the product. */}
         <div className="flex h-11 items-center justify-between bg-ink px-5 text-white">
           <Logo tone="onDark" size="sm" />
           <span className="border-b-2 border-stamp pb-0.5 text-sm font-medium">{t("nav")}</span>
@@ -60,35 +56,49 @@ export function LandingCaseMock() {
 
           <div className="mt-5 border-t border-line pt-5">
             <p className="text-caps text-ink-muted">{t("statusLabel")}</p>
-            <StatusIndicator label={current.title} category={current.category} size="lg" className="mt-2" />
-            <p className="mt-2 max-w-[48ch] text-md text-ink">{t("meaning")}</p>
-            <p className="mt-3 text-sm text-ink-muted">
-              {t("checked", { date: format.dateTime(new Date(`${sample.lastChangeOn}T00:00:00Z`), shortDate) })}
+            <StatusIndicator label={t("status")} category={sample.category} size="lg" className="mt-2" />
+            <p className="mt-2.5 max-w-[52ch] text-md text-ink">{t("meaning")}</p>
+            <div className="mt-4 border-l border-line pl-4">
+              <p className="text-caps text-ink-muted">{t("official")}</p>
+              <NoticeText text={t("officialText")} className="mt-1.5 max-w-[64ch] text-sm leading-relaxed text-ink-muted" />
+            </div>
+            <p className="mt-4 text-sm text-ink-muted">
+              {t("checked", { date: format.dateTime(new Date(`${sample.lastChangeOn}T00:00:00Z`), { month: "short", day: "numeric", year: "numeric", ...utc }) })}
             </p>
           </div>
 
-          <div className="mt-5 grid gap-5 border-t border-line pt-5 sm:grid-cols-2">
+          <div className="mt-5 grid gap-5 border-t border-line pt-5 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
             <div>
               <p className="text-caps text-ink-muted">{t("keyDates")}</p>
-              <KeyDateChip kind="appointment" date={sample.keyDate} now={sample.now} className="mt-2" />
+              <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3">
+                <time dateTime={sample.keyDate} className="flex w-12 flex-col items-center rounded-lg border border-ink bg-ink py-1.5 tabular text-white">
+                  <span className="text-caps leading-none">{format.dateTime(keyDay, { month: "short", ...utc })}</span>
+                  <span className="mt-1 text-heading leading-none">{format.dateTime(keyDay, { day: "numeric", ...utc })}</span>
+                  <span className="mt-1 text-[11px] leading-none">{format.dateTime(keyDay, { weekday: "short", ...utc })}</span>
+                </time>
+                <div className="min-w-0">
+                  <p className="text-md font-medium text-ink">{t("keyDateTitle")}</p>
+                  <KeyDateChip kind="due_date" date={sample.keyDate} now={sample.now} className="mt-1" />
+                </div>
+              </div>
             </div>
             <div className="min-w-0">
               <p className="text-caps text-ink-muted">{t("sharedWith")}</p>
-              <p className="mt-2 truncate text-md font-medium text-ink">{sample.shareEmail}</p>
+              <p className="mt-3 truncate text-md font-medium text-ink">{sample.shareEmail}</p>
               <p className="mt-0.5 flex items-center gap-1.5 text-sm text-ink-muted">
                 <StatusDot tone="approved" />
-                {t("shareActive", { date: format.dateTime(new Date(`${sample.shareSince}T00:00:00Z`), { month: "short", day: "numeric", timeZone: "UTC" }) })}
+                {t("shareActive", { date: format.dateTime(new Date(`${sample.shareSince}T00:00:00Z`), { month: "short", day: "numeric", ...utc }) })}
               </p>
             </div>
           </div>
 
           <div className="mt-5 border-t border-line pt-5">
             <p className="text-caps mb-4 text-ink-muted">{t("timeline")}</p>
-            <Timeline events={events} />
+            <Timeline events={events} highlightedEventId="rfe" />
           </div>
         </div>
       </div>
-      <p className="mt-3 text-center text-xs text-ink-subtle">{t("caption")}</p>
-    </div>
+      <figcaption className="mt-3 text-xs text-ink-subtle">{t("caption")}</figcaption>
+    </figure>
   );
 }
