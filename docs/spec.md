@@ -34,9 +34,9 @@ Extras, in build order (cut from the bottom if time runs out):
 | # | Extra | Done when |
 |---|---|---|
 | E1 | Timeline + plain-English explanations | Each status category shows what it means and what usually comes next, in EN and ES. |
-| E2 | Attorney dashboard | Table of shared cases with client, status, last change, next key date; filter "changed in the last 7 days". |
+| E2 | Attorney dashboard | Table of shared cases with client, status, last change, next key date; "Needs review" filter (4.8), status filter, search and urgency sort. The summary line still counts cases changed in the last 7 days. |
 | E3 | "Is my case slow?" | Compares the case age with the official processing time for its form type, shows the source and date, and links to the USCIS e-Request page when the case is outside it. |
-| E4 | Key dates | Client or attorney adds a due date or appointment; countdown on the case, `.ics` download, attorney dashboard sorted by urgency. |
+| E4 | Key dates | Client or attorney adds a due date or appointment; countdown on the case, month calendar view, "Add to calendar" (Google Calendar, Outlook or `.ics` download), attorney dashboard sorted by urgency. |
 | E5 | Insights | Per form type: count, median and 25–75% range of days from received to approved, from consented cases only. |
 | E6 | Scheduled checks + email | Weekdays during sandbox hours, every case is checked once; clients with notifications on get an email when a status event is observed. |
 | E7 | Case assistant | "Ask about this case": an agent answers using tools over the case's own data, says when it does not know, and adds a not-legal-advice note. |
@@ -49,17 +49,22 @@ Extras, in build order (cut from the bottom if time runs out):
 | `/` | Public | Landing: value proposition, sign in / create account. |
 | `/sign-up` | Public | Name, email, password, role, unchecked consent checkbox. |
 | `/sign-in` | Public | Email, password; note pointing reviewers to the demo accounts. |
+| `/sign-up?invite=<share id>` | Public | Sign-up with the invited email and the attorney role prefilled (4.4). |
+| `/check-email` | Public | "Check your inbox" screen shown after sign-up; reads an optional `email` parameter. |
 | `/auth/confirm` | Public | Email confirmation callback. |
-| `/cases` | Client | Tracked cases with status, last change and a "changed since your last visit" marker; "Add a case" dialog with sandbox sample receipts. |
-| `/cases/[trackedCaseId]` | Client | Case detail: header (nickname, receipt, form), current status (EN/ES), refresh, plain-English card, "Is my case slow?", key dates, shares, mini insight, timeline, assistant. |
+| `/cases` | Client | Tracked cases with status, last change and a "changed since your last visit" marker; search (`?q=`) and paging (5 per page, `?page=`); "Add a case" dialog with 12 labelled sandbox receipts, hiding the ones already tracked. |
+| `/cases/[trackedCaseId]` | Client | Case detail: header (nickname, receipt, form), current status (EN/ES), refresh, plain-English card, "Is my case slow?", key dates (preview of the 3 nearest, month calendar, "Add to calendar"), shares, mini insight, timeline, assistant. |
+| `/cases/[trackedCaseId]/key-dates/[keyDateId]/ics` | Signed in | Route Handler: `.ics` file for one key date (4.5). |
 | `/attorney` | Attorney | Shared cases table, filters, urgency order. "All (N) / Needs review (N)" view: a case needs review when a status event was recorded after the attorney last marked it as reviewed (4.8); those rows carry a vermilion dot plus "New update", come first in the default order and have a "Mark as reviewed" action. |
 | `/attorney/cases/[trackedCaseId]` | Attorney | Same case detail without edit, share or delete actions; can refresh and add key dates. Above the status: the client's name and email, "Shared with you since {date}" and "Write to client" (`mailto:` with the subject "About {nickname or receipt}"). Header: "Mark as reviewed" while the case needs review, "Reviewed" otherwise. Aside, after key dates: "My notes", the attorney's private notes (4.8). RLS returns the tracked case only while a share to the attorney is active. |
 | `/insights` | Client | Insights by form type, highlighting the client's own case if they have one. |
-| `/settings` | Both | Profile, language, consent, email notifications, delete account. |
+| `/settings` | Both | Profile, language, consent, email notifications, "Download my data", delete account. |
+| `/settings/export` | Both | Route Handler: JSON download of everything stored about the person (profile, consents, tracked cases, shares, key dates they added, counts of assistant questions and emails; attorneys also get their notes and reviews). Runs with the person's session, so RLS decides the content. |
+| `/design` | Development only | Gallery of presentational components with sample data. Returns 404 when `NODE_ENV` is `production`. |
 | `/api/cron/scheduled-checks` | Vercel Cron | Runs scheduled checks. Protected by `CRON_SECRET`. |
 | `/api/assistant` | Signed in | Streams assistant replies. |
 
-Every route has loading, empty and error states. A banner appears on case screens when the last check failed because USCIS was unavailable: "USCIS is offline (Mon–Fri, 7am–8pm ET). Showing the last saved status from {time}."
+Every route has loading, empty and error states. Errors are caught by a root `error.tsx` and per-section `error.tsx` files. Unknown routes show a translated root `not-found.tsx`; a case the person cannot read shows the case `not-found.tsx` (client and attorney). A banner appears on case screens when the last check failed because USCIS was unavailable: "USCIS is offline (Mon–Fri, 7am–8pm ET). Showing the last saved status from {time}."
 
 The language switch (EN/ES) is always in the top bar, next to a Help button that replays the page's guided tour.
 
@@ -106,7 +111,7 @@ Email confirmation is a security requirement, not just polish: shares are matche
 ### 4.5 Key dates
 1. On a case, the client (or an attorney with an active share) adds a key date: kind (due date / appointment), date, optional time, title, optional notes.
 2. The case shows a countdown for the next key date; the attorney dashboard sorts by it.
-3. "Add to calendar" downloads an `.ics` file generated on the server.
+3. "Add to calendar" offers Google Calendar and Outlook (links with the event prefilled, `src/lib/calendar-links.ts`) and an `.ics` download for Apple Calendar and others, generated on the server. Timed events last one hour; times are Eastern. The case preview shows the 3 nearest upcoming dates; a month calendar shows all.
 4. The creator or the client can delete a key date.
 
 ### 4.6 Scheduled checks
@@ -115,7 +120,7 @@ Email confirmation is a security requirement, not just polish: shares are matche
 3. For each observed status event, every tracking client with notifications on receives one email in their language. `notifications_sent` prevents duplicates.
 
 ### 4.7 Delete account
-Deleting an account removes the profile, tracked cases, shares they created or received, key dates they created, attorney notes and reviews they wrote, and consent rows. A case nobody tracks anymore is deleted with its status events and checks.
+Deleting an account removes the profile, tracked cases, shares they created or received, key dates they created, attorney notes and reviews they wrote, and consent rows. A case nobody tracks anymore is deleted with its status events; its checks stay in `case_checks` with `case_id` set to null.
 
 ### 4.8 Attorney tools on a shared case
 1. **Private notes.** On the shared case detail the attorney writes notes for themselves (1–2,000 characters; Ctrl/⌘+Enter saves). The list is newest first with relative time; each note can be edited inline or deleted after confirmation. Only the author sees them, and only while the share is active: the client never does, and revoking hides them (they reappear if the client shares the case with the same attorney again). Deleting the tracked case deletes them.
@@ -145,7 +150,7 @@ Unique: `(case_id, origin, occurred_on, text_en)`.
 `category` is one of `received`, `biometrics`, `interview`, `evidence_requested`, `evidence_received`, `approved`, `card_produced`, `card_delivered`, `transferred`, `denied`, `withdrawn`, `other`. It is assigned in code from the English text by an ordered list of patterns, unit-tested against the fixtures. **[fixtures]**
 
 **`case_checks`**: every check, for audit, quota and rate limits. *Server* writes only.
-`id uuid pk`, `case_id uuid → cases on delete cascade`, `trigger text check in ('add','refresh','scheduled')`, `requested_by uuid null → profiles on delete set null`, `result text check in ('changed','unchanged','error')`, `error_code text null`, `http_status int null`, `duration_ms int`, `created_at timestamptz`.
+`id uuid pk`, `case_id uuid null → cases on delete set null` (a check is kept when its case is deleted, so the daily quota still counts it; migration `20261030110000_review_fixes.sql`), `trigger text check in ('add','refresh','scheduled')`, `requested_by uuid null → profiles on delete set null`, `result text check in ('changed','unchanged','error')`, `error_code text null`, `http_status int null`, `duration_ms int`, `created_at timestamptz`.
 
 **`tracked_cases`**: a client's link to a case.
 `id uuid pk`, `case_id uuid → cases`, `client_id uuid → profiles on delete cascade`, `nickname text null`, `last_viewed_at timestamptz null`, `created_at timestamptz`. Unique `(case_id, client_id)`.
@@ -239,7 +244,7 @@ Module `src/lib/cases/` (pure, test-first):
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase client |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server writes, cron, seed |
 | `USCIS_CLIENT_ID`, `USCIS_CLIENT_SECRET`, `USCIS_TOKEN_URL`, `USCIS_API_BASE_URL` | USCIS API |
-| `RESEND_API_KEY`, `EMAIL_FROM` | Status-change emails (Auth emails use Resend SMTP configured in Supabase) |
+| `RESEND_API_KEY`, `EMAIL_FROM` | Status-change and share-invitation emails (Auth emails use Resend SMTP configured in Supabase) |
 | `ANTHROPIC_API_KEY` | Case assistant |
 | `CRON_SECRET` | Protects the cron route |
 | `NEXT_PUBLIC_SITE_URL` | Links in emails and auth redirects |
@@ -258,8 +263,8 @@ Seeded by a script from recorded fixtures, so they work at any hour: one client 
 
 ## 10. Testing
 
-- Vitest on `src/lib/`: receipt validation and normalization, response parsing (every fixture), error mapping (every shape), change detection, history merge, categorization, case age vs official time, `.ics` generation, the "needs review" rule, attorney note validation and the `mailto:` link.
-- pgTAP on the database (`npm run test:db`): RLS isolation (`rls.test.sql`), insights thresholds, and attorney notes, reviews and client contact (`attorney_tools.test.sql`).
+- Vitest on `src/lib/` (27 test files, `npm test`). Areas: receipt validation and normalization, response parsing (every fixture), client and error classification, notice-text detection, change detection and applying a check, categorization, case search and paging, key dates and the key dates calendar, `.ics` generation, calendar links (Google, Outlook), idle timeout state, guided tour steps, time zones and formatting helpers, auth schemas (including `safeNextPath`), status tone, emails (share, status change), and the attorney tools (the "needs review" rule, note validation and preview, the `mailto:` link).
+- pgTAP on the database (`npm run test:db`, 63 tests): `rls.test.sql` (25, RLS isolation), `insights.test.sql` (7, thresholds and privacy), `attorney_tools.test.sql` (31, notes, reviews and client contact).
 - CI on GitHub Actions: lint, typecheck, tests on every push.
 - Manual checklist before delivery: R1–R7 with two accounts, RLS isolation, out-of-hours behavior, mobile layout.
 

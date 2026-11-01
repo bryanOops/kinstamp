@@ -29,9 +29,9 @@ The client tracks four sandbox cases; two are shared with the attorney. Open bot
 ### The end-to-end flow
 
 1. **Sign up** at `/sign-up` as a client (or use the demo client). Confirm your email from the link we send.
-2. **Add a case** with a sandbox receipt number, e.g. `LIN9999106498`, `EAC9999103406`, `SRC9999132694` (the dialog lists a few; the full list is in [`docs/uscis-api.md`](docs/uscis-api.md)).
+2. **Add a case** with a sandbox receipt number, e.g. `LIN9999106498`, `EAC9999103406`, `SRC9999132694` (the dialog lists 12 labelled demo receipts and hides the ones you already track; the full list is in [`docs/uscis-api.md`](docs/uscis-api.md)).
 3. **Refresh** it, read its **timeline** (history reported by USCIS plus changes Kinstamp observes), switch the status between English and Spanish.
-4. **Share** it with an attorney's email. Sign in as that attorney: the case appears in *Clients' cases*. Revoke it and it disappears immediately.
+4. **Share** it with an attorney's email. Sign in as that attorney: the case appears in *Clients' cases*. Revoke it and it disappears immediately. The attorney also gets an email: an invitation to sign up if they have no account yet, or a link to *Clients' cases*.
 
 ### About the USCIS sandbox
 
@@ -100,12 +100,12 @@ Browser ──► Next.js on Vercel (Server Components, Server Actions, Route Ha
               │  reads as the signed-in person ──► Supabase Postgres (RLS on every table)
               │  writes checks with the service role (after access is verified)
               ├─► USCIS Case Status API (OAuth client credentials, server only)
-              ├─► Resend (confirmation and status-change emails)
+              ├─► Resend (confirmation, status-change and share-invitation emails)
               └─► Claude API (case assistant, read-only tools)
 Vercel Cron (weekdays, 10am ET) ──► /api/cron/scheduled-checks
 ```
 
-- **`src/lib/`**: pure, React-free domain logic with unit tests: receipt validation, USCIS response parsing and error mapping (`uscis/`), change detection and status categories (`cases/`), time zones, ICS generation.
+- **`src/lib/`**: pure, React-free domain logic with unit tests: receipt validation, USCIS response parsing and error mapping (`uscis/`), change detection and status categories (`cases/`), time zones, ICS generation and calendar links, case search and paging, the attorney "needs review" rule.
 - **`src/server/`**: the data access layer: auth (`getCurrentProfile`, `requireProfile`), queries, Server Actions, the check runner, notifications, the assistant's tools.
 - **`src/app/`**, **`src/components/`**: routes and UI. Server Components by default; client components only where there is interaction.
 - **`supabase/migrations/`**: the schema, RLS policies and SQL functions; **`supabase/tests/`**: pgTAP tests.
@@ -118,7 +118,7 @@ The coding standards that every change (human or AI) follows are in [`CLAUDE.md`
 
 | Table | Holds |
 |---|---|
-| `profiles` | One per account: name, role (`client` / `attorney`), language, email preference |
+| `profiles` | One per account: name, role (`client` / `attorney`), language, email preference, `tours_completed` (guided tours already finished) |
 | `consents` | Opt-in to anonymous insights, with grant and revoke dates (append-only history) |
 | `cases` | **One row per receipt number** with its current status ([ADR 0001](docs/adr/0001-one-case-per-receipt-number.md)) |
 | `status_events` | **Append-only history**: every status with its date and origin, `reported` by USCIS or `observed` by Kinstamp, and a category ([ADR 0002](docs/adr/0002-append-only-status-events-with-origin.md)) |
@@ -126,17 +126,22 @@ The coding standards that every change (human or AI) follows are in [`CLAUDE.md`
 | `tracked_cases` | A client's link to a case, with their own nickname |
 | `shares` | A tracked case shared with an attorney's email; pending until that attorney signs up; revocable |
 | `key_dates` | Due dates and appointments copied from USCIS notices, by the client or the attorney |
+| `attorney_notes` | An attorney's private notes on a case shared with them; only the author reads them, and only while the share is active |
+| `attorney_reviews` | When an attorney last marked a shared case as reviewed (one row per attorney and case) |
 | `notifications_sent`, `assistant_usage` | Idempotent emails and assistant rate limits |
 
 **Why it is ready for insights.** Each case exists once, so it is counted once. Its history never changes, has dates, and every event carries a category (`received`, `evidence_requested`, `approved`, …) and an origin, so durations such as "received → approved for I-130" are a single query. Consent is its own table with dates. Insights are computed **live, only from cases of people who currently consent, and never for groups smaller than 5** ([ADR 0005](docs/adr/0005-insights-computed-live-from-consented-cases.md)): revoking consent takes effect immediately and nothing identifies a person, a receipt or a nickname. Sharing data with other businesses would follow the same rule: aggregates only, from consented cases, above the minimum group size.
 
 ### Security
 
-- **Authorization lives in Postgres row-level security**, not in application filters ([ADR 0004](docs/adr/0004-authorization-in-postgres-rls.md)). Clients read only cases they track; attorneys only cases actively shared with their **confirmed** email; nobody can change their role or write to cases or history. 26 pgTAP tests check this and the insights privacy rules with several accounts (`npm run test:db`).
+- **Authorization lives in Postgres row-level security**, not in application filters ([ADR 0004](docs/adr/0004-authorization-in-postgres-rls.md)). Clients read only cases they track; attorneys only cases actively shared with their **confirmed** email; nobody can change their role or write to cases or history. 63 pgTAP tests check this, the attorney tools and the insights privacy rules with several accounts (`npm run test:db`).
 - **A receipt number is the only key to a case**, exactly as on USCIS's public status page: the API has no notion of ownership and returns no personal data, so two people can track the same receipt. Everything a person adds on top (that they track it, the nickname, key dates, shares) is theirs alone under RLS. Per-person hourly check limits and a daily USCIS budget stop receipt guessing.
 - Email confirmation is required: shares are matched by email, so an unconfirmed account must never claim an attorney's address.
 - USCIS credentials, the Supabase service-role key and the Anthropic key exist only on the server.
-- Post-sign-in redirects only accept same-site paths.
+- Post-sign-in redirects only accept same-site paths (control characters are rejected).
+- After 30 minutes without activity the person gets a 60-second warning, then is signed out. A request with an expired session cookie is redirected to sign-in with a "session ended" notice.
+- The share invitation link carries only the share id (`/sign-up?invite=<share id>`), no personal data.
+- Attorney private notes are visible only to their author while the share is active. The client's name and email reach the attorney through `shared_case_client()`, which answers only for an active share addressed to the attorney's confirmed email.
 
 ### USCIS integration and edge cases
 
@@ -161,7 +166,9 @@ The five decisions that are hardest to reverse have their own ADRs in [`docs/adr
 | Next.js + Supabase + Vercel | The role's stack; Supabase gives auth and row-level security without building them | Coupled to Postgres/Supabase for authorization |
 | Role chosen at sign-up (client or attorney) | Clear demo, simple policies, mirrors how a firm works | An attorney can't track personal cases with the same account |
 | Share by email, pending until the attorney signs up | Families know their attorney's email, not an internal ID | Emails must be normalized; a typo leaves a pending share the client can revoke |
-| Attorneys can view, refresh and add key dates, nothing else | Refreshing only reads USCIS; letters often reach the attorney first | Their refreshes use the same quota (mitigated by reuse) |
+| Attorneys can view, refresh, add key dates, keep private notes and mark cases as reviewed; they cannot share, rename or untrack | Refreshing only reads USCIS; letters often reach the attorney first; notes and reviews never touch the client's data | Their refreshes use the same quota (mitigated by reuse) |
+| "Needs review" = latest status event newer than the attorney's last review (or than the share, if never reviewed) | Simple, deterministic, tested in `src/lib/attorney/review.ts`; opening a case never marks it | Reviews are per attorney, not per firm |
+| Attorney sees the client's name and email through `shared_case_client()` (security definer, active share only) | The client chose to share; avoids opening `profiles` to attorneys | One more privileged SQL function to keep tested |
 | Opt-in consent, off by default | Respectful and easy to explain | Fewer data points for insights |
 | Whole UI in English and Spanish (`next-intl`, JSON messages) | Many families are Spanish-speaking; USCIS already returns status texts in both | Every string is written twice |
 | Email confirmation with Resend on our own domain | Supabase's default mailer is rate-limited and lands in spam; the same domain sends status emails | A domain had to be bought |
@@ -177,12 +184,23 @@ The five decisions that are hardest to reverse have their own ADRs in [`docs/adr
 The brief's floor is lookup, accounts, saved cases, refresh, history and an insights-ready model. What I added, in the order I'd defend it:
 
 1. **Timeline + plain-language explanations.** The hard part of USCIS isn't fetching a status, it's understanding it. Each status category explains what it means and what usually comes next, in English and Spanish.
-2. **Attorney dashboard.** The client behind this exercise is an immigration law firm; attorneys see every case shared with them, sorted by the next key date, with what changed this week.
-3. **Key dates that can't be missed.** RFE deadlines and appointments copied from notices, with a countdown, an `.ics` file for the calendar, and urgency ordering for the attorney. Kinstamp never calculates a legal deadline; people copy it from the letter.
+2. **Attorney dashboard.** The client behind this exercise is an immigration law firm; attorneys see every case shared with them, sorted by the next key date. Its "Needs review" filter shows cases with a status event the attorney hasn't looked at yet.
+3. **Key dates that can't be missed.** RFE deadlines and appointments copied from notices, with a countdown and urgency ordering for the attorney. Kinstamp never calculates a legal deadline; people copy it from the letter.
 4. **"Is my case slow?"** Compares the case's age with the time USCIS publishes for its form, with source and date, and links to USCIS's own inquiry page when it's outside that time.
 5. **Insights**, anonymized, from consented cases only.
 6. **Scheduled checks + email on change**, so nobody has to remember to refresh.
 7. **Case assistant.** An agent (Claude, tool-use loop) that answers "what does this mean / what's next / how long" using only this case's data through read-only tools that run with the person's own permissions, says when it doesn't know, and is explicit that it isn't legal advice.
+
+Smaller additions, each with its reason:
+
+- **Case search and paging** (5 per page, `?q=` and `?page=` in the URL). A family with many cases, or a link to page 2, should still work.
+- **Key dates calendar view and "Add to calendar" menu** (Google, Outlook, Apple/`.ics`; `src/lib/calendar-links.ts`). A deadline you can't see next to other dates, or in your own calendar, is easy to miss. The case preview shows the 3 nearest dates; the month calendar shows all.
+- **Attorney notes, "needs review" and client header.** Attorneys work many cases; they need a private place for notes, a way to know what changed since they last looked, and who the client is.
+- **Share invitation email.** An attorney without an account would otherwise never learn a case was shared.
+- **Guided tours per role, with Help replay** (`profiles.tours_completed`). New people need the "public board vs. private notebook" idea once; finished tours are stored on the account, not the device.
+- **Idle sign-out with warning** (30 minutes, `src/hooks/use-idle-timeout.ts`) and a "session ended" notice. Immigration data on a shared computer.
+- **"Download my data"** (`/settings/export`). A person should be able to take their data with them.
+- **Insights receipt-date fallback** (migration `20261030200000`). Some USCIS histories omit the "received" event; the receipt date keeps those cases countable.
 
 ---
 
@@ -204,8 +222,11 @@ Third-party skills used locally are not committed; install them with `npx skills
 
 - End-to-end tests (Playwright) for the main flows, running against a seeded database in CI.
 - Refresh the official processing times automatically, and per service center.
+- A calendar subscription feed (one URL per case) so key dates stay in sync instead of one-off downloads.
 - Law-firm organizations: several attorneys per firm, client invitations from the attorney side.
 - Multiple roles per account, so an attorney can also track personal cases.
 - Periodic, non-reidentifiable insight snapshots instead of live queries once volume grows; a consented data product for third parties built on the same rule.
 - SMS/WhatsApp notifications; persisted assistant conversations with explicit consent.
+- Assistant: make the daily limit atomic (count-and-insert in one SQL function; today two simultaneous messages could reach 21), log tokens and tool calls per message, and a small eval set.
+- Run `npm run test:db` in CI against a Supabase container.
 - Production USCIS access (requires a demo with USCIS).
