@@ -21,6 +21,11 @@ const trackedCases = [
   { receiptNumber: "EAC9999103424", nickname: "Carlos's petition", shareWithAttorney: true },
   { receiptNumber: "LIN9999106501", nickname: "Sofia's petition", shareWithAttorney: false },
   { receiptNumber: "EAC9999103408", nickname: "Dad's petition", shareWithAttorney: false },
+  // Four more approved I-130s: with Mom's petition, the five a form needs before insights show.
+  { receiptNumber: "EAC9999103404", nickname: "Grandma's petition", shareWithAttorney: false },
+  { receiptNumber: "EAC9999103405", nickname: "Luis's petition", shareWithAttorney: false },
+  { receiptNumber: "EAC9999103410", nickname: "Elena's petition", shareWithAttorney: false },
+  { receiptNumber: "EAC9999103411", nickname: "Tomas's petition", shareWithAttorney: false },
 ];
 
 const admin = createAdminClient();

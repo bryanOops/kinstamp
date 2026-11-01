@@ -24,7 +24,7 @@ The demo accounts hold only USCIS sandbox data, so their credentials are public 
 | Client (family) | `demo-client@kinstamp.com` | `kinstamp-demo-2026` |
 | Attorney | `demo-attorney@kinstamp.com` | `kinstamp-demo-2026` |
 
-The client tracks four sandbox cases; two are shared with the attorney. Open both in two browser windows to see sharing and its limits.
+The client tracks eight sandbox cases, five of them approved I-130s, so Insights has data; two are shared with the attorney. Open both in two browser windows to see sharing and its limits.
 
 ### The end-to-end flow
 
@@ -40,7 +40,7 @@ The USCIS sandbox **only answers Monday to Friday, 7am–8pm Eastern** and only 
 - Outside those hours every case shows its **last saved status** with a clear "USCIS is offline" notice and the time of the last successful check. Nothing is ever simulated in production ([ADR 0003](docs/adr/0003-never-simulate-uscis-data-in-production.md)).
 - All 50 sandbox receipts were **checked once ahead of time** and stored as regular cases, so adding one on a weekend still shows real data. This is only done for public sandbox receipts: with real receipt numbers Kinstamp never checks a case nobody asked for.
 - A refresh against the sandbox always returns "No changes". Change detection is covered by unit tests on recorded real responses.
-- **Insights shows 0 days in production, honestly.** It only counts consenting people's cases, in groups of at least 5, measured from receipt (the "received" event, or the receipt date USCIS reports when its history omits it) to approval. Every sandbox case was received and approved on September 5, 2023, so the median is 0 days. Filling it with invented cases would break the rule above; the SQL behind it is covered by pgTAP tests with realistic fixtures. To see it, sign in as the demo client (who consents) and add five approved sandbox receipts, e.g. `EAC9999103404`, `EAC9999103405`, `EAC9999103410`, `EAC9999103411`, `LIN9999106498`.
+- **Insights shows 0 days in production, honestly.** It only counts consenting people's cases, in groups of at least 5, measured from receipt (the "received" event, or the receipt date USCIS reports when its history omits it) to approval. Every sandbox case was received and approved on September 5, 2023, so the median is 0 days. Filling it with invented cases would break the rule above; the SQL behind it is covered by pgTAP tests with realistic fixtures. The demo client consents and tracks five approved I-130s, so Insights shows that group (at least 5 cases, 0 days).
 
 ---
 
