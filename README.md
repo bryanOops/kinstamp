@@ -5,6 +5,7 @@
 Kinstamp (*kin* + *stamp*: built for families waiting on USCIS) lets a family save their USCIS receipt numbers, see each case's current status and full history, understand what it means in plain language, and share a case with their attorney, who sees only what was shared.
 
 - **Live app:** https://kinstamp.com (also https://kinstamp.vercel.app)
+- **Video walkthrough (~10 min):** [Google Drive](https://drive.google.com/file/d/10t0Um_XA8o4N2uLF2KtTsHB4RpJh3fV2/view?usp=sharing)
 - **Stack:** Next.js 16 (App Router) · Supabase (Postgres, Auth, RLS) · Vercel · Tailwind v4 + shadcn/ui · Zod · Vitest + pgTAP · Claude API
 
 ---
