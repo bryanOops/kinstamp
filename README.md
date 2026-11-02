@@ -127,7 +127,7 @@ The coding standards that every change (human or AI) follows are in [`CLAUDE.md`
 
 | Table | Holds |
 |---|---|
-| `profiles` | One per account: name, role (`client` / `attorney`), language, email preference, `tours_completed` (guided tours already finished) |
+| `profiles` | One per account: name, role (`client` / `attorney`), language, email preference, `tours_completed` (guided tours already shown) |
 | `consents` | Opt-in to anonymous insights, with grant and revoke dates (append-only history) |
 | `cases` | **One row per receipt number** with its current status ([ADR 0001](docs/adr/0001-one-case-per-receipt-number.md)) |
 | `status_events` | **Append-only history**: every status with its date and origin, `reported` by USCIS or `observed` by Kinstamp, and a category ([ADR 0002](docs/adr/0002-append-only-status-events-with-origin.md)) |
@@ -206,7 +206,7 @@ Smaller additions, each with its reason:
 - **Key dates calendar view and "Add to calendar" menu** (Google, Outlook, Apple/`.ics`; `src/lib/calendar-links.ts`). A deadline you can't see next to other dates, or in your own calendar, is easy to miss. The case preview shows the 3 nearest dates; the month calendar shows all.
 - **Attorney notes, "needs review" and client header.** Attorneys work many cases; they need a private place for notes, a way to know what changed since they last looked, and who the client is.
 - **Share invitation email.** An attorney without an account would otherwise never learn a case was shared.
-- **Guided tours per role, with Help replay** (`profiles.tours_completed`). New people need the "public board vs. private notebook" idea once; finished tours are stored on the account, not the device.
+- **Guided tours per role, with Help replay** (`profiles.tours_completed`). New people need the "public board vs. private notebook" idea once: one tour per account, on its first visit, recorded on the account (not the device) as soon as it starts. The case detail tour runs only from Help.
 - **Idle sign-out with warning** (30 minutes, `src/hooks/use-idle-timeout.ts`) and a "session ended" notice. Immigration data on a shared computer.
 - **"Download my data"** (`/settings/export`). A person should be able to take their data with them.
 - **Insights receipt-date fallback** (migration `20261030200000`). Some USCIS histories omit the "received" event; the receipt date keeps those cases countable.

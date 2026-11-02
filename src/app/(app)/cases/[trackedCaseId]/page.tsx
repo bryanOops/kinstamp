@@ -59,7 +59,7 @@ export default async function CaseDetailPage({ params }: PageProps<"/cases/[trac
         icsHref={(keyDate) => `/cases/${trackedCaseId}/key-dates/${keyDate.id}/ics`}
         keyDateActions={(keyDate) => (keyDate.canDelete ? <DeleteKeyDateButton keyDate={keyDate} /> : null)}
       />
-      <TourLauncher tour="case_detail" completed={profile.toursCompleted.includes("case_detail")} />
+      <TourLauncher tour="case_detail" autoStart={false} />
     </div>
   );
 }

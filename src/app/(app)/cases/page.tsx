@@ -31,7 +31,7 @@ export default async function CasesPage() {
         actions={cases.length > 0 ? <AddCaseControl trackedReceipts={trackedReceipts} /> : undefined}
       />
       <CaseList cases={cases} now={now} addCaseAction={<AddCaseControl trackedReceipts={trackedReceipts} />} />
-      <TourLauncher tour="cases" completed={profile.toursCompleted.includes("cases")} />
+      <TourLauncher tour="cases" autoStart={!profile.toursCompleted.includes("cases")} />
     </div>
   );
 }

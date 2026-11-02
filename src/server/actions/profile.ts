@@ -8,7 +8,7 @@ import { requireProfile } from "@/server/auth";
 const tourSchema = z.enum(tourIds);
 
 /**
- * Records that the signed-in person finished (or skipped) a guided tour, so it does not
+ * Records that a guided tour auto-started for the signed-in person, so it does not
  * start again on another device. Replaying from "Help" never calls this twice.
  */
 export async function markTourCompleted(tour: unknown): Promise<void> {

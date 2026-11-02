@@ -23,7 +23,7 @@ export default async function AttorneyPage() {
     <div className="flex flex-1 flex-col gap-8 fade-up">
       <PageHeader title={t("title")} description={t("description")} />
       <SharedCasesTable rows={rows} now={new Date()} attorneyEmail={profile.email} />
-      <TourLauncher tour="attorney" completed={profile.toursCompleted.includes("attorney")} />
+      <TourLauncher tour="attorney" autoStart={!profile.toursCompleted.includes("attorney")} />
     </div>
   );
 }

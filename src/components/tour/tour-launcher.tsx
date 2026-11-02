@@ -10,22 +10,26 @@ import { tours, type TourId } from "./tours";
 
 type TourLauncherProps = {
   tour: TourId;
-  /** From `profile.toursCompleted`: a finished or skipped tour never auto-starts again. */
-  completed: boolean;
+  /**
+   * True only on a role's main screen while the tour is not in `profile.toursCompleted`.
+   * Otherwise the tour runs only from the Help button.
+   */
+  autoStart: boolean;
 };
 
 /** Lets the page paint and settle (entrance animation, streamed top bar) before the spotlight appears. */
 const AUTO_START_DELAY_MS = 700;
 
 /**
- * Mounted once per screen that has a tour. Auto-starts the tour the first time the
- * account sees the screen and registers it so the Help button can replay it.
- * Finishing or skipping records the tour on the profile.
+ * Mounted once per screen that has a tour and registers it so the Help button can replay it.
+ * The main screen of each role auto-starts its tour once per account: it is recorded on the
+ * profile as soon as it starts, so leaving halfway (navigating, closing the tab, signing out)
+ * does not bring it back.
  */
-export function TourLauncher({ tour, completed }: TourLauncherProps) {
+export function TourLauncher({ tour, autoStart }: TourLauncherProps) {
   const t = useTranslations(`tour.${tour}`);
   const [steps, setSteps] = useState<TourStep[] | null>(null);
-  const [recorded, setRecorded] = useState(completed);
+  const [recorded, setRecorded] = useState(!autoStart);
   const [, startTransition] = useTransition();
 
   const start = useCallback(() => {
@@ -37,16 +41,15 @@ export function TourLauncher({ tour, completed }: TourLauncherProps) {
 
   useEffect(() => {
     if (recorded) return;
-    const timer = window.setTimeout(start, AUTO_START_DELAY_MS);
+    const timer = window.setTimeout(() => {
+      setRecorded(true);
+      startTransition(() => markTourCompleted(tour));
+      start();
+    }, AUTO_START_DELAY_MS);
     return () => window.clearTimeout(timer);
-  }, [recorded, start]);
+  }, [recorded, start, tour]);
 
-  function finish() {
-    setSteps(null);
-    if (recorded) return;
-    setRecorded(true);
-    startTransition(() => markTourCompleted(tour));
-  }
+  const finish = () => setSteps(null);
 
   if (!steps) return null;
   return <Tour steps={steps} onFinish={finish} />;
